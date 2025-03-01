@@ -148,7 +148,7 @@ public class ManageBooks extends JFrame{
 
         //BookID icon
         ImageIcon id = new ImageIcon(getClass().getResource("/com/res/BookIDIcon.png"));
-        Image scaledIDIcon = id.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH);
+        Image scaledIDIcon = id.getImage().getScaledInstance(85,65, Image.SCALE_SMOOTH);
         iconID = new JLabel(new ImageIcon(scaledIDIcon));
         iconID.setBounds(15, 175, 45, 45);
         NavigationPanel.add(iconID);
@@ -175,8 +175,8 @@ public class ManageBooks extends JFrame{
 
         //Book name Icon
 
-        ImageIcon book = new ImageIcon(getClass().getResource("/com/res/IconBook.png"));
-        Image scaledBookIcon = book.getImage().getScaledInstance(85, 65, Image.SCALE_SMOOTH);
+        ImageIcon book = new ImageIcon(getClass().getResource("/com/res/BookNameIcon.png"));
+        Image scaledBookIcon = book.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH);
         iconBook = new JLabel(new ImageIcon(scaledBookIcon));
         iconBook.setBounds(15, 275, 45, 45);
         NavigationPanel.add(iconBook);
