@@ -5,7 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -42,6 +43,11 @@ public class ManageBorrower extends JFrame{
     private JLabel borrowerAge;
     private JLabel borrowerGender;
     private JLabel manageBorrower;
+
+    //Content
+    private JLabel Owner;
+    private JLabel Date;
+
     
     //Icon
     private JLabel borrowerIdIcon;
@@ -76,6 +82,10 @@ public class ManageBorrower extends JFrame{
     private void initComponents(){
 
         int heightButton = 45;
+
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String formattedDate = currentDate.format(formatter);
 
         ////////// Main Panel////////
         mainPanel = new JPanel();
@@ -295,11 +305,25 @@ public class ManageBorrower extends JFrame{
        emDash.setBounds(230,75,250,5);
        rightPanel.add(emDash); 
 
+       //Owner//
+       Owner = new JLabel("Owner: Admin");
+       Owner.setFont(new Font("Tahoma", Font.BOLD, 27));
+       Owner.setForeground(DarkColor);
+       Owner.setBounds(40, 110, 250, 30);
+       rightPanel.add(Owner);
+       
+       //Date//
+       Date = new JLabel("Date: " + formattedDate);
+       Date.setFont(new Font("Tahoma", Font.BOLD, 27));
+       Date.setForeground(DarkColor);
+       Date.setBounds(400, 110, 500, 30);
+       rightPanel.add(Date);
+
 
        //Table
        borrowerTablePanel = new JPanel();
        borrowerTablePanel.setBackground(LightColor);
-       borrowerTablePanel.setBounds(100,150,500,150);
+       borrowerTablePanel.setBounds(100,225,500,150);
        borrowerTablePanel.setLayout(null);
        rightPanel.add(borrowerTablePanel);
 

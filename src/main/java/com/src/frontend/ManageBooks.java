@@ -5,7 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -38,11 +39,13 @@ public class ManageBooks extends JFrame{
     private JLabel bookName;
     private JLabel authorName;
     private JLabel Quantity;
+
+    //Content
     private JLabel manageBook;
+    private JLabel Owner;
+    private JLabel Date;
    
     
-    
-
     private JButton backButton;
     private JButton addButton;
     private JButton deleteButton;
@@ -76,6 +79,10 @@ public class ManageBooks extends JFrame{
     private void initComponents(){
 
         int heightButton = 45;
+
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String formattedDate = currentDate.format(formatter);
 
          // Main Panel
          mainPanel = new JPanel();
@@ -287,23 +294,39 @@ public class ManageBooks extends JFrame{
          NavigationPanel.add(updateButton);
 
 
-         //Manage book content
+         //Content Panel
+         //Manage Book//
        
         manageBook = new JLabel("Manage Books");
         manageBook.setFont(new Font("Tahoma", Font.BOLD, 30));
         manageBook.setForeground(DarkColor);
-        manageBook.setBounds(250, 0, 600, 100);
+        manageBook.setBounds(225, 0, 600, 100);
         rightPanel.add(manageBook);
 
         emDash = new JPanel();
         emDash.setBackground(DarkColor);
-        emDash.setBounds(260,75,200,5);
+        emDash.setBounds(235,75,200,5);
         rightPanel.add(emDash);
+
+        //Owner//
+        Owner = new JLabel("Owner: Admin");
+        Owner.setFont(new Font("Tahoma", Font.BOLD, 27));
+        Owner.setForeground(DarkColor);
+        Owner.setBounds(40, 110, 250, 30);
+        rightPanel.add(Owner);
+        
+        //Date//
+        Date = new JLabel("Date: " + formattedDate);
+        Date.setFont(new Font("Tahoma", Font.BOLD, 27));
+        Date.setForeground(DarkColor);
+        Date.setBounds(400, 110, 500, 30);
+        rightPanel.add(Date);
+        
         
         //Table
         bookManageTablePanel = new JPanel();
         bookManageTablePanel.setBackground(LightColor);
-        bookManageTablePanel.setBounds(100,150,500,150);
+        bookManageTablePanel.setBounds(100,225,500,150);
         bookManageTablePanel.setLayout(null);
         rightPanel.add(bookManageTablePanel);
 
