@@ -7,8 +7,14 @@
   <version>1.0-SNAPSHOT</version>
   <name>LibraryManSys</name>
   <url>http://maven.apache.org</url>
-
-  <dependencies>
+    <repositories>
+        <repository>
+            <id>unknown-jars-temp-repo</id>
+            <name>A temporary repository created by NetBeans for libraries and jars it could not identify. Please replace the dependencies in this repository with correct ones and delete this repository.</name>
+            <url>file:${project.basedir}/lib</url>
+        </repository>
+    </repositories>
+    <dependencies>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -21,6 +27,20 @@
       <artifactId>mysql-connector-j</artifactId>
       <version>9.2.0</version> 
     </dependency>
-    
-  </dependencies>
+        <dependency>
+            <groupId>unknown.binary</groupId>
+            <artifactId>RSFoto_v1.0</artifactId>
+            <version>SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>unknown.binary</groupId>
+            <artifactId>RSCalendar</artifactId>
+            <version>SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>unknown.binary</groupId>
+            <artifactId>RojeruSan.parte1</artifactId>
+            <version>SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>
