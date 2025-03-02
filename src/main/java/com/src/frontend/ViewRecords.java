@@ -15,6 +15,25 @@ public class ViewRecords extends javax.swing.JFrame {
      */
     public ViewRecords() {
         initComponents();
+        // try {
+        //     for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+        //         if ("Nimbus".equals(info.getName())) {
+        //             javax.swing.UIManager.setLookAndFeel(info.getClassName());
+        //             break;
+        //         }
+        //     }
+        // } catch (ClassNotFoundException ex) {
+        //     java.util.logging.Logger.getLogger(ViewRecords.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        // } catch (InstantiationException ex) {
+        //     java.util.logging.Logger.getLogger(ViewRecords.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        // } catch (IllegalAccessException ex) {
+        //     java.util.logging.Logger.getLogger(ViewRecords.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        // } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        //     java.util.logging.Logger.getLogger(ViewRecords.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        // }
+        setLocationRelativeTo(null);
+        setVisible(true);
+        
     }
 
     /**
@@ -36,16 +55,19 @@ public class ViewRecords extends javax.swing.JFrame {
         date_fromDate = new rojeru_san.componentes.RSDateChooser();
         jLabel3 = new javax.swing.JLabel();
         date_toDate = new rojeru_san.componentes.RSDateChooser();
-        searchButton = new rojerusan.RSButtonHover();
+        searchButton2 = new rojerusan.RSButtonHover();
         backButton = new rojeru_san.complementos.RSButtonHover();
-        panel_table = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbl_issueBookDetails = new rojeru_san.complementos.RSTableMetro();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(47, 120, 152));
+        jPanel1.setPreferredSize(new java.awt.Dimension(1000, 230));
+        jPanel1.setRequestFocusEnabled(false);
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 40)); // NOI18N
@@ -53,12 +75,12 @@ public class ViewRecords extends javax.swing.JFrame {
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/res/BookIDIcon.png"))); // NOI18N
         jLabel1.setText("View Records");
         jLabel1.setIconTextGap(0);
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 0, 470, 150));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 0, 470, 150));
 
         jLabel2.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(220, 238, 229));
         jLabel2.setText("From");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 190, 50, 40));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 150, 50, 40));
 
         date_fromDate.setColorBackground(new java.awt.Color(3, 47, 90));
         date_fromDate.setColorButtonHover(new java.awt.Color(5, 77, 120));
@@ -68,12 +90,12 @@ public class ViewRecords extends javax.swing.JFrame {
         date_fromDate.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 14)); // NOI18N
         date_fromDate.setFormatoFecha("dd/MM/yyyy");
         date_fromDate.setPlaceholder("Select Issue Date");
-        jPanel1.add(date_fromDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 190, -1, -1));
+        jPanel1.add(date_fromDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 150, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(220, 238, 229));
         jLabel3.setText("To");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 190, 30, 40));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 150, 30, 40));
 
         date_toDate.setColorBackground(new java.awt.Color(3, 47, 90));
         date_toDate.setColorButtonHover(new java.awt.Color(5, 77, 120));
@@ -83,14 +105,15 @@ public class ViewRecords extends javax.swing.JFrame {
         date_toDate.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 14)); // NOI18N
         date_toDate.setFormatoFecha("dd/MM/yyyy");
         date_toDate.setPlaceholder("Select Issue Date");
-        jPanel1.add(date_toDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 190, -1, -1));
+        jPanel1.add(date_toDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 150, -1, -1));
 
-        searchButton.setBackground(new java.awt.Color(3, 47, 90));
-        searchButton.setForeground(new java.awt.Color(220, 238, 229));
-        searchButton.setText("Search");
-        searchButton.setColorHover(new java.awt.Color(5, 77, 120));
-        searchButton.setColorText(new java.awt.Color(220, 238, 229));
-        jPanel1.add(searchButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(1140, 190, 140, -1));
+        searchButton2.setBackground(new java.awt.Color(3, 47, 90));
+        searchButton2.setBorder(null);
+        searchButton2.setForeground(new java.awt.Color(220, 238, 229));
+        searchButton2.setText("Search");
+        searchButton2.setColorHover(new java.awt.Color(5, 77, 120));
+        searchButton2.setColorText(new java.awt.Color(220, 238, 229));
+        jPanel1.add(searchButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 150, 140, -1));
 
         backButton.setBackground(new java.awt.Color(3, 47, 90));
         backButton.setForeground(new java.awt.Color(220, 238, 229));
@@ -99,15 +122,16 @@ public class ViewRecords extends javax.swing.JFrame {
         backButton.setColorText(new java.awt.Color(220, 238, 229));
         backButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                backButtonActionPerformed(evt);
+                new HomePage();
+                setVisible(false);
             }
         });
         jPanel1.add(backButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 100, 40));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1480, 280));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 239));
 
-        panel_table.setBackground(new java.awt.Color(255, 255, 255));
-        panel_table.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         tbl_issueBookDetails.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -138,20 +162,12 @@ public class ViewRecords extends javax.swing.JFrame {
         tbl_issueBookDetails.setRowHeight(42);
         tbl_issueBookDetails.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tbl_issueBookDetails);
-        if (tbl_issueBookDetails.getColumnModel().getColumnCount() > 0) {
-            tbl_issueBookDetails.getColumnModel().getColumn(0).setResizable(false);
-            tbl_issueBookDetails.getColumnModel().getColumn(1).setResizable(false);
-            tbl_issueBookDetails.getColumnModel().getColumn(2).setResizable(false);
-            tbl_issueBookDetails.getColumnModel().getColumn(3).setResizable(false);
-            tbl_issueBookDetails.getColumnModel().getColumn(4).setResizable(false);
-            tbl_issueBookDetails.getColumnModel().getColumn(5).setResizable(false);
-        }
 
-        panel_table.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 70, 1250, 350));
+        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 10, 770, 350));
 
-        getContentPane().add(panel_table, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 280, 1480, 580));
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 240, 1000, 400));
 
-        setSize(new java.awt.Dimension(1497, 865));
+        setSize(new java.awt.Dimension(1016, 648));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -162,37 +178,37 @@ public class ViewRecords extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ViewRecords.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ViewRecords.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ViewRecords.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ViewRecords.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    // public static void main(String args[]) {
+    //     /* Set the Nimbus look and feel */
+    //     //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+    //     /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+    //      * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+    //      */
+    //     try {
+    //         for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+    //             if ("Nimbus".equals(info.getName())) {
+    //                 javax.swing.UIManager.setLookAndFeel(info.getClassName());
+    //                 break;
+    //             }
+    //         }
+    //     } catch (ClassNotFoundException ex) {
+    //         java.util.logging.Logger.getLogger(ViewRecords.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    //     } catch (InstantiationException ex) {
+    //         java.util.logging.Logger.getLogger(ViewRecords.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    //     } catch (IllegalAccessException ex) {
+    //         java.util.logging.Logger.getLogger(ViewRecords.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    //     } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+    //         java.util.logging.Logger.getLogger(ViewRecords.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    //     }
+    //     //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ViewRecords().setVisible(true);
-            }
-        });
-    }
+    //     /* Create and display the form */
+    //     java.awt.EventQueue.invokeLater(new Runnable() {
+    //         public void run() {
+    //             new ViewRecords().setVisible(true);
+    //         }
+    //     });
+    // }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private rojeru_san.complementos.RSButtonHover backButton;
@@ -206,9 +222,9 @@ public class ViewRecords extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JPanel panel_table;
-    private rojerusan.RSButtonHover searchButton;
+    private rojerusan.RSButtonHover searchButton2;
     private rojeru_san.complementos.RSTableMetro tbl_issueBookDetails;
     // End of variables declaration//GEN-END:variables
 }

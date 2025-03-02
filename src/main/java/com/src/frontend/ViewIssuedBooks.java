@@ -15,6 +15,8 @@ public class ViewIssuedBooks extends javax.swing.JFrame {
      */
     public ViewIssuedBooks() {
         initComponents();
+        setVisible(true);
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -33,16 +35,18 @@ public class ViewIssuedBooks extends javax.swing.JFrame {
         backButton = new rojeru_san.complementos.RSButtonHover();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setPreferredSize(new java.awt.Dimension(1000, 640));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 40)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(3, 47, 90));
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/res/BookNameIcon.png"))); // NOI18N
         jLabel1.setText("Issued Books");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 70, 370, 90));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 60, 370, 90));
 
         tbl_issueBookDetails.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -74,7 +78,7 @@ public class ViewIssuedBooks extends javax.swing.JFrame {
         tbl_issueBookDetails.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tbl_issueBookDetails);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 250, 1250, 350));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 200, 770, 350));
 
         backButton.setBackground(new java.awt.Color(3, 47, 90));
         backButton.setForeground(new java.awt.Color(220, 238, 229));
@@ -83,12 +87,13 @@ public class ViewIssuedBooks extends javax.swing.JFrame {
         backButton.setColorText(new java.awt.Color(220, 238, 229));
         backButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                backButtonActionPerformed(evt);
+                new HomePage();
+                setVisible(false);
             }
         });
         jPanel1.add(backButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 100, 40));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1370, 680));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 640));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -100,37 +105,37 @@ public class ViewIssuedBooks extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ViewIssuedBooks.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ViewIssuedBooks.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ViewIssuedBooks.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ViewIssuedBooks.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    // public static void main(String args[]) {
+    //     /* Set the Nimbus look and feel */
+    //     //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+    //     /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+    //      * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+    //      */
+    //     try {
+    //         for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+    //             if ("Nimbus".equals(info.getName())) {
+    //                 javax.swing.UIManager.setLookAndFeel(info.getClassName());
+    //                 break;
+    //             }
+    //         }
+    //     } catch (ClassNotFoundException ex) {
+    //         java.util.logging.Logger.getLogger(ViewIssuedBooks.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    //     } catch (InstantiationException ex) {
+    //         java.util.logging.Logger.getLogger(ViewIssuedBooks.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    //     } catch (IllegalAccessException ex) {
+    //         java.util.logging.Logger.getLogger(ViewIssuedBooks.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    //     } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+    //         java.util.logging.Logger.getLogger(ViewIssuedBooks.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    //     }
+    //     //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ViewIssuedBooks().setVisible(true);
-            }
-        });
-    }
+    //     /* Create and display the form */
+    //     java.awt.EventQueue.invokeLater(new Runnable() {
+    //         public void run() {
+    //             new ViewIssuedBooks().setVisible(true);
+    //         }
+    //     });
+    // }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private rojeru_san.complementos.RSButtonHover backButton;
