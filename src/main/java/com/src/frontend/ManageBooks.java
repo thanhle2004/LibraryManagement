@@ -5,8 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -17,18 +16,18 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
 public class ManageBooks extends JFrame{
-
     private JPanel mainPanel;
     private JPanel NavigationPanel;
     private JPanel rightPanel;
     private JPanel bookManageTablePanel;
-    private JPanel emDash;
 
 
     private JLabel iconID;
@@ -39,13 +38,11 @@ public class ManageBooks extends JFrame{
     private JLabel bookName;
     private JLabel authorName;
     private JLabel Quantity;
-
-    //Content
     private JLabel manageBook;
-    private JLabel Owner;
-    private JLabel Date;
-   
+    // private JLabel Bar;
     
+    
+
     private JButton backButton;
     private JButton addButton;
     private JButton deleteButton;
@@ -80,10 +77,6 @@ public class ManageBooks extends JFrame{
 
         int heightButton = 45;
 
-        LocalDate currentDate = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        String formattedDate = currentDate.format(formatter);
-
          // Main Panel
          mainPanel = new JPanel();
          mainPanel.setBackground(Color.WHITE);
@@ -94,7 +87,7 @@ public class ManageBooks extends JFrame{
 
         //Navigation
          NavigationPanel = new JPanel();
-         NavigationPanel.setBackground(DarkColor);
+         NavigationPanel.setBackground(new Color(5, 77, 120));
          NavigationPanel.setBounds(0,0,300,640);
          NavigationPanel.setLayout(null);
          mainPanel.add(NavigationPanel);
@@ -110,7 +103,7 @@ public class ManageBooks extends JFrame{
 
          //backButton
          backButton = new RoundedButton("Back");
-         backButton.setBounds(-1, 0, 300, heightButton);
+         backButton.setBounds(0, 0, 300, heightButton);
          backButton.setBackground(new Color(47, 120, 152));
          backButton.setForeground(new Color(220, 238, 229));
          backButton.setFont(new Font("Tahoma", Font.BOLD, 15));
@@ -148,12 +141,14 @@ public class ManageBooks extends JFrame{
 
         //BookID icon
         ImageIcon id = new ImageIcon(getClass().getResource("/com/res/BookIDIcon.png"));
-        Image scaledIDIcon = id.getImage().getScaledInstance(85,65, Image.SCALE_SMOOTH);
+        Image scaledIDIcon = id.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH);
         iconID = new JLabel(new ImageIcon(scaledIDIcon));
         iconID.setBounds(15, 175, 45, 45);
         NavigationPanel.add(iconID);
 
 
+        
+        
 
         //Book Name
         bookName = new JLabel("Enter Book Name:");
@@ -175,8 +170,8 @@ public class ManageBooks extends JFrame{
 
         //Book name Icon
 
-        ImageIcon book = new ImageIcon(getClass().getResource("/com/res/BookNameIcon.png"));
-        Image scaledBookIcon = book.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH);
+        ImageIcon book = new ImageIcon(getClass().getResource("/com/res/IconBook.png"));
+        Image scaledBookIcon = book.getImage().getScaledInstance(85, 65, Image.SCALE_SMOOTH);
         iconBook = new JLabel(new ImageIcon(scaledBookIcon));
         iconBook.setBounds(15, 275, 45, 45);
         NavigationPanel.add(iconBook);
@@ -228,16 +223,16 @@ public class ManageBooks extends JFrame{
         NavigationPanel.add(quantityField);
 
 
-        //////////Quantity Icon////////
+        //Quantity Icon
         ImageIcon quantity = new ImageIcon(getClass().getResource("/com/res/IconQuantity.png"));
         Image scaledQuantityIcon = quantity.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH);
         iconQuantity = new JLabel(new ImageIcon(scaledQuantityIcon));
         iconQuantity.setBounds(15, 475, 45, 45);
         NavigationPanel.add(iconQuantity);
 
-        //////////Add Button////////
+        //Add Button
          addButton = new RoundedButton("Add");
-         addButton.setBounds(15, 75, 60, heightButton);
+         addButton.setBounds(5, 75, 60, heightButton);
          addButton.setBackground(new Color(47, 120, 152));
          addButton.setForeground(new Color(220, 238, 229));
          addButton.setFont(new Font("Tahoma", Font.BOLD, 15));
@@ -254,9 +249,9 @@ public class ManageBooks extends JFrame{
         });
          NavigationPanel.add(addButton);
         
-        //////////Delete Button////////
+        //Delete Button
          deleteButton = new RoundedButton("Delete");
-         deleteButton.setBounds(110, 75, 70, heightButton);
+         deleteButton.setBounds(100, 75, 70, heightButton);
          deleteButton.setBackground(new Color(47, 120, 152));
          deleteButton.setForeground(new Color(220, 238, 229));
          deleteButton.setFont(new Font("Tahoma", Font.BOLD, 15));
@@ -273,9 +268,9 @@ public class ManageBooks extends JFrame{
         });
         NavigationPanel.add(deleteButton);
 
-        //////////Update Button////////
+        //Update Button
         updateButton = new RoundedButton("Update");
-        updateButton.setBounds(215, 75, 70, heightButton);
+        updateButton.setBounds(200, 75, 70, heightButton);
         updateButton.setBackground(new Color(47, 120, 152));
         updateButton.setForeground(new Color(220, 238, 229));
         updateButton.setFont(new Font("Tahoma", Font.BOLD, 15));
@@ -294,39 +289,18 @@ public class ManageBooks extends JFrame{
          NavigationPanel.add(updateButton);
 
 
-         //Content Panel
-         //Manage Book//
+         //Manage book content
        
         manageBook = new JLabel("Manage Books");
         manageBook.setFont(new Font("Tahoma", Font.BOLD, 30));
         manageBook.setForeground(DarkColor);
-        manageBook.setBounds(225, 0, 600, 100);
+        manageBook.setBounds(250, 0, 600, 100);
         rightPanel.add(manageBook);
-
-        emDash = new JPanel();
-        emDash.setBackground(DarkColor);
-        emDash.setBounds(235,75,200,5);
-        rightPanel.add(emDash);
-
-        //Owner//
-        Owner = new JLabel("Owner: Admin");
-        Owner.setFont(new Font("Tahoma", Font.BOLD, 27));
-        Owner.setForeground(DarkColor);
-        Owner.setBounds(40, 110, 250, 30);
-        rightPanel.add(Owner);
-        
-        //Date//
-        Date = new JLabel("Date: " + formattedDate);
-        Date.setFont(new Font("Tahoma", Font.BOLD, 27));
-        Date.setForeground(DarkColor);
-        Date.setBounds(400, 110, 500, 30);
-        rightPanel.add(Date);
-        
         
         //Table
         bookManageTablePanel = new JPanel();
         bookManageTablePanel.setBackground(LightColor);
-        bookManageTablePanel.setBounds(100,225,500,150);
+        bookManageTablePanel.setBounds(100,150,500,150);
         bookManageTablePanel.setLayout(null);
         rightPanel.add(bookManageTablePanel);
 

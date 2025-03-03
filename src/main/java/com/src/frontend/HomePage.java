@@ -128,20 +128,13 @@ public class HomePage extends JFrame {
             }
         });
 
+        
+
         ManageBorrowerButton = new NavButton("Manage borrowers");
         ManageBorrowerButton.setBounds(0,200 + heightButton*2, 200, heightButton);
         ManageBorrowerButton.setFocusPainted(false);
         ManageBorrowerButton.setBorder(null);
         NavigationPanel.add(ManageBorrowerButton);
-
-        ManageBorrowerButton.addActionListener(new ActionListener() {
-            //Notification access successfully
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new ManageBorrower();
-                setVisible(false);
-            }
-        });
 
         IssueBookButton = new NavButton("Issue books");
         IssueBookButton.setBounds(0,200 + heightButton*3, 200, heightButton);
@@ -149,11 +142,30 @@ public class HomePage extends JFrame {
         IssueBookButton.setBorder(null);
         NavigationPanel.add(IssueBookButton);
 
+        
+        IssueBookButton.addActionListener(new ActionListener() {
+            //Notification access successfully
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new IssueBook();
+                setVisible(false);
+            }
+        });
+
         ReturnBookButton = new NavButton("Return books");
         ReturnBookButton.setBounds(0,200 + heightButton*4, 200, heightButton);
         ReturnBookButton.setFocusPainted(false);
         ReturnBookButton.setBorder(null);
         NavigationPanel.add(ReturnBookButton);
+
+        ReturnBookButton.addActionListener(new ActionListener() {
+            //Notification access successfully
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new ReturnBook();
+                setVisible(false);
+            }
+        });
 
         ViewRecordButton = new NavButton("View records");
         ViewRecordButton.setBounds(0,200 + heightButton*5, 200, heightButton);
