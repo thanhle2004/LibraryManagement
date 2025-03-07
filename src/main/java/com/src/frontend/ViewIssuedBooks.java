@@ -48,16 +48,18 @@ public class ViewIssuedBooks extends javax.swing.JFrame {
         backButton = new rojeru_san.complementos.RSButtonHover();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setPreferredSize(new java.awt.Dimension(1000, 640));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 40)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(3, 47, 90));
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/res/BookNameIcon.png"))); // NOI18N
         jLabel1.setText("Issued Books");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 70, 370, 90));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 60, 370, 90));
 
         tbl_issueBookDetails.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -89,7 +91,7 @@ public class ViewIssuedBooks extends javax.swing.JFrame {
         tbl_issueBookDetails.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tbl_issueBookDetails);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 250, 1250, 350));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 200, 770, 350));
 
         backButton.setBackground(new java.awt.Color(3, 47, 90));
         backButton.setForeground(new java.awt.Color(220, 238, 229));
@@ -106,7 +108,7 @@ public class ViewIssuedBooks extends javax.swing.JFrame {
         });
         jPanel1.add(backButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 100, 40));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1370, 680));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 640));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -118,7 +120,7 @@ public class ViewIssuedBooks extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private rojeru_san.complementos.RSButtonHover backButton;
     private javax.swing.JLabel jLabel1;
