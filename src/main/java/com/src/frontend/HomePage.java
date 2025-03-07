@@ -149,11 +149,27 @@ public class HomePage extends JFrame {
         IssueBookButton.setBorder(null);
         NavigationPanel.add(IssueBookButton);
 
+        IssueBookButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new IssueBook();
+                setVisible(false);
+            }
+        });
+
         ReturnBookButton = new NavButton("Return books");
         ReturnBookButton.setBounds(0,200 + heightButton*4, 200, heightButton);
         ReturnBookButton.setFocusPainted(false);
         ReturnBookButton.setBorder(null);
         NavigationPanel.add(ReturnBookButton);
+
+        ReturnBookButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new ReturnBook();
+                setVisible(false);
+            }
+        });
 
         ViewRecordButton = new NavButton("View records");
         ViewRecordButton.setBounds(0,200 + heightButton*5, 200, heightButton);
@@ -161,11 +177,27 @@ public class HomePage extends JFrame {
         ViewRecordButton.setBorder(null);
         NavigationPanel.add(ViewRecordButton);
 
+        ViewRecordButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new ViewRecords();
+                setVisible(false);
+            }
+        });
+
         ViewIssuedBookButton = new NavButton("View issued books");
         ViewIssuedBookButton.setBounds(0,200 + heightButton*6, 200, heightButton);
         ViewIssuedBookButton.setFocusPainted(false);
         ViewIssuedBookButton.setBorder(null);
         NavigationPanel.add(ViewIssuedBookButton);
+
+        ViewIssuedBookButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new ViewIssuedBooks();
+                setVisible(false);
+            }
+        });
 
         LogOutButton = new NavButton("Log out");
         LogOutButton.setBounds(0,200 + heightButton*7, 200, heightButton);
