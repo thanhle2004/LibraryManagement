@@ -32,11 +32,17 @@ public class ManageBorrower extends JFrame{
     private JPanel rightPanel;
     private JPanel borrowerTablePanel;
     private JPanel emDash;
-
+    
+    //Button
     private JButton backButton;
     private JButton addButton;
     private JButton deleteButton;
     private JButton updateButton;
+    private JButton searchButton;
+
+
+
+
 
     private JLabel borrowerID;
     private JLabel borrowerName;
@@ -44,21 +50,20 @@ public class ManageBorrower extends JFrame{
     private JLabel borrowerGender;
     private JLabel manageBorrower;
 
-    //Content
-    private JLabel Owner;
-    private JLabel Date;
-
-    
+  
     //Icon
     private JLabel borrowerIdIcon;
     private JLabel borrowerNameIcon;
     private JLabel borrowerAgeIcon;
     private JLabel borrowerGenderIcon;
-
+    private JLabel searchIcon;
+    
+    //Field
     private JTextField borrowerIDField;
     private JTextField borrowerNameField;
     private JTextField borrowerAgeField;
     private JTextField borrowerGenderField;
+    private JTextField searchField;
     
 
     private JTable manageTable;
@@ -83,9 +88,7 @@ public class ManageBorrower extends JFrame{
 
         int heightButton = 45;
 
-        LocalDate currentDate = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        String formattedDate = currentDate.format(formatter);
+       
 
         ////////// Main Panel////////
         mainPanel = new JPanel();
@@ -111,8 +114,8 @@ public class ManageBorrower extends JFrame{
 
 
          //////////backButton////////
-         backButton = new RoundedButton("Back");
-         backButton.setBounds(-1, 0, 300, heightButton);
+         backButton = new JButton("Back");
+         backButton.setBounds(-1, 0, 150, 30);
          backButton.setBackground(new Color(47, 120, 152));
          backButton.setForeground(new Color(220, 238, 229));
          backButton.setFont(new Font("Tahoma", Font.BOLD, 15));
@@ -132,7 +135,7 @@ public class ManageBorrower extends JFrame{
 
         /////////Add Button///////
         addButton = new RoundedButton("Add");
-        addButton.setBounds(15, 75, 60, heightButton);
+        addButton.setBounds(15, 500, 60, heightButton);
         addButton.setBackground(new Color(47, 120, 152));
         addButton.setForeground(new Color(220, 238, 229));
         addButton.setFont(new Font("Tahoma", Font.BOLD, 15));
@@ -152,7 +155,7 @@ public class ManageBorrower extends JFrame{
 
         ///////Delete Button//////////
         deleteButton = new RoundedButton("Delete");
-        deleteButton.setBounds(110, 75, 70, heightButton);
+        deleteButton.setBounds(110, 500, 70, heightButton);
         deleteButton.setBackground(new Color(47, 120, 152));
         deleteButton.setForeground(new Color(220, 238, 229));
         deleteButton.setFont(new Font("Tahoma", Font.BOLD, 15));
@@ -172,7 +175,7 @@ public class ManageBorrower extends JFrame{
 
        /////Update Button///////
        updateButton = new RoundedButton("Update");
-       updateButton.setBounds(215, 75, 70, heightButton);
+       updateButton.setBounds(215, 500, 70, heightButton);
        updateButton.setBackground(new Color(47, 120, 152));
        updateButton.setForeground(new Color(220, 238, 229));
        updateButton.setFont(new Font("Tahoma", Font.BOLD, 15));
@@ -195,12 +198,12 @@ public class ManageBorrower extends JFrame{
         borrowerID = new JLabel("Borrower ID:");
         borrowerID.setFont(new Font("Tahoma", Font.BOLD, 15));
         borrowerID.setForeground(new Color(255, 255, 255));
-        borrowerID.setBounds(75, 150, 500, 15);
+        borrowerID.setBounds(75, 75, 500, 15);
         NavigationPanel.add(borrowerID);
 
         ////Borrower ID Field/////
         borrowerIDField = new JTextField(15);
-        borrowerIDField.setBounds(75, 175, 200, 45);
+        borrowerIDField.setBounds(75, 100, 200, 45);
         borrowerIDField.setBackground(LightColor);
         borrowerIDField.setForeground(new Color(5, 77, 120));
         borrowerIDField.setBorder(BorderFactory.createCompoundBorder(
@@ -213,7 +216,7 @@ public class ManageBorrower extends JFrame{
        ImageIcon originalBorrowerIcon = new ImageIcon(getClass().getResource("/com/res/ID.png"));
        Image scaledBorrowerIcon = originalBorrowerIcon.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH);
        borrowerIdIcon = new JLabel(new ImageIcon(scaledBorrowerIcon));
-       borrowerIdIcon.setBounds(15, 175, 45, 45);
+       borrowerIdIcon.setBounds(15, 100, 45, 45);
        NavigationPanel.add(borrowerIdIcon);
        
        ///Borrower Name////
@@ -221,12 +224,12 @@ public class ManageBorrower extends JFrame{
        borrowerName = new JLabel("Borrower Name:");
        borrowerName.setFont(new Font("Tahoma", Font.BOLD, 15));
        borrowerName.setForeground(new Color(255, 255, 255));
-       borrowerName.setBounds(75, 250, 500, 15);
+       borrowerName.setBounds(75, 175, 500, 15);
        NavigationPanel.add(borrowerName);
 
        ///Borrower Name Field///
        borrowerNameField = new JTextField(15);
-       borrowerNameField.setBounds(75, 275, 200, 45);
+       borrowerNameField.setBounds(75, 200, 200, 45);
        borrowerNameField.setBackground(LightColor);
        borrowerNameField.setForeground(new Color(5, 77, 120));
        borrowerNameField.setBorder(BorderFactory.createCompoundBorder(
@@ -239,18 +242,18 @@ public class ManageBorrower extends JFrame{
        ImageIcon originalNameIcon = new ImageIcon(getClass().getResource("/com/res/BorrowerNameIcon.png"));
        Image scaledNameIcon = originalNameIcon.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH);
        borrowerNameIcon = new JLabel(new ImageIcon(scaledNameIcon));
-       borrowerNameIcon.setBounds(15, 275, 45, 45);
+       borrowerNameIcon.setBounds(15, 200, 45, 45);
        NavigationPanel.add(borrowerNameIcon);
 
        //Borrower Age//
        borrowerAge = new JLabel("Borrower Age:");
        borrowerAge.setFont(new Font("Tahoma", Font.BOLD, 15) );
        borrowerAge.setForeground(new Color(255, 255, 255));
-       borrowerAge.setBounds(75, 350, 500, 15);
+       borrowerAge.setBounds(75, 275, 500, 15);
        NavigationPanel.add(borrowerAge);
 
        borrowerAgeField = new JTextField(15);
-       borrowerAgeField.setBounds(75, 375, 200, 45);
+       borrowerAgeField.setBounds(75, 300, 200, 45);
        borrowerAgeField.setBackground(LightColor);
        borrowerAgeField.setForeground(new Color(5, 77, 120));
        borrowerAgeField.setBorder(BorderFactory.createCompoundBorder(
@@ -263,7 +266,7 @@ public class ManageBorrower extends JFrame{
        ImageIcon originaAgeIcon = new ImageIcon(getClass().getResource("/com/res/AgeIcon.png"));
        Image scaledAgeIcon = originaAgeIcon.getImage().getScaledInstance(45, 55, Image.SCALE_SMOOTH);
        borrowerAgeIcon = new JLabel(new ImageIcon(scaledAgeIcon));
-       borrowerAgeIcon.setBounds(15, 375, 45, 55);
+       borrowerAgeIcon.setBounds(15, 300, 45, 55);
        NavigationPanel.add(borrowerAgeIcon);
 
 
@@ -271,11 +274,11 @@ public class ManageBorrower extends JFrame{
        borrowerGender = new JLabel("Borrower Gender:");
        borrowerGender.setFont(new Font("Tahoma", Font.BOLD, 15) );
        borrowerGender.setForeground(new Color(255, 255, 255));
-       borrowerGender.setBounds(75, 450, 500, 15);
+       borrowerGender.setBounds(75, 375, 500, 15);
        NavigationPanel.add(borrowerGender);
 
        borrowerGenderField = new JTextField(15);
-       borrowerGenderField.setBounds(75, 475, 200, 45);
+       borrowerGenderField.setBounds(75, 400, 200, 45);
        borrowerGenderField.setBackground(LightColor);
        borrowerGenderField.setForeground(new Color(5, 77, 120));
        borrowerGenderField.setBorder(BorderFactory.createCompoundBorder(
@@ -289,7 +292,7 @@ public class ManageBorrower extends JFrame{
        ImageIcon originaGenderIcon = new ImageIcon(getClass().getResource("/com/res/GenderIcon.png"));
        Image scaledGenderIcon = originaGenderIcon.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH);
        borrowerGenderIcon = new JLabel(new ImageIcon(scaledGenderIcon));
-       borrowerGenderIcon.setBounds(15, 475, 45, 45);
+       borrowerGenderIcon.setBounds(15, 400, 45, 45);
        NavigationPanel.add(borrowerGenderIcon);
 
 
@@ -305,25 +308,53 @@ public class ManageBorrower extends JFrame{
        emDash.setBounds(230,75,250,5);
        rightPanel.add(emDash); 
 
-       //Owner//
-       Owner = new JLabel("Owner: Admin");
-       Owner.setFont(new Font("Tahoma", Font.BOLD, 27));
-       Owner.setForeground(DarkColor);
-       Owner.setBounds(40, 110, 250, 30);
-       rightPanel.add(Owner);
-       
-       //Date//
-       Date = new JLabel("Date: " + formattedDate);
-       Date.setFont(new Font("Tahoma", Font.BOLD, 27));
-       Date.setForeground(DarkColor);
-       Date.setBounds(400, 110, 500, 30);
-       rightPanel.add(Date);
 
+
+
+        ////////Searching///////
+        searchField = new JTextField();
+        searchField.setBounds(250,100,200,35);
+        searchField.setBackground(LightColor);
+        searchField.setForeground(new Color(5, 77, 120));
+        searchField.setBorder(BorderFactory.createCompoundBorder(
+                new LineBorder(DarkColor, 3),
+                new EmptyBorder(5, 10, 5, 10)
+        ));
+        rightPanel.add(searchField);
+
+        //Icon//
+        ImageIcon search = new ImageIcon(getClass().getResource("/com/res/SearchIcon.png"));
+        Image scaledSearchIcon = search.getImage().getScaledInstance(45, 35, Image.SCALE_SMOOTH);
+        searchIcon = new JLabel(new ImageIcon(scaledSearchIcon));
+        searchIcon.setBounds(200, 100, 45, 35);
+        rightPanel.add(searchIcon);
+
+       
+
+        ////////Search Button/////////
+        searchButton = new JButton("Search");
+        searchButton.setBounds(475, 100, 60, 35);
+        searchButton.setBackground(LightColor);
+        searchButton.setForeground(DarkColor);
+        searchButton.setFont(new Font("Tahoma", Font.BOLD, 15));
+        searchButton.setFocusPainted(false);
+        searchButton.setBorder(new LineBorder(DarkColor, 3));
+         
+        searchButton.addActionListener(new ActionListener() {
+            //Notification access successfully
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+        
+            }
+        });
+        rightPanel.add(searchButton);
+        
 
        //Table
        borrowerTablePanel = new JPanel();
        borrowerTablePanel.setBackground(LightColor);
-       borrowerTablePanel.setBounds(100,225,500,150);
+       borrowerTablePanel.setBounds(0,300,800,640);
        borrowerTablePanel.setLayout(null);
        rightPanel.add(borrowerTablePanel);
 
@@ -356,7 +387,7 @@ public class ManageBorrower extends JFrame{
         headerManageTable.setForeground(LightColor);
 
         JScrollPane scrollManageTablePanel = new JScrollPane(manageTable);
-        scrollManageTablePanel.setBounds(0, 0, 500, 150);
+        scrollManageTablePanel.setBounds(0, 0, 700, 640);
         scrollManageTablePanel.getViewport().setOpaque(false);
         scrollManageTablePanel.setOpaque(false);
         borrowerTablePanel.add(scrollManageTablePanel);
