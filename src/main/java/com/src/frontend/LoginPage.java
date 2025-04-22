@@ -17,9 +17,6 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
-import com.src.auth.Login;
-
-
 
 public class LoginPage extends JFrame {
     private JPanel Panel1;
