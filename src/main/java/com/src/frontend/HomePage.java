@@ -1,6 +1,12 @@
 package com.src.frontend;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -8,8 +14,14 @@ import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import javax.swing.*;
-import javax.swing.border.LineBorder;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
@@ -142,9 +154,7 @@ public class HomePage extends JFrame {
         IssueBookButton.setBorder(null);
         NavigationPanel.add(IssueBookButton);
 
-        
         IssueBookButton.addActionListener(new ActionListener() {
-            //Notification access successfully
             @Override
             public void actionPerformed(ActionEvent e) {
                 new IssueBook();
@@ -159,7 +169,6 @@ public class HomePage extends JFrame {
         NavigationPanel.add(ReturnBookButton);
 
         ReturnBookButton.addActionListener(new ActionListener() {
-            //Notification access successfully
             @Override
             public void actionPerformed(ActionEvent e) {
                 new ReturnBook();
@@ -173,11 +182,27 @@ public class HomePage extends JFrame {
         ViewRecordButton.setBorder(null);
         NavigationPanel.add(ViewRecordButton);
 
+        ViewRecordButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new ViewRecords();
+                setVisible(false);
+            }
+        });
+
         ViewIssuedBookButton = new NavButton("View issued books");
         ViewIssuedBookButton.setBounds(0,200 + heightButton*6, 200, heightButton);
         ViewIssuedBookButton.setFocusPainted(false);
         ViewIssuedBookButton.setBorder(null);
         NavigationPanel.add(ViewIssuedBookButton);
+
+        ViewIssuedBookButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new ViewIssuedBooks();
+                setVisible(false);
+            }
+        });
 
         LogOutButton = new NavButton("Log out");
         LogOutButton.setBounds(0,200 + heightButton*7, 200, heightButton);

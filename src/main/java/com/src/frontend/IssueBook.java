@@ -262,8 +262,4 @@ public class IssueBook extends JFrame {
             super.paintComponent(g);
         }
     }
-    
-    public static void main(String[] args) {
-        new IssueBook();
-    }
 }

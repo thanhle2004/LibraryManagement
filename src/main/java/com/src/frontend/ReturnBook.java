@@ -153,11 +153,4 @@ public class ReturnBook extends JFrame {
         add(rightPanel);
         setVisible(true);
     }
-
-    public static void main(String[] args) {
-        new ReturnBook();
-    }
 }
-
-
-
