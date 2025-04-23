@@ -78,14 +78,10 @@ public class ManageBooks extends JFrame{
             setVisible(true);
             setLocationRelativeTo(null);
         }
-    
-    
-    
+
         private void initComponents(){
     
             int heightButton = 45;
-    
-          
     
              // Main Panel
              mainPanel = new JPanel();
@@ -93,7 +89,6 @@ public class ManageBooks extends JFrame{
              mainPanel.setPreferredSize(new Dimension(1050, 640));
              mainPanel.setLayout(null);
              add(mainPanel);
-    
     
             //left panel
              leftPanel = new JPanel();

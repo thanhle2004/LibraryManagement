@@ -38,7 +38,7 @@ public class HomePage extends JFrame {
     private JButton IssueBookButton;
     private JButton ReturnBookButton;
     private JButton ViewRecordButton;
-    private JButton ViewIssuedBookButton;
+    private JButton ViewStatisticsButton;
     private JButton LogOutButton;
 
     //Content
@@ -132,7 +132,6 @@ public class HomePage extends JFrame {
         NavigationPanel.add(ManageBookButton);
 
         ManageBookButton.addActionListener(new ActionListener() {
-            //Notification access successfully
             @Override
             public void actionPerformed(ActionEvent e) {
                 new ManageBooks();
@@ -147,6 +146,14 @@ public class HomePage extends JFrame {
         ManageBorrowerButton.setFocusPainted(false);
         ManageBorrowerButton.setBorder(null);
         NavigationPanel.add(ManageBorrowerButton);
+
+        ManageBorrowerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new ManageBorrower();
+                setVisible(false);
+            }
+        });
 
         IssueBookButton = new NavButton("Issue books");
         IssueBookButton.setBounds(0,200 + heightButton*3, 200, heightButton);
@@ -190,16 +197,16 @@ public class HomePage extends JFrame {
             }
         });
 
-        ViewIssuedBookButton = new NavButton("View issued books");
-        ViewIssuedBookButton.setBounds(0,200 + heightButton*6, 200, heightButton);
-        ViewIssuedBookButton.setFocusPainted(false);
-        ViewIssuedBookButton.setBorder(null);
-        NavigationPanel.add(ViewIssuedBookButton);
+        ViewStatisticsButton = new NavButton("View Statistics");
+        ViewStatisticsButton.setBounds(0,200 + heightButton*6, 200, heightButton);
+        ViewStatisticsButton.setFocusPainted(false);
+        ViewStatisticsButton.setBorder(null);
+        NavigationPanel.add(ViewStatisticsButton);
 
-        ViewIssuedBookButton.addActionListener(new ActionListener() {
+        ViewStatisticsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new ViewIssuedBooks();
+                new ViewStatistics();
                 setVisible(false);
             }
         });
@@ -480,7 +487,7 @@ public class HomePage extends JFrame {
             g2.fillRect(0, 0, getWidth(), getHeight());
 
             if (isHovered) {
-                g2.setColor(new Color(0, 0, 0, 50));
+                g2.setColor(hoverColor);
                 g2.fillRect(0, 0, getWidth(), getHeight());
             }
 

@@ -69,7 +69,6 @@ public class ManageBorrower extends JFrame{
     Color DarkColor = new Color(5, 77, 120);
     Color LightColor = new Color(220,238,229);
 
-
     public ManageBorrower(){
         setPreferredSize(new Dimension(1000, 640));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -88,6 +88,7 @@ public class ViewRecords extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //Search code
+                //Search days that borrowers issue books or return books
             }
         });
         headerPanel.add(searchButton);
@@ -122,23 +123,15 @@ public class ViewRecords extends JFrame {
    
         //Table
         String[] columnNames = {
-            "ID", "Book", "Shelf Number", "Borrower", "Due Date", "Return Date", "Status"
+            "No.", "BookID", "BorrowerID", "Issue Date", "Due Date", "Return Date", "Days Overdue", "Fine Amount"
         };
 
         Object[][] data = {
-            {"1", "A", "2", "Duc", "16/11/2024", "1/1/2025", "pending"},
-            {"1", "A", "2", "Duc", "16/11/2024", "1/1/2025", "pending"},
-            {"1", "A", "2", "Duc", "16/11/2024", "1/1/2025", "pending"},
-            {"1", "A", "2", "Duc", "16/11/2024", "1/1/2025", "pending"},
-            {"1", "A", "2", "Duc", "16/11/2024", "1/1/2025", "pending"},
-            {"1", "A", "2", "Duc", "16/11/2024", "1/1/2025", "pending"},
-            {"1", "A", "2", "Duc", "16/11/2024", "1/1/2025", "pending"},
-            {"1", "A", "2", "Duc", "16/11/2024", "1/1/2025", "pending"},
-            {"1", "A", "2", "Duc", "16/11/2024", "1/1/2025", "pending"},
-            {"1", "A", "2", "Duc", "16/11/2024", "1/1/2025", "pending"},
-            {"1", "A", "2", "Duc", "16/11/2024", "1/1/2025", "pending"},
-            {null, null, null, null, null, null, null},
-            {null, null, null, null, null, null, null},
+            {"1", "12345", "54321", "20/03/2025", "01/04/2025", "03/04/2025", "2", "$2"},
+            {"2", "12347", "54721", "10/04/2025", "15/04/2025", "", "8", "$8"},
+            {"3", "12346", "54621", "20/04/2025", "25/04/2025", "", "0", "0"},
+            {null, null, null, null, null, null, null, null},
+            {null, null, null, null, null, null, null, null},
         };
 
         table = new JTable(data, columnNames);
