@@ -3,6 +3,8 @@ package com.src.view.manageBooks;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -39,5 +41,20 @@ public class BookManageTable {
             e.printStackTrace();
         }
     }
+
+    public void loadSearchResults(JTable table, List<Map<String, Object>> books) {
+    DefaultTableModel model = (DefaultTableModel) table.getModel();
+    model.setRowCount(0);
+    for (Map<String, Object> book : books) {
+        model.addRow(new Object[]{
+                book.get("ISBN"),
+                book.get("Title"),
+                book.get("Author"),
+                book.get("MainGenre"),
+                book.get("published_day"),
+                book.get("Status")
+        });
+    }
+}
     
 }
