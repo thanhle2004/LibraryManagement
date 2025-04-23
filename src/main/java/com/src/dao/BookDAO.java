@@ -106,4 +106,25 @@ public class BookDAO extends AbstractGenericDAO<Map<String, Object>, String> {
         return results;
     }
 
+    public Map<String, Object> getById(String isbn) {
+        String sql = "SELECT ISBN, Title, Author_id, MainGenre_id, published_day FROM Book WHERE ISBN = ?";
+        try (Connection conn = DatabaseAccessManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, isbn);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                Map<String, Object> book = new HashMap<>();
+                book.put("ISBN", rs.getString("ISBN"));
+                book.put("Title", rs.getString("Title"));
+                book.put("Author_id", rs.getInt("Author_id"));
+                book.put("MainGenre_id", rs.getInt("MainGenre_id"));
+                book.put("published_day", rs.getDate("published_day"));
+                return book;
+            }
+            return null;
+        } catch (SQLException e) {
+            throw new RuntimeException("Lỗi khi lấy thông tin sách: " + e.getMessage());
+        }
+    }
+
 }

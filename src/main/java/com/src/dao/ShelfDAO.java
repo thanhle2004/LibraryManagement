@@ -66,38 +66,78 @@ public class ShelfDAO extends AbstractGenericDAO<Map<String, Object>, Integer> {
         stmt.setInt(4, (Integer) entity.get("Shelves_id"));
     }
 
-    public List<Map<String, Object>> getShelfDetails() {
+    public List<Map<String, Object>> searchShelves(String keyword) {
         List<Map<String, Object>> results = new ArrayList<>();
-        String sql = "SELECT s.Shelves_id, s.Shelf_number, g.MainGenre_name, " +
-                     "CONCAT(m.First_name, ' ', m.Last_name) AS Manager_Name, " +
-                     "m.Email, m.Phone_number " +
-                     "FROM shelves s " +
-                     "LEFT JOIN Genre g ON s.MainGenre_id = g.Genre_id " +
-                     "LEFT JOIN shelfmanager m ON s.Manager_id = m.Manager_id";
+        String sql = "SELECT " +
+                     "    s.Shelves_id AS Shelf_ID, " +
+                     "    s.Shelf_number AS Shelf_Number, " +
+                     "    g.MainGenre_name AS Genre, " +
+                     "    g.MainGenre_id, " +
+                     "    CONCAT(m.First_name, ' ', m.Last_name) AS Manager_Name, " +
+                     "    m.Manager_id, " +
+                     "    m.Email AS Email, " +
+                     "    m.Phone_number AS Phone " +
+                     "FROM " +
+                     "    shelves s " +
+                     "LEFT JOIN " +
+                     "    genre g ON s.MainGenre_id = g.MainGenre_id " +
+                     "LEFT JOIN " +
+                     "    shelfmanager m ON s.Manager_id = m.Manager_id " +
+                     "WHERE " +
+                     "    CAST(s.Shelves_id AS CHAR) LIKE ? " +
+                     "    OR CAST(s.Shelf_number AS CHAR) LIKE ? " +
+                     "    OR g.MainGenre_name LIKE ? " +
+                     "    OR m.First_name LIKE ? " +
+                     "    OR m.Last_name LIKE ? " +
+                     "    OR m.Email LIKE ? " +
+                     "    OR m.Phone_number LIKE ?";
     
         try (Connection conn = DatabaseAccessManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
     
+            String searchPattern = "%" + keyword + "%";
+            for (int i = 1; i <= 7; i++) {
+                stmt.setString(i, searchPattern);
+            }
+    
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 Map<String, Object> shelf = new HashMap<>();
-                shelf.put("Shelves_id", rs.getInt("Shelves_id"));
-                shelf.put("Shelf_number", rs.getInt("Shelf_number"));
-                shelf.put("MainGenre", rs.getString("MainGenre_name"));
-    
-                String managerName = rs.getString("Manager_Name");  
-                shelf.put("Manager_Name", managerName); 
-    
+                shelf.put("Shelf_ID", rs.getInt("Shelf_ID"));
+                shelf.put("Shelf_Number", rs.getInt("Shelf_Number"));
+                shelf.put("Genre", rs.getString("Genre"));
+                shelf.put("MainGenre_id", rs.getInt("MainGenre_id"));
+                shelf.put("Manager_Name", rs.getString("Manager_Name"));
+                shelf.put("Manager_id", rs.getInt("Manager_id"));
                 shelf.put("Email", rs.getString("Email"));
-                shelf.put("Phone_number", rs.getString("Phone_number"));
+                shelf.put("Phone", rs.getString("Phone"));
                 results.add(shelf);
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException("Error fetching shelf details: " + e.getMessage());
+            throw new RuntimeException("Error searching shelves: " + e.getMessage());
         }
-    
+        System.out.println("Found shelves: " + results.size());
         return results;
     }
-    
+
+    public Map<String, Object> getById(int shelfId) {
+        String sql = "SELECT Shelves_id, Shelf_number, MainGenre_id, Manager_id FROM shelves WHERE Shelves_id = ?";
+        try (Connection conn = DatabaseAccessManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, shelfId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                Map<String, Object> shelf = new HashMap<>();
+                shelf.put("Shelf_ID", rs.getInt("Shelves_id"));
+                shelf.put("Shelf_number", rs.getInt("Shelf_number"));
+                shelf.put("MainGenre_id", rs.getInt("MainGenre_id"));
+                shelf.put("Manager_id", rs.getInt("Manager_id"));
+                return shelf;
+            }
+            return null;
+        } catch (SQLException e) {
+            throw new RuntimeException("Lỗi khi lấy thông tin kệ sách: " + e.getMessage());
+        }
+    }
 }
