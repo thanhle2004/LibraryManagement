@@ -66,17 +66,30 @@ public class BookDAO extends AbstractGenericDAO<Map<String, Object>, String> {
         stmt.setString(6, (String) entity.get("ISBN"));
     }
 
-    public List<Map<String, Object>> searchBooks(String isbn, String title) {
+    public List<Map<String, Object>> searchBooks(String keyword) {
         List<Map<String, Object>> results = new ArrayList<>();
-        String sql = "SELECT b.ISBN, b.Title, CONCAT(a.First_name, ' ', a.Last_name) AS Author, g.MainGenre_name AS MainGenre, b.published_day, b.Status FROM book b INNER JOIN Author a ON b.Author_id = a.Author_id INNER JOIN Genre g ON b.MainGenre_id = g.MainGenre_id WHERE (? IS NULL OR b.ISBN = ?) AND (? IS NULL OR b.Title LIKE ?)";
-
+        // Truy vấn tìm kiếm trên tất cả các cột
+        String sql = "SELECT b.ISBN, b.Title, CONCAT(a.First_name, ' ', a.Last_name) AS Author, g.MainGenre_name AS MainGenre, b.published_day, b.Status " +
+                    "FROM book b " +
+                    "INNER JOIN Author a ON b.Author_id = a.Author_id " +
+                    "INNER JOIN Genre g ON b.MainGenre_id = g.MainGenre_id " +
+                    "WHERE b.ISBN LIKE ? " +
+                    "OR b.Title LIKE ? " +
+                    "OR CONCAT(a.First_name, ' ', a.Last_name) LIKE ? " +
+                    "OR g.MainGenre_name LIKE ? " +
+                    "OR CAST(b.published_day AS CHAR) LIKE ? " +
+                    "OR b.Status LIKE ?";
+    
         try (Connection conn = DatabaseAccessManager.getConnection();
-                PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, isbn);
-            stmt.setString(2, isbn);
-            stmt.setString(3, title);
-            stmt.setString(4, title);
-
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            String searchPattern = "%" + keyword + "%";
+            stmt.setString(1, searchPattern); 
+            stmt.setString(2, searchPattern); 
+            stmt.setString(3, searchPattern); 
+            stmt.setString(4, searchPattern); 
+            stmt.setString(5, searchPattern); 
+            stmt.setString(6, searchPattern); 
+    
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 Map<String, Object> book = new HashMap<>();

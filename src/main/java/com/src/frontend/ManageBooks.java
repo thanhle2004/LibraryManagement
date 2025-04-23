@@ -122,32 +122,32 @@ public class ManageBooks extends JFrame {
         bookManageTable = new BookManageTable();
         authorManageTable = new AuthorManageTable();
         int heightButton = 45;
-    
+
         LocalDate currentDate = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String formattedDate = currentDate.format(formatter);
-    
+
         // Main Panel
         mainPanel = new JPanel();
         mainPanel.setBackground(Color.WHITE);
         mainPanel.setPreferredSize(new Dimension(1000, 640));
         mainPanel.setLayout(null);
         add(mainPanel);
-    
+
         // Left Panel
         leftPanel = new JPanel();
         leftPanel.setBackground(DarkColor);
         leftPanel.setBounds(0, 0, 300, 640);
         leftPanel.setLayout(null);
         mainPanel.add(leftPanel);
-    
+
         // Right Panel
         rightPanel = new JPanel();
         rightPanel.setBackground(Color.WHITE);
         rightPanel.setBounds(300, 0, 700, 640);
         rightPanel.setLayout(null);
         mainPanel.add(rightPanel);
-    
+
         // Back Button
         backButton = new JButton("Back");
         backButton.setBounds(-1, 0, 150, 30);
@@ -157,7 +157,7 @@ public class ManageBooks extends JFrame {
         backButton.setFocusPainted(false);
         backButton.setBorder(null);
         leftPanel.add(backButton);
-    
+
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -165,7 +165,7 @@ public class ManageBooks extends JFrame {
                 setVisible(false);
             }
         });
-    
+
         // Search Field
         searchField = new JTextField();
         searchField.setBounds(250, 100, 200, 35);
@@ -175,14 +175,14 @@ public class ManageBooks extends JFrame {
                 new LineBorder(DarkColor, 3),
                 new EmptyBorder(5, 10, 5, 10)));
         rightPanel.add(searchField);
-    
+
         // Search Icon
         ImageIcon search = new ImageIcon(getClass().getResource("/com/res/SearchIcon.png"));
         Image scaledSearchIcon = search.getImage().getScaledInstance(45, 35, Image.SCALE_SMOOTH);
         searchIcon = new JLabel(new ImageIcon(scaledSearchIcon));
         searchIcon.setBounds(200, 100, 45, 35);
         rightPanel.add(searchIcon);
-    
+
         // Search Button
         searchButton = new JButton("Search");
         searchButton.setBounds(475, 100, 60, 35);
@@ -192,7 +192,7 @@ public class ManageBooks extends JFrame {
         searchButton.setFocusPainted(false);
         searchButton.setBorder(new LineBorder(DarkColor, 3));
         rightPanel.add(searchButton);
-    
+
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -203,8 +203,7 @@ public class ManageBooks extends JFrame {
                             bookManageTable.loadBookData(manageTable);
                         } else {
                             BookDAO bookDAO = new BookDAO();
-                            bookManageTable.loadSearchResults(manageTable, bookDAO.searchBooks(
-                                    searchText, "%" + searchText + "%"));
+                            bookManageTable.loadSearchResults(manageTable, bookDAO.searchBooks(searchText));
                         }
                         if (manageTable.getRowCount() == 0) {
                             JOptionPane.showMessageDialog(null, "No books found.");
@@ -214,8 +213,7 @@ public class ManageBooks extends JFrame {
                             authorManageTable.loadAuthorData(manageTable);
                         } else {
                             AuthorDAO authorDAO = new AuthorDAO();
-                            authorManageTable.loadSearchResults(manageTable, authorDAO.searchAuthors(
-                                    null, "%" + searchText + "%"));
+                            authorManageTable.loadSearchResults(manageTable, authorDAO.searchAuthors(searchText));
                         }
                         if (manageTable.getRowCount() == 0) {
                             JOptionPane.showMessageDialog(null, "No authors found.");
@@ -227,26 +225,26 @@ public class ManageBooks extends JFrame {
                 }
             }
         });
-    
+
         // Content Panel
         manageBook = new JLabel("Manage Books");
         manageBook.setFont(new Font("Tahoma", Font.BOLD, 30));
         manageBook.setForeground(DarkColor);
         manageBook.setBounds(250, 0, 600, 100);
         rightPanel.add(manageBook);
-    
+
         emDash = new JPanel();
         emDash.setBackground(DarkColor);
         emDash.setBounds(255, 75, 200, 5);
         rightPanel.add(emDash);
-    
+
         // Date Label
         Day = new JLabel("Date: " + formattedDate);
         Day.setFont(new Font("Tahoma", Font.BOLD, 27));
         Day.setForeground(DarkColor);
-        Day.setBounds(400, 150, 500, 30); 
+        Day.setBounds(400, 150, 500, 30);
         rightPanel.add(Day);
-    
+
         // Author Button
         authorButton = new JButton("Author");
         authorButton.setBounds(450, 175, 100, 55);
@@ -256,7 +254,7 @@ public class ManageBooks extends JFrame {
         authorButton.setFocusPainted(false);
         authorButton.setBorder(new LineBorder(DarkColor, 3));
         rightPanel.add(authorButton);
-    
+
         authorButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -273,7 +271,7 @@ public class ManageBooks extends JFrame {
                 authorManageTable.loadAuthorData(manageTable);
             }
         });
-    
+
         // Book Button
         bookButton = new JButton("Book");
         bookButton.setBounds(175, 175, 100, 55);
@@ -283,7 +281,7 @@ public class ManageBooks extends JFrame {
         bookButton.setFocusPainted(false);
         bookButton.setBorder(new LineBorder(DarkColor, 3));
         rightPanel.add(bookButton);
-    
+
         bookButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -300,14 +298,14 @@ public class ManageBooks extends JFrame {
                 bookManageTable.loadBookData(manageTable);
             }
         });
-    
+
         // Book Table Panel
         bookManageTablePanel = new JPanel(new BorderLayout());
         bookManageTablePanel.setBackground(LightColor);
         bookManageTablePanel.setBounds(0, tableY, 700, 390);
         rightPanel.add(bookManageTablePanel);
-    
-        String[] columnManageTable = {"Book ISBN", "Title", "Author", "Main Genre", "Published Day", "Status"};
+
+        String[] columnManageTable = { "Book ISBN", "Title", "Author", "Main Genre", "Published Day", "Status" };
         DefaultTableModel modelManageTable = new DefaultTableModel(columnManageTable, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -317,51 +315,50 @@ public class ManageBooks extends JFrame {
         manageTable = new JTable(modelManageTable);
         manageTable.setBackground(LightColor);
         manageTable.setForeground(DarkColor);
-        manageTable.setFont(new Font("Tahoma", Font.PLAIN, 12)); // Giảm font để nội dung gọn hơn
-        manageTable.setRowHeight(25); // Tăng chiều cao hàng để dễ đọc
-        manageTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); // Tắt auto-resize để dùng chiều rộng cố định
-    
-      
-        manageTable.getColumnModel().getColumn(0).setPreferredWidth(90); 
-        manageTable.getColumnModel().getColumn(1).setPreferredWidth(180); 
+        manageTable.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        manageTable.setRowHeight(25);
+        manageTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
+        manageTable.getColumnModel().getColumn(0).setPreferredWidth(90);
+        manageTable.getColumnModel().getColumn(1).setPreferredWidth(180);
         manageTable.getColumnModel().getColumn(2).setPreferredWidth(155);
         manageTable.getColumnModel().getColumn(3).setPreferredWidth(110);
-        manageTable.getColumnModel().getColumn(4).setPreferredWidth(90); 
-        manageTable.getColumnModel().getColumn(5).setPreferredWidth(65); 
-    
-     
+        manageTable.getColumnModel().getColumn(4).setPreferredWidth(90);
+        manageTable.getColumnModel().getColumn(5).setPreferredWidth(65);
+
         manageTable.setDefaultRenderer(Object.class, new javax.swing.table.DefaultTableCellRenderer() {
             @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                    boolean hasFocus, int row, int column) {
                 Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                 if (c instanceof JLabel) {
                     JLabel label = (JLabel) c;
-                    label.setVerticalAlignment(JLabel.TOP); 
-                    label.setToolTipText(value != null ? value.toString() : null); 
+                    label.setVerticalAlignment(JLabel.TOP);
+                    label.setToolTipText(value != null ? value.toString() : null);
                 }
                 return c;
             }
         });
-    
+
         bookManageTable.loadBookData(manageTable);
-    
+
         JTableHeader headerManageTable = manageTable.getTableHeader();
         headerManageTable.setBackground(new Color(47, 120, 152));
         headerManageTable.setForeground(LightColor);
         headerManageTable.setFont(new Font("Tahoma", Font.BOLD, 12));
-    
+
         JScrollPane scrollManageTablePanel = new JScrollPane(manageTable);
         scrollManageTablePanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollManageTablePanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         bookManageTablePanel.add(scrollManageTablePanel, BorderLayout.CENTER);
-    
+
         // Author Table Panel
         authorManageTablePanel = new JPanel(new BorderLayout());
         authorManageTablePanel.setBackground(LightColor);
         authorManageTablePanel.setBounds(0, tableY, 700, 390);
         rightPanel.add(authorManageTablePanel);
-    
-        String[] columnAuthorTable = {"Author ID", "Name", "Birth Date", "Nationality", "Bio"};
+
+        String[] columnAuthorTable = { "Author ID", "Name", "Birth Date", "Nationality", "Bio" };
         DefaultTableModel modelAuthorTable = new DefaultTableModel(columnAuthorTable, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -374,18 +371,19 @@ public class ManageBooks extends JFrame {
         authorTable.setFont(new Font("Tahoma", Font.PLAIN, 12));
         authorTable.setRowHeight(25);
         authorTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    
+
         // Đặt chiều rộng cột cho bảng Author
-        authorTable.getColumnModel().getColumn(0).setPreferredWidth(80);  // Author ID
+        authorTable.getColumnModel().getColumn(0).setPreferredWidth(80); // Author ID
         authorTable.getColumnModel().getColumn(1).setPreferredWidth(100); // First Name
         authorTable.getColumnModel().getColumn(2).setPreferredWidth(100); // Last Name
         authorTable.getColumnModel().getColumn(3).setPreferredWidth(100); // Birth Date
         authorTable.getColumnModel().getColumn(4).setPreferredWidth(320); // Nationality
-    
+
         // Tùy chỉnh renderer cho bảng Author
         authorTable.setDefaultRenderer(Object.class, new javax.swing.table.DefaultTableCellRenderer() {
             @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                    boolean hasFocus, int row, int column) {
                 Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                 if (c instanceof JLabel) {
                     JLabel label = (JLabel) c;
@@ -395,19 +393,19 @@ public class ManageBooks extends JFrame {
                 return c;
             }
         });
-    
+
         authorManageTable.loadAuthorData(authorTable);
-    
+
         JTableHeader headerAuthorTable = authorTable.getTableHeader();
         headerAuthorTable.setBackground(new Color(47, 120, 152));
         headerAuthorTable.setForeground(LightColor);
         headerAuthorTable.setFont(new Font("Tahoma", Font.BOLD, 12));
-    
+
         JScrollPane scrollAuthorTablePanel = new JScrollPane(authorTable);
         scrollAuthorTablePanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollAuthorTablePanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         authorManageTablePanel.add(scrollAuthorTablePanel, BorderLayout.CENTER);
-    
+
         leftPanel.add(createBookPanel());
     }
 
@@ -636,7 +634,8 @@ public class ManageBooks extends JFrame {
         return panel;
     }
 
-    // Book Panel (giữ nguyên như mã gốc, không thay đổi vì không liên quan đến bảng)
+    // Book Panel (giữ nguyên như mã gốc, không thay đổi vì không liên quan đến
+    // bảng)
     private JPanel createBookPanel() {
         JPanel panel = new JPanel();
         panel.setBackground(DarkColor);

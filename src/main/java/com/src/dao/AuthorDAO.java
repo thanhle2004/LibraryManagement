@@ -62,22 +62,26 @@ public class AuthorDAO extends AbstractGenericDAO<Map<String, Object>, Integer> 
         stmt.setInt(5, (Integer) entity.get("Author_id"));
     }
 
-    public List<Map<String, Object>> searchAuthors(Integer authorId, String name) {
+    public List<Map<String, Object>> searchAuthors(String keyword) {
         List<Map<String, Object>> results = new ArrayList<>();
-        String sql = "SELECT Author_id, First_name, Last_name, BirthDate, Nationality FROM Author WHERE (? IS NULL OR Author_id = ?) AND (? IS NULL OR CONCAT(First_name, ' ', Last_name) LIKE ?)";
-
+        // Truy vấn tìm kiếm trên tất cả các cột
+        String sql = "SELECT Author_id, First_name, Last_name, BirthDate, Nationality FROM Author " +
+                    "WHERE CAST(Author_id AS CHAR) LIKE ? " +
+                    "OR First_name LIKE ? " +
+                    "OR Last_name LIKE ? " +
+                    "OR CAST(BirthDate AS CHAR) LIKE ? " +
+                    "OR Nationality LIKE ?";
+    
         try (Connection conn = DatabaseAccessManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            if (authorId == null) {
-                stmt.setNull(1, java.sql.Types.INTEGER);
-                stmt.setNull(2, java.sql.Types.INTEGER);
-            } else {
-                stmt.setInt(1, authorId);
-                stmt.setInt(2, authorId);
-            }
-            stmt.setString(3, name);
-            stmt.setString(4, name);
-
+          
+            String searchPattern = "%" + keyword + "%";
+            stmt.setString(1, searchPattern); 
+            stmt.setString(2, searchPattern);
+            stmt.setString(3, searchPattern); 
+            stmt.setString(4, searchPattern); 
+            stmt.setString(5, searchPattern); 
+    
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 Map<String, Object> author = new HashMap<>();
