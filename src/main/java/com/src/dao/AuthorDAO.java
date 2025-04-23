@@ -64,23 +64,24 @@ public class AuthorDAO extends AbstractGenericDAO<Map<String, Object>, Integer> 
 
     public List<Map<String, Object>> searchAuthors(String keyword) {
         List<Map<String, Object>> results = new ArrayList<>();
-        // Truy vấn tìm kiếm trên tất cả các cột
-        String sql = "SELECT Author_id, First_name, Last_name, BirthDate, Nationality FROM Author " +
-                    "WHERE CAST(Author_id AS CHAR) LIKE ? " +
-                    "OR First_name LIKE ? " +
-                    "OR Last_name LIKE ? " +
-                    "OR CAST(BirthDate AS CHAR) LIKE ? " +
-                    "OR Nationality LIKE ?";
+        String sql = "SELECT Author_id, First_name, Last_name, BirthDate, Nationality, Bio FROM Author " +
+                "WHERE CAST(Author_id AS CHAR) LIKE ? " +
+                "OR First_name LIKE ? " +
+                "OR Last_name LIKE ? " +
+                "OR CAST(BirthDate AS CHAR) LIKE ? " +
+                "OR Nationality LIKE ? " +
+                "OR Bio LIKE ?";
     
         try (Connection conn = DatabaseAccessManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-          
+    
             String searchPattern = "%" + keyword + "%";
-            stmt.setString(1, searchPattern); 
+            stmt.setString(1, searchPattern);
             stmt.setString(2, searchPattern);
-            stmt.setString(3, searchPattern); 
-            stmt.setString(4, searchPattern); 
-            stmt.setString(5, searchPattern); 
+            stmt.setString(3, searchPattern);
+            stmt.setString(4, searchPattern);
+            stmt.setString(5, searchPattern);
+            stmt.setString(6, searchPattern);
     
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
@@ -90,12 +91,15 @@ public class AuthorDAO extends AbstractGenericDAO<Map<String, Object>, Integer> 
                 author.put("Last_name", rs.getString("Last_name"));
                 author.put("BirthDate", rs.getDate("BirthDate"));
                 author.put("Nationality", rs.getString("Nationality"));
+                author.put("Bio", rs.getString("Bio"));
                 results.add(author);
             }
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Error searching authors: " + e.getMessage());
         }
+        System.out.println("Found authors: " + results.size());
         return results;
     }
+
 }
