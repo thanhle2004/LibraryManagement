@@ -35,6 +35,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
 import com.src.dao.BookDAO;
+import com.src.dao.ShelfDAO;
 import com.src.dao.AuthorDAO;
 import com.src.view.manageBooks.BookManageTable;
 import com.src.view.manageBooks.AuthorManageTable;
@@ -62,19 +63,13 @@ public class ManageBooks extends JFrame {
     private JLabel searchIcon;
 
     private JLabel authorID;
-    private JLabel firstNameLabel; // Sửa tên
-    private JLabel lastNameLabel; // Sửa tên
-    private JLabel birthDateLabel; // Sửa tên
-    private JLabel nationalityLabel; // Sửa tên
-    private JLabel iconAuthorID;
-    private JLabel iconFirstName; // Sửa tên
-    private JLabel iconLastName; // Sửa tên
-    private JLabel iconBirthDate; // Sửa tên
-    private JLabel iconNationality; // Sửa tên
+    private JLabel firstNameLabel;
+    private JLabel lastNameLabel;
+    private JLabel birthDateLabel;
+    private JLabel nationalityLabel;
 
     // Content
     private JLabel manageBook;
-    private JLabel Day;
 
     // Buttons
     private JButton backButton;
@@ -94,11 +89,22 @@ public class ManageBooks extends JFrame {
     private JTextField mainGenreID;
     private JTextField authorIDField;
     private JTextField firstNameField;
-    private JTextField lastNameField; // Sửa tên
-    private JTextField birthDateField; // Sửa tên
-    private JTextField nationalityField; // Sửa tên
+    private JTextField lastNameField;
+    private JTextField birthDateField;
+    private JTextField nationalityField;
 
-    private JTable manageTable;
+    private JLabel shelfNumberLabel;
+    private JTextField shelfNumberField;
+    private JLabel mainGenreLabel;
+    private JTextField mainGenreField;
+    private JLabel managerIDLabel;
+    private JTextField managerIDField;
+    private JTextField shelfIDField;
+    private JLabel shelfIDLabel;
+
+    private JTable bookTable;
+    private JTable authorTable;
+    private JTable shelfTable;
     private BookManageTable bookManageTable;
     private AuthorManageTable authorManageTable;
     private ShelfManageTable shelfManageTable;
@@ -125,11 +131,6 @@ public class ManageBooks extends JFrame {
         bookManageTable = new BookManageTable();
         authorManageTable = new AuthorManageTable();
         shelfManageTable = new ShelfManageTable();
-        int heightButton = 45;
-
-        LocalDate currentDate = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        String formattedDate = currentDate.format(formatter);
 
         // Main Panel
         mainPanel = new JPanel();
@@ -170,6 +171,7 @@ public class ManageBooks extends JFrame {
             }
         });
 
+        // Search Field and Button
         searchField = new JTextField();
         searchField.setBounds(50, 175, 550, 35);
         searchField.setBackground(LightColor);
@@ -201,25 +203,36 @@ public class ManageBooks extends JFrame {
                     String searchText = searchField.getText().trim();
                     if (currentMode.equals("Book")) {
                         if (searchText.isEmpty()) {
-                            bookManageTable.loadBookData(manageTable);
+                            bookManageTable.loadBookData(bookTable);
                         } else {
                             BookDAO bookDAO = new BookDAO();
-                            bookManageTable.loadSearchResults(manageTable, bookDAO.searchBooks(searchText));
+                            bookManageTable.loadSearchResults(bookTable, bookDAO.searchBooks(searchText));
                         }
-                        if (manageTable.getRowCount() == 0) {
+                        if (bookTable.getRowCount() == 0) {
                             JOptionPane.showMessageDialog(null, "No books found.");
                         }
                     } else if (currentMode.equals("Author")) {
                         if (searchText.isEmpty()) {
-                            authorManageTable.loadAuthorData(manageTable);
+                            authorManageTable.loadAuthorData(authorTable);
                         } else {
                             AuthorDAO authorDAO = new AuthorDAO();
-                            authorManageTable.loadSearchResults(manageTable, authorDAO.searchAuthors(searchText));
+                            authorManageTable.loadSearchResults(authorTable, authorDAO.searchAuthors(searchText));
                         }
-                        if (manageTable.getRowCount() == 0) {
+                        if (authorTable.getRowCount() == 0) {
                             JOptionPane.showMessageDialog(null, "No authors found.");
                         }
-                    }
+                    } 
+                    // else if (currentMode.equals("Shelves")) {
+                    //     if (searchText.isEmpty()) {
+                    //         shelfManageTable.loadShelfData(shelfTable);
+                    //     } else {
+                    //         ShelfDAO shelfDAO = new ShelfDAO();
+                    //         shelfManageTable.loadSearchResults(shelfTable, shelfDAO.searchShelves(searchText));
+                    //     }
+                    //     if (shelfTable.getRowCount() == 0) {
+                    //         JOptionPane.showMessageDialog(null, "No shelves found.");
+                    //     }
+                    // }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Error searching: " + ex.getMessage());
@@ -239,41 +252,7 @@ public class ManageBooks extends JFrame {
         emDash.setBounds(255, 75, 200, 5);
         rightPanel.add(emDash);
 
-        // // Date Label
-        // Day = new JLabel("Date: " + formattedDate);
-        // Day.setFont(new Font("Tahoma", Font.BOLD, 27));
-        // Day.setForeground(DarkColor);
-        // Day.setBounds(400, 150, 500, 30);
-        // rightPanel.add(Day);
-
-        // Author Button
-        authorButton = new JButton("Author");
-        authorButton.setBounds(250, 100, 200, 55);
-        authorButton.setBackground(LightColor);
-        authorButton.setForeground(DarkColor);
-        authorButton.setFont(new Font("Tahoma", Font.BOLD, 10));
-        authorButton.setFocusPainted(false);
-        authorButton.setBorder(new LineBorder(DarkColor, 3));
-        rightPanel.add(authorButton);
-
-        authorButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                currentMode = "Author";
-                leftPanel.removeAll();
-                leftPanel.add(createAuthorPanel());
-                rightPanel.remove(bookManageTablePanel);
-                rightPanel.remove(shelfmanageTablePanel);
-                rightPanel.add(authorManageTablePanel);
-                manageBook.setText("Manage Authors");
-                leftPanel.revalidate();
-                leftPanel.repaint();
-                rightPanel.revalidate();
-                rightPanel.repaint();
-                authorManageTable.loadAuthorData(manageTable);
-            }
-        });
-
+        // Mode Buttons
         bookButton = new JButton("Book");
         bookButton.setBounds(50, 100, 200, 55);
         bookButton.setBackground(LightColor);
@@ -292,12 +271,39 @@ public class ManageBooks extends JFrame {
                 rightPanel.remove(authorManageTablePanel);
                 rightPanel.remove(shelfmanageTablePanel);
                 rightPanel.add(bookManageTablePanel);
-                manageBook.setText("Manage Books");
+                manageBook.setText(currentMode);
                 leftPanel.revalidate();
                 leftPanel.repaint();
                 rightPanel.revalidate();
                 rightPanel.repaint();
-                bookManageTable.loadBookData(manageTable);
+                bookManageTable.loadBookData(bookTable);
+            }
+        });
+
+        authorButton = new JButton("Author");
+        authorButton.setBounds(250, 100, 200, 55);
+        authorButton.setBackground(LightColor);
+        authorButton.setForeground(DarkColor);
+        authorButton.setFont(new Font("Tahoma", Font.BOLD, 10));
+        authorButton.setFocusPainted(false);
+        authorButton.setBorder(new LineBorder(DarkColor, 3));
+        rightPanel.add(authorButton);
+
+        authorButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                currentMode = "Author";
+                leftPanel.removeAll();
+                leftPanel.add(createAuthorPanel());
+                rightPanel.remove(bookManageTablePanel);
+                rightPanel.remove(shelfmanageTablePanel);
+                rightPanel.add(authorManageTablePanel);
+                manageBook.setText(currentMode);
+                leftPanel.revalidate();
+                leftPanel.repaint();
+                rightPanel.revalidate();
+                rightPanel.repaint();
+                authorManageTable.loadAuthorData(authorTable);
             }
         });
 
@@ -319,12 +325,12 @@ public class ManageBooks extends JFrame {
                 rightPanel.remove(authorManageTablePanel);
                 rightPanel.remove(bookManageTablePanel);
                 rightPanel.add(shelfmanageTablePanel);
-                manageBook.setText("Manage Shelves");
+                manageBook.setText(currentMode);
                 leftPanel.revalidate();
                 leftPanel.repaint();
                 rightPanel.revalidate();
                 rightPanel.repaint();
-                shelfManageTable.loadShelfData(manageTable);
+                shelfManageTable.loadShelfData(shelfTable);
             }
         });
 
@@ -334,29 +340,29 @@ public class ManageBooks extends JFrame {
         bookManageTablePanel.setBounds(0, tableY, 700, 390);
         rightPanel.add(bookManageTablePanel);
 
-        String[] columnManageTable = { "Book ISBN", "Title", "Author", "Main Genre", "Published Day", "Status" };
-        DefaultTableModel modelManageTable = new DefaultTableModel(columnManageTable, 0) {
+        String[] columnBookTable = { "Book ISBN", "Title", "Author", "Main Genre", "Published Day", "Status" };
+        DefaultTableModel modelBookTable = new DefaultTableModel(columnBookTable, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
 
-        manageTable = new JTable(modelManageTable);
-        manageTable.setBackground(LightColor);
-        manageTable.setForeground(DarkColor);
-        manageTable.setFont(new Font("Tahoma", Font.PLAIN, 12));
-        manageTable.setRowHeight(25);
-        manageTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        bookTable = new JTable(modelBookTable);
+        bookTable.setBackground(LightColor);
+        bookTable.setForeground(DarkColor);
+        bookTable.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        bookTable.setRowHeight(25);
+        bookTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-        manageTable.getColumnModel().getColumn(0).setPreferredWidth(90);
-        manageTable.getColumnModel().getColumn(1).setPreferredWidth(180);
-        manageTable.getColumnModel().getColumn(2).setPreferredWidth(155);
-        manageTable.getColumnModel().getColumn(3).setPreferredWidth(110);
-        manageTable.getColumnModel().getColumn(4).setPreferredWidth(90);
-        manageTable.getColumnModel().getColumn(5).setPreferredWidth(65);
+        bookTable.getColumnModel().getColumn(0).setPreferredWidth(90);
+        bookTable.getColumnModel().getColumn(1).setPreferredWidth(180);
+        bookTable.getColumnModel().getColumn(2).setPreferredWidth(155);
+        bookTable.getColumnModel().getColumn(3).setPreferredWidth(110);
+        bookTable.getColumnModel().getColumn(4).setPreferredWidth(90);
+        bookTable.getColumnModel().getColumn(5).setPreferredWidth(65);
 
-        manageTable.setDefaultRenderer(Object.class, new javax.swing.table.DefaultTableCellRenderer() {
+        bookTable.setDefaultRenderer(Object.class, new javax.swing.table.DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
                     boolean hasFocus, int row, int column) {
@@ -370,17 +376,17 @@ public class ManageBooks extends JFrame {
             }
         });
 
-        bookManageTable.loadBookData(manageTable);
+        bookManageTable.loadBookData(bookTable);
 
-        JTableHeader headerManageTable = manageTable.getTableHeader();
-        headerManageTable.setBackground(new Color(47, 120, 152));
-        headerManageTable.setForeground(LightColor);
-        headerManageTable.setFont(new Font("Tahoma", Font.BOLD, 12));
+        JTableHeader headerBookTable = bookTable.getTableHeader();
+        headerBookTable.setBackground(new Color(47, 120, 152));
+        headerBookTable.setForeground(LightColor);
+        headerBookTable.setFont(new Font("Tahoma", Font.BOLD, 12));
 
-        JScrollPane scrollManageTablePanel = new JScrollPane(manageTable);
-        scrollManageTablePanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollManageTablePanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        bookManageTablePanel.add(scrollManageTablePanel, BorderLayout.CENTER);
+        JScrollPane scrollBookTablePanel = new JScrollPane(bookTable);
+        scrollBookTablePanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollBookTablePanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        bookManageTablePanel.add(scrollBookTablePanel, BorderLayout.CENTER);
 
         // Author Table Panel
         authorManageTablePanel = new JPanel(new BorderLayout());
@@ -395,21 +401,20 @@ public class ManageBooks extends JFrame {
                 return false;
             }
         };
-        JTable authorTable = new JTable(modelAuthorTable);
+
+        authorTable = new JTable(modelAuthorTable);
         authorTable.setBackground(LightColor);
         authorTable.setForeground(DarkColor);
         authorTable.setFont(new Font("Tahoma", Font.PLAIN, 12));
         authorTable.setRowHeight(25);
         authorTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-        // Đặt chiều rộng cột cho bảng Author
-        authorTable.getColumnModel().getColumn(0).setPreferredWidth(80); // Author ID
-        authorTable.getColumnModel().getColumn(1).setPreferredWidth(100); // First Name
-        authorTable.getColumnModel().getColumn(2).setPreferredWidth(100); // Last Name
-        authorTable.getColumnModel().getColumn(3).setPreferredWidth(100); // Birth Date
-        authorTable.getColumnModel().getColumn(4).setPreferredWidth(320); // Nationality
+        authorTable.getColumnModel().getColumn(0).setPreferredWidth(80);
+        authorTable.getColumnModel().getColumn(1).setPreferredWidth(150);
+        authorTable.getColumnModel().getColumn(2).setPreferredWidth(100);
+        authorTable.getColumnModel().getColumn(3).setPreferredWidth(100);
+        authorTable.getColumnModel().getColumn(4).setPreferredWidth(270);
 
-        // Tùy chỉnh renderer cho bảng Author
         authorTable.setDefaultRenderer(Object.class, new javax.swing.table.DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
@@ -450,21 +455,21 @@ public class ManageBooks extends JFrame {
             }
         };
 
-        manageTable = new JTable(modelShelfTable);
-        manageTable.setBackground(LightColor);
-        manageTable.setForeground(DarkColor);
-        manageTable.setFont(new Font("Tahoma", Font.PLAIN, 12));
-        manageTable.setRowHeight(25);
-        manageTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        shelfTable = new JTable(modelShelfTable);
+        shelfTable.setBackground(LightColor);
+        shelfTable.setForeground(DarkColor);
+        shelfTable.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        shelfTable.setRowHeight(25);
+        shelfTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-        manageTable.getColumnModel().getColumn(0).setPreferredWidth(80);
-        manageTable.getColumnModel().getColumn(1).setPreferredWidth(100);
-        manageTable.getColumnModel().getColumn(2).setPreferredWidth(100);
-        manageTable.getColumnModel().getColumn(3).setPreferredWidth(110);
-        manageTable.getColumnModel().getColumn(4).setPreferredWidth(180);
-        manageTable.getColumnModel().getColumn(5).setPreferredWidth(130);
+        shelfTable.getColumnModel().getColumn(0).setPreferredWidth(80);
+        shelfTable.getColumnModel().getColumn(1).setPreferredWidth(100);
+        shelfTable.getColumnModel().getColumn(2).setPreferredWidth(100);
+        shelfTable.getColumnModel().getColumn(3).setPreferredWidth(110);
+        shelfTable.getColumnModel().getColumn(4).setPreferredWidth(180);
+        shelfTable.getColumnModel().getColumn(5).setPreferredWidth(130);
 
-        manageTable.setDefaultRenderer(Object.class, new javax.swing.table.DefaultTableCellRenderer() {
+        shelfTable.setDefaultRenderer(Object.class, new javax.swing.table.DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
                     boolean hasFocus, int row, int column) {
@@ -478,14 +483,14 @@ public class ManageBooks extends JFrame {
             }
         });
 
-        shelfManageTable.loadShelfData(manageTable);
+        shelfManageTable.loadShelfData(shelfTable);
 
-        JTableHeader headerShelfTable = manageTable.getTableHeader();
+        JTableHeader headerShelfTable = shelfTable.getTableHeader();
         headerShelfTable.setBackground(new Color(47, 120, 152));
         headerShelfTable.setForeground(LightColor);
         headerShelfTable.setFont(new Font("Tahoma", Font.BOLD, 12));
 
-        JScrollPane scrollShelfTablePanel = new JScrollPane(manageTable);
+        JScrollPane scrollShelfTablePanel = new JScrollPane(shelfTable);
         scrollShelfTablePanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollShelfTablePanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         shelfmanageTablePanel.add(scrollShelfTablePanel, BorderLayout.CENTER);
@@ -493,13 +498,13 @@ public class ManageBooks extends JFrame {
         leftPanel.add(createBookPanel());
     }
 
+    // Create Shelf Panel
     private JPanel createShelfJPanel() {
         JPanel panel = new JPanel();
         panel.setBackground(DarkColor);
         panel.setBounds(0, 0, 300, 640);
         panel.setLayout(null);
 
-        // Back Button
         backButton = new JButton("Back");
         backButton.setBounds(-1, 0, 150, 30);
         backButton.setBackground(new Color(47, 120, 152));
@@ -517,87 +522,66 @@ public class ManageBooks extends JFrame {
             }
         });
 
-        // Author ID
-        authorID = new JLabel("Enter Author ID:");
-        authorID.setFont(new Font("Tahoma", Font.BOLD, 15));
-        authorID.setForeground(Color.WHITE);
-        authorID.setBounds(75, 75, 500, 15);
-        panel.add(authorID);
+        shelfIDLabel = new JLabel("Enter Shelf ID:");
+        shelfIDLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
+        shelfIDLabel.setForeground(Color.WHITE);
+        shelfIDLabel.setBounds(75, 25, 500, 15);
+        panel.add(shelfIDLabel);
 
-        authorIDField = new JTextField(15);
-        authorIDField.setBounds(75, 100, 200, 45);
-        authorIDField.setBackground(LightColor);
-        authorIDField.setForeground(DarkColor);
-        authorIDField.setBorder(BorderFactory.createCompoundBorder(
+        shelfIDField = new JTextField(15);
+        shelfIDField.setBounds(75, 50, 200, 45);
+        shelfIDField.setBackground(LightColor);
+        shelfIDField.setForeground(DarkColor);
+        shelfIDField.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(DarkColor),
                 new EmptyBorder(5, 10, 5, 10)));
-        panel.add(authorIDField);
+        panel.add(shelfIDField);
 
-        // First Name
-        firstNameLabel = new JLabel("Enter First Name:");
-        firstNameLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
-        firstNameLabel.setForeground(Color.WHITE);
-        firstNameLabel.setBounds(75, 175, 500, 15);
-        panel.add(firstNameLabel);
+        shelfNumberLabel = new JLabel("Enter Shelf Number:");
+        shelfNumberLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
+        shelfNumberLabel.setForeground(Color.WHITE);
+        shelfNumberLabel.setBounds(75, 115, 500, 15);
+        panel.add(shelfNumberLabel);
 
-        firstNameField = new JTextField(15);
-        firstNameField.setBounds(75, 200, 200, 45);
-        firstNameField.setBackground(LightColor);
-        firstNameField.setForeground(DarkColor);
-        firstNameField.setBorder(BorderFactory.createCompoundBorder(
+        shelfNumberField = new JTextField(15);
+        shelfNumberField.setBounds(75, 140, 200, 45);
+        shelfNumberField.setBackground(LightColor);
+        shelfNumberField.setForeground(DarkColor);
+        shelfNumberField.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(DarkColor),
                 new EmptyBorder(5, 10, 5, 10)));
-        panel.add(firstNameField);
+        panel.add(shelfNumberField);
 
-        // Last Name
-        lastNameLabel = new JLabel("Enter Last Name:");
-        lastNameLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
-        lastNameLabel.setForeground(Color.WHITE);
-        lastNameLabel.setBounds(75, 275, 500, 15);
-        panel.add(lastNameLabel);
+        mainGenreLabel = new JLabel("Enter Main Genre ID:");
+        mainGenreLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
+        mainGenreLabel.setForeground(Color.WHITE);
+        mainGenreLabel.setBounds(75, 205, 500, 15);
+        panel.add(mainGenreLabel);
 
-        lastNameField = new JTextField(15);
-        lastNameField.setBounds(75, 300, 200, 45);
-        lastNameField.setBackground(LightColor);
-        lastNameField.setForeground(DarkColor);
-        lastNameField.setBorder(BorderFactory.createCompoundBorder(
+        mainGenreField = new JTextField(15);
+        mainGenreField.setBounds(75, 230, 200, 45);
+        mainGenreField.setBackground(LightColor);
+        mainGenreField.setForeground(DarkColor);
+        mainGenreField.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(DarkColor),
                 new EmptyBorder(5, 10, 5, 10)));
-        panel.add(lastNameField);
+        panel.add(mainGenreField);
 
-        // Birth Date
-        birthDateLabel = new JLabel("Enter Birth Date (YYYY-MM-DD):");
-        birthDateLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
-        birthDateLabel.setForeground(Color.WHITE);
-        birthDateLabel.setBounds(75, 375, 500, 15);
-        panel.add(birthDateLabel);
+        managerIDLabel = new JLabel("Enter Manager ID:");
+        managerIDLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
+        managerIDLabel.setForeground(Color.WHITE);
+        managerIDLabel.setBounds(75, 295, 500, 15);
+        panel.add(managerIDLabel);
 
-        birthDateField = new JTextField(15);
-        birthDateField.setBounds(75, 400, 200, 45);
-        birthDateField.setBackground(LightColor);
-        birthDateField.setForeground(DarkColor);
-        birthDateField.setBorder(BorderFactory.createCompoundBorder(
+        managerIDField = new JTextField(15);
+        managerIDField.setBounds(75, 320, 200, 45);
+        managerIDField.setBackground(LightColor);
+        managerIDField.setForeground(DarkColor);
+        managerIDField.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(DarkColor),
                 new EmptyBorder(5, 10, 5, 10)));
-        panel.add(birthDateField);
+        panel.add(managerIDField);
 
-        // Nationality
-        nationalityLabel = new JLabel("Enter Nationality:");
-        nationalityLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
-        nationalityLabel.setForeground(Color.WHITE);
-        nationalityLabel.setBounds(75, 475, 500, 15);
-        panel.add(nationalityLabel);
-
-        nationalityField = new JTextField(15);
-        nationalityField.setBounds(75, 500, 200, 45);
-        nationalityField.setBackground(LightColor);
-        nationalityField.setForeground(DarkColor);
-        nationalityField.setBorder(BorderFactory.createCompoundBorder(
-                new LineBorder(DarkColor),
-                new EmptyBorder(5, 10, 5, 10)));
-        panel.add(nationalityField);
-
-        // Add Button
         addButton = new RoundedButton("Add");
         addButton.setBounds(15, 575, 60, 45);
         addButton.setBackground(new Color(47, 120, 152));
@@ -611,35 +595,33 @@ public class ManageBooks extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    String firstName = firstNameField.getText().trim();
-                    String lastName = lastNameField.getText().trim();
-                    String birthDate = birthDateField.getText().trim();
-                    String nationality = nationalityField.getText().trim();
+                    String shelfID = shelfIDField.getText().trim();
+                    String shelfNumber = shelfNumberField.getText().trim();
+                    String mainGenre = mainGenreField.getText().trim();
+                    String managerID = managerIDField.getText().trim();
 
-                    if (firstName.isEmpty() || lastName.isEmpty()) {
-                        throw new IllegalArgumentException("First Name and Last Name are required.");
+                    if (shelfID.isEmpty() || shelfNumber.isEmpty() || mainGenre.isEmpty() || managerID.isEmpty()) {
+                        throw new IllegalArgumentException("Shelf ID, Shelf Number, Main Genre ID, and Manager ID are required.");
                     }
 
-                    Map<String, Object> author = new HashMap<>();
-                    author.put("First_name", firstName);
-                    author.put("Last_name", lastName);
-                    author.put("BirthDate", birthDate.isEmpty() ? null : Date.valueOf(birthDate));
-                    author.put("Nationality", nationality.isEmpty() ? null : nationality);
-                    author.put("Bio", null); // Bio không bắt buộc
+                    Map<String, Object> shelf = new HashMap<>();
+                    shelf.put("Shelf_ID", Integer.parseInt(shelfID));
+                    shelf.put("Shelf_number", Integer.parseInt(shelfNumber));
+                    shelf.put("MainGenre_id", Integer.parseInt(mainGenre));
+                    shelf.put("Manager_id", Integer.parseInt(managerID));
 
-                    AuthorDAO authorDAO = new AuthorDAO();
-                    authorDAO.insert(author);
+                    ShelfDAO shelfDAO = new ShelfDAO();
+                    shelfDAO.insert(shelf);
 
-                    authorManageTable.loadAuthorData(manageTable);
-                    JOptionPane.showMessageDialog(null, "Author added successfully!");
+                    shelfManageTable.loadShelfData(shelfTable);
+                    JOptionPane.showMessageDialog(null, "Shelf added successfully!");
                 } catch (Exception ex) {
                     ex.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Error adding author: " + ex.getMessage());
+                    JOptionPane.showMessageDialog(null, "Error adding shelf: " + ex.getMessage());
                 }
             }
         });
 
-        // Delete Button
         deleteButton = new RoundedButton("Delete");
         deleteButton.setBounds(110, 575, 70, 45);
         deleteButton.setBackground(new Color(47, 120, 152));
@@ -653,23 +635,22 @@ public class ManageBooks extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    String authorIdStr = authorIDField.getText().trim();
-                    if (authorIdStr.isEmpty()) {
-                        throw new IllegalArgumentException("Author ID is required.");
+                    String shelfIDStr = shelfIDField.getText().trim();
+                    if (shelfIDStr.isEmpty()) {
+                        throw new IllegalArgumentException("Shelf ID is required.");
                     }
-                    int authorId = Integer.parseInt(authorIdStr);
-                    AuthorDAO authorDAO = new AuthorDAO();
-                    authorDAO.delete(authorId);
-                    authorManageTable.loadAuthorData(manageTable);
-                    JOptionPane.showMessageDialog(null, "Author deleted successfully!");
+                    int shelfID = Integer.parseInt(shelfIDStr);
+                    ShelfDAO shelfDAO = new ShelfDAO();
+                    shelfDAO.delete(shelfID);
+                    shelfManageTable.loadShelfData(shelfTable);
+                    JOptionPane.showMessageDialog(null, "Shelf deleted successfully!");
                 } catch (Exception ex) {
                     ex.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Error deleting author: " + ex.getMessage());
+                    JOptionPane.showMessageDialog(null, "Error deleting shelf: " + ex.getMessage());
                 }
             }
         });
 
-        // Update Button
         updateButton = new RoundedButton("Update");
         updateButton.setBounds(215, 575, 70, 45);
         updateButton.setBackground(new Color(47, 120, 152));
@@ -683,33 +664,31 @@ public class ManageBooks extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    String authorIdStr = authorIDField.getText().trim();
-                    String firstName = firstNameField.getText().trim();
-                    String lastName = lastNameField.getText().trim();
-                    String birthDate = birthDateField.getText().trim();
-                    String nationality = nationalityField.getText().trim();
+                    String shelfIDStr = shelfIDField.getText().trim();
+                    String shelfNumberStr = shelfNumberField.getText().trim();
+                    String mainGenre = mainGenreField.getText().trim();
+                    String managerID = managerIDField.getText().trim();
 
-                    if (authorIdStr.isEmpty() || firstName.isEmpty() || lastName.isEmpty()) {
-                        throw new IllegalArgumentException("Author ID, First Name, and Last Name are required.");
+                    if (shelfIDStr.isEmpty() || shelfNumberStr.isEmpty() || mainGenre.isEmpty() || managerID.isEmpty()) {
+                        throw new IllegalArgumentException("Shelf ID, Shelf Number, Main Genre ID, and Manager ID are required.");
                     }
 
-                    int authorId = Integer.parseInt(authorIdStr);
-                    Map<String, Object> author = new HashMap<>();
-                    author.put("Author_id", authorId);
-                    author.put("First_name", firstName);
-                    author.put("Last_name", lastName);
-                    author.put("BirthDate", birthDate.isEmpty() ? null : Date.valueOf(birthDate));
-                    author.put("Nationality", nationality.isEmpty() ? null : nationality);
-                    author.put("Bio", null); // Bio không bắt buộc
+                    int shelfID = Integer.parseInt(shelfIDStr);
+                    int shelfNumber = Integer.parseInt(shelfNumberStr);
+                    Map<String, Object> shelf = new HashMap<>();
+                    shelf.put("Shelf_ID", shelfID);
+                    shelf.put("Shelf_number", shelfNumber);
+                    shelf.put("MainGenre_id", Integer.parseInt(mainGenre));
+                    shelf.put("Manager_id", Integer.parseInt(managerID));
 
-                    AuthorDAO authorDAO = new AuthorDAO();
-                    authorDAO.update(author);
+                    ShelfDAO shelfDAO = new ShelfDAO();
+                    shelfDAO.update(shelf);
 
-                    authorManageTable.loadAuthorData(manageTable);
-                    JOptionPane.showMessageDialog(null, "Author updated successfully!");
+                    shelfManageTable.loadShelfData(shelfTable);
+                    JOptionPane.showMessageDialog(null, "Shelf updated successfully!");
                 } catch (Exception ex) {
                     ex.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Error updating author: " + ex.getMessage());
+                    JOptionPane.showMessageDialog(null, "Error updating shelf: " + ex.getMessage());
                 }
             }
         });
@@ -717,14 +696,13 @@ public class ManageBooks extends JFrame {
         return panel;
     }
 
-    // Author Panel
+    // Create Author Panel
     private JPanel createAuthorPanel() {
         JPanel panel = new JPanel();
         panel.setBackground(DarkColor);
         panel.setBounds(0, 0, 300, 640);
         panel.setLayout(null);
 
-        // Back Button
         backButton = new JButton("Back");
         backButton.setBounds(-1, 0, 150, 30);
         backButton.setBackground(new Color(47, 120, 152));
@@ -742,7 +720,6 @@ public class ManageBooks extends JFrame {
             }
         });
 
-        // Author ID
         authorID = new JLabel("Enter Author ID:");
         authorID.setFont(new Font("Tahoma", Font.BOLD, 15));
         authorID.setForeground(Color.WHITE);
@@ -758,7 +735,6 @@ public class ManageBooks extends JFrame {
                 new EmptyBorder(5, 10, 5, 10)));
         panel.add(authorIDField);
 
-        // First Name
         firstNameLabel = new JLabel("Enter First Name:");
         firstNameLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         firstNameLabel.setForeground(Color.WHITE);
@@ -774,7 +750,6 @@ public class ManageBooks extends JFrame {
                 new EmptyBorder(5, 10, 5, 10)));
         panel.add(firstNameField);
 
-        // Last Name
         lastNameLabel = new JLabel("Enter Last Name:");
         lastNameLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         lastNameLabel.setForeground(Color.WHITE);
@@ -790,7 +765,6 @@ public class ManageBooks extends JFrame {
                 new EmptyBorder(5, 10, 5, 10)));
         panel.add(lastNameField);
 
-        // Birth Date
         birthDateLabel = new JLabel("Enter Birth Date (YYYY-MM-DD):");
         birthDateLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         birthDateLabel.setForeground(Color.WHITE);
@@ -806,7 +780,6 @@ public class ManageBooks extends JFrame {
                 new EmptyBorder(5, 10, 5, 10)));
         panel.add(birthDateField);
 
-        // Nationality
         nationalityLabel = new JLabel("Enter Nationality:");
         nationalityLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         nationalityLabel.setForeground(Color.WHITE);
@@ -822,7 +795,6 @@ public class ManageBooks extends JFrame {
                 new EmptyBorder(5, 10, 5, 10)));
         panel.add(nationalityField);
 
-        // Add Button
         addButton = new RoundedButton("Add");
         addButton.setBounds(15, 575, 60, 45);
         addButton.setBackground(new Color(47, 120, 152));
@@ -850,12 +822,12 @@ public class ManageBooks extends JFrame {
                     author.put("Last_name", lastName);
                     author.put("BirthDate", birthDate.isEmpty() ? null : Date.valueOf(birthDate));
                     author.put("Nationality", nationality.isEmpty() ? null : nationality);
-                    author.put("Bio", null); // Bio không bắt buộc
+                    author.put("Bio", null);
 
                     AuthorDAO authorDAO = new AuthorDAO();
                     authorDAO.insert(author);
 
-                    authorManageTable.loadAuthorData(manageTable);
+                    authorManageTable.loadAuthorData(authorTable);
                     JOptionPane.showMessageDialog(null, "Author added successfully!");
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -864,7 +836,6 @@ public class ManageBooks extends JFrame {
             }
         });
 
-        // Delete Button
         deleteButton = new RoundedButton("Delete");
         deleteButton.setBounds(110, 575, 70, 45);
         deleteButton.setBackground(new Color(47, 120, 152));
@@ -885,7 +856,7 @@ public class ManageBooks extends JFrame {
                     int authorId = Integer.parseInt(authorIdStr);
                     AuthorDAO authorDAO = new AuthorDAO();
                     authorDAO.delete(authorId);
-                    authorManageTable.loadAuthorData(manageTable);
+                    authorManageTable.loadAuthorData(authorTable);
                     JOptionPane.showMessageDialog(null, "Author deleted successfully!");
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -894,7 +865,6 @@ public class ManageBooks extends JFrame {
             }
         });
 
-        // Update Button
         updateButton = new RoundedButton("Update");
         updateButton.setBounds(215, 575, 70, 45);
         updateButton.setBackground(new Color(47, 120, 152));
@@ -925,12 +895,12 @@ public class ManageBooks extends JFrame {
                     author.put("Last_name", lastName);
                     author.put("BirthDate", birthDate.isEmpty() ? null : Date.valueOf(birthDate));
                     author.put("Nationality", nationality.isEmpty() ? null : nationality);
-                    author.put("Bio", null); // Bio không bắt buộc
+                    author.put("Bio", null);
 
                     AuthorDAO authorDAO = new AuthorDAO();
                     authorDAO.update(author);
 
-                    authorManageTable.loadAuthorData(manageTable);
+                    authorManageTable.loadAuthorData(authorTable);
                     JOptionPane.showMessageDialog(null, "Author updated successfully!");
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -942,13 +912,13 @@ public class ManageBooks extends JFrame {
         return panel;
     }
 
+    // Create Book Panel
     private JPanel createBookPanel() {
         JPanel panel = new JPanel();
         panel.setBackground(DarkColor);
         panel.setBounds(0, 0, 300, 640);
         panel.setLayout(null);
 
-        // Back Button
         backButton = new JButton("Back");
         backButton.setBounds(-1, 0, 150, 30);
         backButton.setBackground(new Color(47, 120, 152));
@@ -966,7 +936,6 @@ public class ManageBooks extends JFrame {
             }
         });
 
-        // Book ID
         bookID = new JLabel("Enter Book ID:");
         bookID.setFont(new Font("Tahoma", Font.BOLD, 15));
         bookID.setForeground(Color.WHITE);
@@ -982,14 +951,12 @@ public class ManageBooks extends JFrame {
                 new EmptyBorder(5, 10, 5, 10)));
         panel.add(bookIDField);
 
-        // Book ID Icon
         ImageIcon id = new ImageIcon(getClass().getResource("/com/res/BookIDIcon.png"));
         Image scaledIDIcon = id.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH);
         iconID = new JLabel(new ImageIcon(scaledIDIcon));
         iconID.setBounds(15, 100, 45, 45);
         panel.add(iconID);
 
-        // Book Name
         bookName = new JLabel("Enter Book Name:");
         bookName.setFont(new Font("Tahoma", Font.BOLD, 15));
         bookName.setForeground(Color.WHITE);
@@ -1005,14 +972,12 @@ public class ManageBooks extends JFrame {
                 new EmptyBorder(5, 10, 5, 10)));
         panel.add(bookNameField);
 
-        // Book Name Icon
         ImageIcon book = new ImageIcon(getClass().getResource("/com/res/BookNameIcon.png"));
         Image scaledBookIcon = book.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH);
         iconBook = new JLabel(new ImageIcon(scaledBookIcon));
         iconBook.setBounds(15, 200, 45, 45);
         panel.add(iconBook);
 
-        // Author ID
         authorName = new JLabel("Enter Author ID:");
         authorName.setFont(new Font("Tahoma", Font.BOLD, 15));
         authorName.setForeground(Color.WHITE);
@@ -1028,14 +993,12 @@ public class ManageBooks extends JFrame {
                 new EmptyBorder(5, 10, 5, 10)));
         panel.add(authorNameField);
 
-        // Author Icon
         ImageIcon author = new ImageIcon(getClass().getResource("/com/res/IconAuthor.png"));
         Image scaledAuthorIcon = author.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH);
         iconAuthor = new JLabel(new ImageIcon(scaledAuthorIcon));
         iconAuthor.setBounds(15, 300, 45, 45);
         panel.add(iconAuthor);
 
-        // Genre ID
         Category = new JLabel("Enter Genre ID:");
         Category.setFont(new Font("Tahoma", Font.BOLD, 15));
         Category.setForeground(Color.WHITE);
@@ -1051,14 +1014,12 @@ public class ManageBooks extends JFrame {
                 new EmptyBorder(5, 10, 5, 10)));
         panel.add(mainGenreID);
 
-        // Genre Icon
         ImageIcon category = new ImageIcon(getClass().getResource("/com/res/IconQuantity.png"));
         Image scaledCategoryIcon = category.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH);
         iconCategory = new JLabel(new ImageIcon(scaledCategoryIcon));
         iconCategory.setBounds(15, 400, 45, 45);
         panel.add(iconCategory);
 
-        // Add Button
         addButton = new RoundedButton("Add");
         addButton.setBounds(15, 500, 60, 45);
         addButton.setBackground(new Color(47, 120, 152));
@@ -1090,7 +1051,7 @@ public class ManageBooks extends JFrame {
                     BookDAO bookDAO = new BookDAO();
                     bookDAO.insert(book);
 
-                    bookManageTable.loadBookData(manageTable);
+                    bookManageTable.loadBookData(bookTable);
                     JOptionPane.showMessageDialog(null, "Book added successfully!");
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -1099,7 +1060,6 @@ public class ManageBooks extends JFrame {
             }
         });
 
-        // Delete Button
         deleteButton = new RoundedButton("Delete");
         deleteButton.setBounds(110, 500, 70, 45);
         deleteButton.setBackground(new Color(47, 120, 152));
@@ -1116,7 +1076,7 @@ public class ManageBooks extends JFrame {
                     String isbn = bookIDField.getText().trim();
                     BookDAO bookDAO = new BookDAO();
                     bookDAO.delete(isbn);
-                    bookManageTable.loadBookData(manageTable);
+                    bookManageTable.loadBookData(bookTable);
                     JOptionPane.showMessageDialog(null, "Book deleted successfully!");
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -1125,7 +1085,6 @@ public class ManageBooks extends JFrame {
             }
         });
 
-        // Update Button
         updateButton = new RoundedButton("Update");
         updateButton.setBounds(215, 500, 70, 45);
         updateButton.setBackground(new Color(47, 120, 152));
@@ -1156,7 +1115,7 @@ public class ManageBooks extends JFrame {
 
                     BookDAO bookDAO = new BookDAO();
                     bookDAO.update(book);
-                    bookManageTable.loadBookData(manageTable);
+                    bookManageTable.loadBookData(bookTable);
                     JOptionPane.showMessageDialog(null, "Book updated successfully!");
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -1168,17 +1127,7 @@ public class ManageBooks extends JFrame {
         return panel;
     }
 
-    private Component field(int x, int y, int width, int height) {
-        JTextField field = new JTextField();
-        field.setBounds(x, y, width, height);
-        field.setBackground(LightColor);
-        field.setForeground(DarkColor);
-        field.setBorder(BorderFactory.createCompoundBorder(
-                new LineBorder(DarkColor),
-                new EmptyBorder(5, 10, 5, 10)));
-        return field;
-    }
-
+    // Rounded Button Class
     class RoundedButton extends JButton {
         private int radius = 10;
         private Color normalColor = new Color(47, 120, 152);
@@ -1226,4 +1175,6 @@ public class ManageBooks extends JFrame {
             super.paintComponent(g);
         }
     }
+
+    
 }
