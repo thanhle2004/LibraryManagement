@@ -369,7 +369,6 @@ public class HomePage extends JFrame {
         IssuedPanelStat.setBounds(120, 30, 120, 120);
         IssuedPanelStat.setHorizontalAlignment(SwingConstants.CENTER);
         IssuedPanel.add(IssuedPanelStat);
-        //////////////////////////////////////////////////////////////////////////////////////////////
 
         TablePanel = new JPanel();
         TablePanel.setBackground(Color.WHITE);

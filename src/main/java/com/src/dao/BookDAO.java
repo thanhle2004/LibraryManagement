@@ -35,7 +35,6 @@ public class BookDAO extends AbstractGenericDAO<Map<String, Object>, String> {
         book.put("Status", rs.getString("Status"));
         return book;
     }
-
     @Override
     protected String getInsertQuery() {
         return "INSERT INTO book (ISBN, Title, Author_id, MainGenre_id, published_day, Status) VALUES (?, ?, ?, ?, ?, ?)";
@@ -68,7 +67,6 @@ public class BookDAO extends AbstractGenericDAO<Map<String, Object>, String> {
 
     public List<Map<String, Object>> searchBooks(String keyword) {
         List<Map<String, Object>> results = new ArrayList<>();
-        // Truy vấn tìm kiếm trên tất cả các cột
         String sql = "SELECT b.ISBN, b.Title, CONCAT(a.First_name, ' ', a.Last_name) AS Author, g.MainGenre_name AS MainGenre, b.published_day, b.Status " +
                     "FROM book b " +
                     "INNER JOIN Author a ON b.Author_id = a.Author_id " +
