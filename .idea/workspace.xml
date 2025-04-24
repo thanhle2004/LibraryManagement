@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="dce75777-be5d-4a3e-b2ec-3430a61dcc7e" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/HomePage$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/src/frontend/HomePage$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/HomePage$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/src/frontend/HomePage$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/HomePage$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/src/frontend/HomePage$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/HomePage$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/src/frontend/HomePage$4.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/HomePage$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/src/frontend/HomePage$5.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/HomePage$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/src/frontend/HomePage$6.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/HomePage$NavButton$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/src/frontend/HomePage$NavButton$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/HomePage$NavButton.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/src/frontend/HomePage$NavButton.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/HomePage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/src/frontend/HomePage.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/IssueBook$RoundedButton$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/IssueBook$RoundedButton.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/IssueBook.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/src/frontend/IssueBook.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBooks$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBooks$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBooks$10.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBooks$10.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBooks$11.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBooks$11.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBooks$12.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBooks$12.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBooks$13.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBooks$13.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBooks$14.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBooks$14.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBooks$15.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBooks$15.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBooks$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBooks$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBooks$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBooks$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBooks$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBooks$4.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBooks$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBooks$5.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBooks$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBooks$6.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBooks$7.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBooks$7.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBooks$8.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBooks$8.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBooks$9.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBooks$9.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBooks$RoundedButton$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBooks$RoundedButton$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBooks$RoundedButton.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBooks$RoundedButton.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBooks.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBooks.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBorrower$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBorrower$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBorrower$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBorrower$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBorrower$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBorrower$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBorrower$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBorrower$4.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBorrower$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBorrower$5.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBorrower$RoundedButton$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBorrower$RoundedButton$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBorrower$RoundedButton.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBorrower$RoundedButton.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBorrower.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/src/frontend/ManageBorrower.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/ReturnBook$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/ReturnBook.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/src/frontend/ReturnBook.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/ViewIssuedBooks$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/ViewIssuedBooks.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/ViewRecords$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/src/frontend/ViewRecords$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/ViewRecords$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/src/frontend/ViewRecords$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/ViewRecords$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/src/frontend/ViewRecords$4.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/src/frontend/ViewRecords.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/src/frontend/ViewRecords.class" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="2w4c9Dnina5fmyqs3iaF6067Tpk" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.App.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "Thanh",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/IU IT/Y3_S2/Principles of Database Management/Project/PDM/LibraryManagement",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\IU IT\Y3_S2\Principles of Database Management\Project\PDM\LibraryManagement\src\main\java\com" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.src.runApp.App" />
+      <module name="LibraryManSys" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.src.runApp.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.App" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23339.11" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23339.11" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="dce75777-be5d-4a3e-b2ec-3430a61dcc7e" name="Changes" comment="" />
+      <created>1745304132262</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1745304132262</updated>
+      <workItem from="1745304133343" duration="1809000" />
+      <workItem from="1745468901583" duration="11000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

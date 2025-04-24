@@ -43,7 +43,7 @@ public class HomePage extends JFrame {
     private JButton IssueBookButton;
     private JButton ReturnBookButton;
     private JButton ViewRecordButton;
-    private JButton ViewIssuedBookButton;
+    private JButton ViewStatisticButton;
     private JButton LogOutButton;
 
     // Content
@@ -109,7 +109,7 @@ public class HomePage extends JFrame {
 
         Color DarkColor = new Color(5, 77, 120);
         Color LightColor = new Color(220, 238, 229);
-        int heightButton = 45;
+        int heightButton = 44;
 
         LocalDate currentDate = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -172,8 +172,22 @@ public class HomePage extends JFrame {
             }
         });
 
+        JButton ManageStaffButton = new NavButton("Manage Staff");
+        ManageStaffButton.setBounds(0, 200 + heightButton * 3, 200, heightButton);
+        ManageStaffButton.setFocusPainted(false);
+        ManageStaffButton.setBorder(null);
+        NavigationPanel.add(ManageStaffButton);
+
+        ManageStaffButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new ManageStaff();
+                setVisible(false);
+            }
+        });
+
         IssueBookButton = new NavButton("Issue books");
-        IssueBookButton.setBounds(0, 200 + heightButton * 3, 200, heightButton);
+        IssueBookButton.setBounds(0, 200 + heightButton * 4, 200, heightButton);
         IssueBookButton.setFocusPainted(false);
         IssueBookButton.setBorder(null);
         NavigationPanel.add(IssueBookButton);
@@ -187,7 +201,7 @@ public class HomePage extends JFrame {
         });
 
         ReturnBookButton = new NavButton("Return books");
-        ReturnBookButton.setBounds(0, 200 + heightButton * 4, 200, heightButton);
+        ReturnBookButton.setBounds(0, 200 + heightButton * 5, 200, heightButton);
         ReturnBookButton.setFocusPainted(false);
         ReturnBookButton.setBorder(null);
         NavigationPanel.add(ReturnBookButton);
@@ -201,7 +215,7 @@ public class HomePage extends JFrame {
         });
 
         ViewRecordButton = new NavButton("View records");
-        ViewRecordButton.setBounds(0, 200 + heightButton * 5, 200, heightButton);
+        ViewRecordButton.setBounds(0, 200 + heightButton * 6, 200, heightButton);
         ViewRecordButton.setFocusPainted(false);
         ViewRecordButton.setBorder(null);
         NavigationPanel.add(ViewRecordButton);
@@ -214,22 +228,22 @@ public class HomePage extends JFrame {
             }
         });
 
-        ViewIssuedBookButton = new NavButton("View issued books");
-        ViewIssuedBookButton.setBounds(0, 200 + heightButton * 6, 200, heightButton);
-        ViewIssuedBookButton.setFocusPainted(false);
-        ViewIssuedBookButton.setBorder(null);
-        NavigationPanel.add(ViewIssuedBookButton);
+        ViewStatisticButton = new NavButton("View Statistic");
+        ViewStatisticButton.setBounds(0, 200 + heightButton * 7, 200, heightButton);
+        ViewStatisticButton.setFocusPainted(false);
+        ViewStatisticButton.setBorder(null);
+        NavigationPanel.add(ViewStatisticButton);
 
-        ViewIssuedBookButton.addActionListener(new ActionListener() {
+        ViewStatisticButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new ViewIssuedBooks();
+                new ViewStatistics();
                 setVisible(false);
             }
         });
 
         LogOutButton = new NavButton("Log out");
-        LogOutButton.setBounds(0, 200 + heightButton * 7, 200, heightButton);
+        LogOutButton.setBounds(0, 200 + heightButton * 8, 200, heightButton);
         LogOutButton.setFocusPainted(false);
         LogOutButton.setBorder(null);
         NavigationPanel.add(LogOutButton);

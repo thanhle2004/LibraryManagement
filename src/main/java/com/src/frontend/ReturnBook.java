@@ -1,166 +1,274 @@
 package com.src.frontend;
 
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Font;
-import java.awt.Image;
 
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
+
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.awt.*;
+
 
 public class ReturnBook extends JFrame {
     public ReturnBook() {
-        setTitle("Return Book");
-        setSize(1100, 640);
+        setPreferredSize(new Dimension(1100, 640));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setResizable(false);
+        setLayout(new BorderLayout());
+       
+        initComponents();
+        pack();
+        setVisible(true);
         setLocationRelativeTo(null);
-        setLayout(null);
-        
-        // Left Panel (Book Details)
+    }
+       
+    private void initComponents(){
+        Color DarkColor = new Color(5, 77, 120);
+        Color LightColor = new Color(220,238,229);
+
+
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String formattedDate = currentDate.format(formatter);
+
+
+         // Main Panel
+         JPanel mainPanel = new JPanel();
+         mainPanel.setBackground(Color.WHITE);
+         mainPanel.setPreferredSize(new Dimension(1100, 640));
+         mainPanel.setLayout(null);
+         add(mainPanel);
+
+
+        // Navigation Panel (Left)
         JPanel leftPanel = new JPanel();
-        leftPanel.setBounds(0, 0, 550, 640); // 50% Width
-        leftPanel.setBackground(new Color(47, 120, 152)); // Updated color
+        leftPanel.setBackground(new Color(5, 77, 120));
+        leftPanel.setBounds(0, 0, 300, 640);
         leftPanel.setLayout(null);
-
-        // Load the Book Icon and set it larger 
-        ImageIcon bookIcon = new ImageIcon(getClass().getResource("/com/res/IconBook1.png"));
-        Image scaledBookImage = bookIcon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
-        bookIcon = new ImageIcon(scaledBookImage);
-        
-        // Book Title with Icon: Icon on the left, text on the right
-        JLabel bookIconLabel = new JLabel(bookIcon);
-        bookIconLabel.setBounds(80, 65, 64, 64);
-        leftPanel.add(bookIconLabel);
-        
-        
+        mainPanel.add(leftPanel);
+       
         // Back Button
-        JButton backButton = new JButton("Back");
-        backButton.setBounds(20, 20, 200, 40); // Adjusted position and size
-        backButton.setBackground(new Color(0, 80, 160)); // Updated to match new design
-        backButton.setForeground(Color.WHITE);
-        backButton.setFont(new Font("Verdana", Font.BOLD, 16));
+        JButton backButton = new CustomButton("Back", true);
+        backButton.setBounds(10, 10, 280, 45);
+        backButton.setBackground(new Color(47, 120, 152));
+        backButton.setForeground(new Color(220, 238, 229));
+        backButton.setFont(new Font("Tahoma", Font.BOLD, 15));
         backButton.setFocusPainted(false);
-        backButton.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
-        backButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        
-        // Hover effect
-        backButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                backButton.setBackground(new Color(30, 100, 200));
-            }
-
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                backButton.setBackground(new Color(0, 80, 160));
-            }
-        });
-        
         leftPanel.add(backButton);
         backButton.addActionListener(e -> {
             new HomePage();
             setVisible(false);
         });
-        
-        JLabel bookDetailsLabel = new JLabel("Book Details");
-        bookDetailsLabel.setFont(new Font("Verdana", Font.BOLD, 26)); // Increased font size
-        bookDetailsLabel.setForeground(Color.WHITE);
-        bookDetailsLabel.setBounds(150, 80, 250, 30); // Moved below the back button
-        leftPanel.add(bookDetailsLabel);
-        
-        JLabel bookIdInfoLabel = new JLabel("Book ID:");
-        bookIdInfoLabel.setForeground(Color.WHITE);
-        bookIdInfoLabel.setFont(new Font("Verdana", Font.BOLD, 16));
-        bookIdInfoLabel.setBounds(30, 140, 150, 25);
-        leftPanel.add(bookIdInfoLabel);
-        
-        JTextField bookIdInfoField = new JTextField();
-        bookIdInfoField.setBounds(30, 170, 250, 35);
-        leftPanel.add(bookIdInfoField);
-        
-        JLabel bookNameLabel = new JLabel("Book Name:");
-        bookNameLabel.setForeground(Color.WHITE);
-        bookNameLabel.setFont(new Font("Verdana", Font.BOLD, 16));
-        bookNameLabel.setBounds(30, 220, 150, 25);
-        leftPanel.add(bookNameLabel);
-        
-        JTextField bookNameField = new JTextField();
-        bookNameField.setBounds(30, 250, 250, 35);
-        leftPanel.add(bookNameField);
-        
-        JLabel authorLabel = new JLabel("Author:");
-        authorLabel.setForeground(Color.WHITE);
-        authorLabel.setFont(new Font("Verdana", Font.BOLD, 16));
-        authorLabel.setBounds(30, 300, 150, 25);
-        leftPanel.add(authorLabel);
-        
-        JTextField authorField = new JTextField();
-        authorField.setBounds(30, 330, 250, 35);
-        leftPanel.add(authorField);
-        
-        JLabel quantityLabel = new JLabel("Quantity:");
-        quantityLabel.setForeground(Color.WHITE);
-        quantityLabel.setFont(new Font("Verdana", Font.BOLD, 16));
-        quantityLabel.setBounds(30, 380, 150, 25);
-        leftPanel.add(quantityLabel);
-        
-        JTextField quantityField = new JTextField();
-        quantityField.setBounds(30, 410, 250, 35);
-        leftPanel.add(quantityField);
-        
-        add(leftPanel);
-        
-        // Right Panel (Issue Book)
-        JPanel rightPanel = new JPanel();
-        rightPanel.setBounds(550, 0, 550, 640);
-        rightPanel.setBackground(new Color(220, 235, 220));
-        rightPanel.setLayout(null);
+       
+        // Return Information Panel (Left Form)
+        JPanel returnPanel = new JPanel();
+        returnPanel.setBackground(new Color(5, 77, 120));
+        returnPanel.setBounds(0, 60, 300, 580);
+        returnPanel.setLayout(null);
+        leftPanel.add(returnPanel);
+       
+        JLabel dateLabel = new JLabel("Date: " + formattedDate);
+        dateLabel.setFont(new Font("Tahoma", Font.BOLD, 18));
+        dateLabel.setForeground(DarkColor);
+        dateLabel.setBounds(20,30,200,25);
+        returnPanel.add(dateLabel);
 
-        // Load IssueBook Icon
-        ImageIcon issueBookIcon = new ImageIcon(getClass().getResource("/com/res/IssueBook.png"));
-        Image scaledIssueBookImage = issueBookIcon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
-        issueBookIcon = new ImageIcon(scaledIssueBookImage);
-
-        // Label for IssueBook Icon
-        JLabel issueBookIconLabel = new JLabel(issueBookIcon);
-        issueBookIconLabel.setBounds(80, 65, 64, 64);
-        rightPanel.add(issueBookIconLabel);
-
-        // Label for Issue Book Title
-        JLabel issueBookLabel = new JLabel("Issue Book");
-        issueBookLabel.setFont(new Font("Verdana", Font.BOLD, 26));
-        issueBookLabel.setBounds(160, 80, 250, 30);
-        rightPanel.add(issueBookLabel);
 
         JLabel bookIdLabel = new JLabel("Enter Book ID:");
-        bookIdLabel.setFont(new Font("Verdana", Font.BOLD, 16));
-        bookIdLabel.setBounds(30, 140, 150, 25);
-        rightPanel.add(bookIdLabel);
-
+        bookIdLabel.setFont(new Font("Tahoma", Font.BOLD, 18));
+        bookIdLabel.setForeground(LightColor);
+        bookIdLabel.setBounds(20, 80, 200, 25);
+        returnPanel.add(bookIdLabel);
+       
         JTextField bookIdField = new JTextField();
-        bookIdField.setBounds(30, 170, 250, 35);
-        rightPanel.add(bookIdField);
+        bookIdField.setBounds(20, 120, 260, 30);
+        returnPanel.add(bookIdField);
+       
+        JLabel borrowerIdLabel = new JLabel("Enter Borrower ID:");
+        borrowerIdLabel.setFont(new Font("Tahoma", Font.BOLD, 18));
+        borrowerIdLabel.setForeground(LightColor);
+        borrowerIdLabel.setBounds(20, 160, 200, 25);
+        returnPanel.add(borrowerIdLabel);
+       
+        JTextField borrowerIdField = new JTextField();
+        borrowerIdField.setBounds(20, 200, 260, 30);
+        returnPanel.add(borrowerIdField);
 
-        JLabel studentIdLabel = new JLabel("Enter Student ID:");
-        studentIdLabel.setFont(new Font("Verdana", Font.BOLD, 16));
-        studentIdLabel.setBounds(30, 220, 160, 25);
-        rightPanel.add(studentIdLabel);
 
-        JTextField studentIdField = new JTextField();
-        studentIdField.setBounds(30, 250, 250, 35);
-        rightPanel.add(studentIdField);
+        JButton checkButton = new CustomButton("Check Infomation", false);
+        checkButton.setBounds(20, 250, 260, 40);
+        checkButton.setBackground(new Color(47, 120, 152));
+        checkButton.setForeground(new Color(220, 238, 229));
+        checkButton.setFocusPainted(false);
+        returnPanel.add(checkButton);
 
-        JButton returnButton = new JButton("Issue Book");
-        returnButton.setBounds(30, 310, 250, 45);
-        returnButton.setBackground(new Color(0, 80, 160));
-        returnButton.setForeground(Color.WHITE);
-        returnButton.setFont(new Font("Verdana", Font.BOLD, 16));
-        rightPanel.add(returnButton);
 
-        add(rightPanel);
-        setVisible(true);
+        JButton confirmButton = new CustomButton("Confirm Return", false);
+        confirmButton.setBounds(20, 300, 260, 40);
+        confirmButton.setBackground(new Color(47, 120, 152));
+        confirmButton.setForeground(new Color(220, 238, 229));
+        confirmButton.setFocusPainted(false);
+       
+        checkButton.addActionListener(e -> {
+            String bookId = bookIdField.getText().trim();
+            String borrowerId = borrowerIdField.getText().trim();
+
+
+            if (bookId.isEmpty() || borrowerId.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please enter both Book ID and Student ID", "Input Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                //DÀNH CHO GIANG
+                //CHECK LOGIN BẰNG DATABASE Ở ĐÂY
+                returnPanel.add(confirmButton);
+                returnPanel.revalidate();
+                returnPanel.repaint();
+            }
+        });
+       
+
+
+        // Issue Information (Right Panel)
+        JPanel rightPanel = new JPanel();
+        rightPanel.setBounds(300, 0, 800, 640);
+        rightPanel.setBackground(new Color(220, 235, 220));
+        rightPanel.setLayout(null);
+        mainPanel.add(rightPanel);
+
+
+        JLabel rightPanelTitle = new JLabel("Issue Details", SwingConstants.CENTER);
+        rightPanelTitle.setForeground(DarkColor);
+        rightPanelTitle.setFont(new Font("Verdana", Font.BOLD, 22));
+        rightPanelTitle.setBounds(0, 20, 800, 32);
+        rightPanel.add(rightPanelTitle);
+
+
+        JLabel issueIDLabel = new JLabel("Issue ID: ");
+        issueIDLabel.setForeground(DarkColor);
+        issueIDLabel.setFont(new Font("Verdana", Font.BOLD, 18));
+        issueIDLabel.setBounds(20, 80, 300, 25);
+        rightPanel.add(issueIDLabel);
+
+
+        JLabel borrowerNameLabel = new JLabel("Borrower Name: ");
+        borrowerNameLabel.setForeground(DarkColor);
+        borrowerNameLabel.setFont(new Font("Verdana", Font.BOLD, 18));
+        borrowerNameLabel.setBounds(20, 140, 300, 25);
+        rightPanel.add(borrowerNameLabel);
+
+
+        JLabel bookNameLabel = new JLabel("Book Name: ");
+        bookNameLabel.setForeground(DarkColor);
+        bookNameLabel.setFont(new Font("Verdana", Font.BOLD, 18));
+        bookNameLabel.setBounds(20, 200, 300, 25);
+        rightPanel.add(bookNameLabel);
+
+
+        JLabel issueDateLabel = new JLabel("Issue Date: ");
+        issueDateLabel.setForeground(DarkColor);
+        issueDateLabel.setFont(new Font("Verdana", Font.BOLD, 18));
+        issueDateLabel.setBounds(20, 260, 300, 25);
+        rightPanel.add(issueDateLabel);
+
+
+        JLabel dueDateLabel = new JLabel("Due Date: ");
+        dueDateLabel.setForeground(DarkColor);
+        dueDateLabel.setFont(new Font("Verdana", Font.BOLD, 18));
+        dueDateLabel.setBounds(20, 320, 300, 25);
+        rightPanel.add(dueDateLabel);
+
+
+        JLabel returnDateLabel = new JLabel("Return Date: ");
+        returnDateLabel.setForeground(DarkColor);
+        returnDateLabel.setFont(new Font("Verdana", Font.BOLD, 18));
+        returnDateLabel.setBounds(20, 380, 300, 25);
+        rightPanel.add(returnDateLabel);
+
+
+        JLabel daysOverDue = new JLabel("Days Overdue: ");
+        daysOverDue.setForeground(DarkColor);
+        daysOverDue.setFont(new Font("Verdana", Font.BOLD, 18));
+        daysOverDue.setBounds(20, 440, 300, 25);
+        rightPanel.add(daysOverDue);
+
+
+        JLabel fineAmountLabel = new JLabel("Fine Amount: ");
+        fineAmountLabel.setForeground(DarkColor);
+        fineAmountLabel.setFont(new Font("Verdana", Font.BOLD, 18));
+        fineAmountLabel.setBounds(20, 500, 300, 25);
+        rightPanel.add(fineAmountLabel);
+
+
+    }
+
+
+    class CustomButton extends JButton {
+        private boolean rounded;
+        private int radius = 10;
+        private Color normalColor = new Color(47, 120, 152);
+        private Color hoverColor = new Color(0, 0, 0, 50);
+        private Color borderColor = new Color(5, 77, 120);
+
+
+        public CustomButton(String text, boolean rounded) {
+            super(text);
+            this.rounded = rounded;
+            setOpaque(false);
+            setFocusPainted(false);
+            setContentAreaFilled(false);
+            setBorderPainted(false);
+            setFont(new Font("Tahoma", Font.BOLD, 15));
+            setBackground(normalColor);
+
+
+            addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    setBackground(hoverColor);
+                    repaint();
+                }
+
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    setBackground(normalColor);
+                    repaint();
+                }
+            });
+        }
+
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+
+            int width = getWidth();
+            int height = getHeight();
+
+
+            g2.setColor(getBackground());
+
+
+            if (rounded) {
+                int arc = radius * 2;
+                g2.fillRoundRect(0, 0, width - 1, height - 1, arc, arc);
+                g2.setColor(borderColor);
+                g2.drawRoundRect(0, 0, width - 1, height - 1, arc, arc);
+            } else {
+                g2.fillRect(0, 0, width, height);
+                g2.setColor(borderColor);
+                g2.drawRect(0, 0, width - 1, height - 1);
+            }
+
+
+            g2.dispose();
+            super.paintComponent(g);
+        }
     }
 }
+
+
+

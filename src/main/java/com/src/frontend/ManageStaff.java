@@ -36,7 +36,7 @@ import javax.swing.table.JTableHeader;
 import com.src.dao.BorrowerDAO;
 import com.src.view.manageBorrower.BorrowerManageTable;
 
-public class ManageBorrowers extends JFrame {
+public class ManageStaff extends JFrame {
 
     private JPanel mainPanel;
     private JPanel NavigationPanel;
@@ -78,7 +78,7 @@ public class ManageBorrowers extends JFrame {
     Color DarkColor = new Color(5, 77, 120);
     Color LightColor = new Color(220, 238, 229);
 
-    public ManageBorrowers() {
+    public ManageStaff() {
         setPreferredSize(new Dimension(1100, 640));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
@@ -450,7 +450,7 @@ public class ManageBorrowers extends JFrame {
         NavigationPanel.add(borrowerGenderIcon);
 
         // Borrower book content//
-        manageBorrower = new JLabel("Manage Borrower");
+        manageBorrower = new JLabel("Manage Staff");
         manageBorrower.setFont(new Font("Tahoma", Font.BOLD, 30));
         manageBorrower.setForeground(DarkColor);
         manageBorrower.setBounds(220, 0, 600, 100);
