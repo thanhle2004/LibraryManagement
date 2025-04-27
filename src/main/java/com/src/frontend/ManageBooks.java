@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -66,6 +67,7 @@ public class ManageBooks extends JFrame {
     private JLabel publishedDateLabel;
     private JLabel managerIDLabel;
     private JLabel shelfIDLabel;
+    private JLabel bioLabel; // Added for Bio
 
     private JLabel manageBook;
 
@@ -75,6 +77,7 @@ public class ManageBooks extends JFrame {
     private JButton deleteButton;
     private JButton updateButton;
     private JButton searchButton;
+    private JButton clearButton; // Added Clear button
     private JButton authorButton;
     private JButton bookButton;
     private JButton shelfButton;
@@ -94,6 +97,7 @@ public class ManageBooks extends JFrame {
     private JTextField publishedDateField;
     private JComboBox<String> managerIDField;
     private JTextField shelfIDField;
+    private JTextField bioField; // Added for Bio
 
     private JTable bookTable;
     private JTable authorTable;
@@ -196,7 +200,7 @@ public class ManageBooks extends JFrame {
         });
 
         searchField = new JTextField();
-        searchField.setBounds(15, 175, 585, 35);
+        searchField.setBounds(15, 175, 500, 35);
         searchField.setBackground(LightColor);
         searchField.setForeground(DarkColor);
         searchField.setBorder(BorderFactory.createCompoundBorder(
@@ -204,13 +208,13 @@ public class ManageBooks extends JFrame {
                 new EmptyBorder(5, 10, 5, 10)));
         rightPanel.add(searchField);
 
-        searchButton = new JButton("Search");
-        searchButton.setBounds(605, 175, 80, 35);
-        searchButton.setBackground(LightColor);
-        searchButton.setForeground(DarkColor);
+        searchButton = new RoundedButton("Search");
+        searchButton.setBounds(520, 175, 80, 35);
+        searchButton.setBackground(new Color(47, 120, 152));
+        searchButton.setForeground(LightColor);
         searchButton.setFont(new Font("Tahoma", Font.BOLD, 15));
         searchButton.setFocusPainted(false);
-        searchButton.setBorder(new LineBorder(DarkColor, 3));
+        searchButton.setBorder(null);
         rightPanel.add(searchButton);
 
         searchButton.addActionListener(new ActionListener() {
@@ -255,6 +259,35 @@ public class ManageBooks extends JFrame {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Error searching: " + ex.getMessage(), "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        clearButton = new RoundedButton("Clear");
+        clearButton.setBounds(605, 175, 80, 35);
+        clearButton.setBackground(new Color(47, 120, 152));
+        clearButton.setForeground(LightColor);
+        clearButton.setFont(new Font("Tahoma", Font.BOLD, 15));
+        clearButton.setFocusPainted(false);
+        clearButton.setBorder(null);
+        rightPanel.add(clearButton);
+
+        clearButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                searchField.setText("");
+                try {
+                    if (currentMode.equals("Book")) {
+                        bookManageTable.loadBookData(bookTable);
+                    } else if (currentMode.equals("Author")) {
+                        authorManageTable.loadAuthorData(authorTable);
+                    } else if (currentMode.equals("Shelves")) {
+                        shelfManageTable.loadShelfData(shelfTable);
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Error clearing search: " + ex.getMessage(), "Error",
                             JOptionPane.ERROR_MESSAGE);
                 }
             }
@@ -387,6 +420,22 @@ public class ManageBooks extends JFrame {
             }
         });
 
+        bookTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int selectedRow = bookTable.getSelectedRow();
+                if (selectedRow != -1) {
+                    bookIDField.setText(bookTable.getValueAt(selectedRow, 0).toString());
+                    bookNameField.setText(bookTable.getValueAt(selectedRow, 1).toString());
+                    authorNameField.setSelectedItem(bookTable.getValueAt(selectedRow, 2).toString());
+                    mainGenreID.setSelectedItem(bookTable.getValueAt(selectedRow, 3).toString());
+                    publishedDateField.setText(bookTable.getValueAt(selectedRow, 4) != null
+                            ? bookTable.getValueAt(selectedRow, 4).toString()
+                            : "");
+                }
+            }
+        });
+
         bookManageTable.loadBookData(bookTable);
 
         JTableHeader headerBookTable = bookTable.getTableHeader();
@@ -436,6 +485,29 @@ public class ManageBooks extends JFrame {
                     label.setToolTipText(value != null ? value.toString() : null);
                 }
                 return c;
+            }
+        });
+
+        authorTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int selectedRow = authorTable.getSelectedRow();
+                if (selectedRow != -1) {
+                    authorIDField.setText(authorTable.getValueAt(selectedRow, 0).toString());
+                    String fullName = authorTable.getValueAt(selectedRow, 1).toString();
+                    String[] nameParts = fullName.split(" ", 2);
+                    firstNameField.setText(nameParts[0]);
+                    lastNameField.setText(nameParts.length > 1 ? nameParts[1] : "");
+                    birthDateField.setText(authorTable.getValueAt(selectedRow, 2) != null
+                            ? authorTable.getValueAt(selectedRow, 2).toString()
+                            : "");
+                    nationalityField.setText(authorTable.getValueAt(selectedRow, 3) != null
+                            ? authorTable.getValueAt(selectedRow, 3).toString()
+                            : "");
+                    bioField.setText(authorTable.getValueAt(selectedRow, 4) != null
+                            ? authorTable.getValueAt(selectedRow, 4).toString()
+                            : "");
+                }
             }
         });
 
@@ -492,6 +564,22 @@ public class ManageBooks extends JFrame {
             }
         });
 
+        shelfTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int selectedRow = shelfTable.getSelectedRow();
+                if (selectedRow != -1) {
+                    shelfIDField.setText(shelfTable.getValueAt(selectedRow, 0).toString());
+                    shelfNumberField.setText(shelfTable.getValueAt(selectedRow, 1).toString());
+                    mainGenreField.setSelectedItem(shelfTable.getValueAt(selectedRow, 2).toString());
+                    String managerName = shelfTable.getValueAt(selectedRow, 3).toString();
+                    String[] managerParts = managerName.split(" ", 2);
+                    String managerId = managerParts[0];
+                    managerIDField.setSelectedItem(managerId + " - " + managerName);
+                }
+            }
+        });
+
         shelfManageTable.loadShelfData(shelfTable);
 
         JTableHeader headerShelfTable = shelfTable.getTableHeader();
@@ -513,10 +601,11 @@ public class ManageBooks extends JFrame {
             List<Map<String, Object>> genres = genreDAO.findAll();
             comboBox.removeAllItems();
             for (Map<String, Object> genre : genres) {
-                String genreId = (String) genre.get("MainGenre_id");
+                String genreId = String.valueOf(genre.get("MainGenre_id"));
                 String genreName = (String) genre.get("MainGenre_name");
                 comboBox.addItem(genreId + " - " + genreName);
             }
+            comboBox.setSelectedItem(null);
         } catch (Exception ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error loading genres: " + ex.getMessage(), "Error",
@@ -535,6 +624,7 @@ public class ManageBooks extends JFrame {
                         + (author.get("Last_name") != null ? author.get("Last_name") : "");
                 comboBox.addItem(authorId + " - " + authorName);
             }
+            comboBox.setSelectedItem(null);
         } catch (Exception ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error loading authors: " + ex.getMessage(), "Error",
@@ -553,6 +643,7 @@ public class ManageBooks extends JFrame {
                         + (manager.get("Last_name") != null ? manager.get("Last_name") : "");
                 comboBox.addItem(managerId + " - " + managerName);
             }
+            comboBox.setSelectedItem(null);
         } catch (Exception ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error loading managers: " + ex.getMessage(), "Error",
@@ -603,7 +694,7 @@ public class ManageBooks extends JFrame {
         panel.add(shelfIDLabel);
 
         shelfIDField = new JTextField(15);
-        shelfIDField.setBounds(15, 100, 260, 45);
+        shelfIDField.setBounds(15, 100, 260, 30);
         shelfIDField.setBackground(LightColor);
         shelfIDField.setForeground(DarkColor);
         shelfIDField.setBorder(BorderFactory.createCompoundBorder(
@@ -614,11 +705,11 @@ public class ManageBooks extends JFrame {
         shelfNumberLabel = new JLabel("Enter Shelf Number:");
         shelfNumberLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         shelfNumberLabel.setForeground(Color.WHITE);
-        shelfNumberLabel.setBounds(15, 175, 500, 15);
+        shelfNumberLabel.setBounds(15, 150, 500, 15);
         panel.add(shelfNumberLabel);
 
         shelfNumberField = new JTextField(15);
-        shelfNumberField.setBounds(15, 200, 260, 45);
+        shelfNumberField.setBounds(15, 175, 260, 30);
         shelfNumberField.setBackground(LightColor);
         shelfNumberField.setForeground(DarkColor);
         shelfNumberField.setBorder(BorderFactory.createCompoundBorder(
@@ -629,12 +720,12 @@ public class ManageBooks extends JFrame {
         mainGenreLabel = new JLabel("Enter Main Genre ID:");
         mainGenreLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         mainGenreLabel.setForeground(Color.WHITE);
-        mainGenreLabel.setBounds(15, 275, 500, 15);
+        mainGenreLabel.setBounds(15, 225, 500, 15);
         panel.add(mainGenreLabel);
 
         mainGenreField = new JComboBox<>();
         mainGenreField.setEditable(true);
-        mainGenreField.setBounds(15, 300, 260, 45);
+        mainGenreField.setBounds(15, 250, 260, 30);
         mainGenreField.setBackground(LightColor);
         mainGenreField.setForeground(DarkColor);
         mainGenreField.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -644,15 +735,188 @@ public class ManageBooks extends JFrame {
         populateGenreComboBox(mainGenreField);
         panel.add(mainGenreField);
 
+        JButton addGenreButton = new RoundedButton("Add Genre");
+        addGenreButton.setBounds(15, 275, 80, 30);
+        addGenreButton.setBackground(new Color(47, 120, 152));
+        addGenreButton.setForeground(LightColor);
+        addGenreButton.setFont(new Font("Tahoma", Font.BOLD, 12));
+        addGenreButton.setFocusPainted(false);
+        addGenreButton.setBorder(null);
+        panel.add(addGenreButton);
+
+        JButton updateGenreButton = new RoundedButton("Update Genre");
+        updateGenreButton.setBounds(105, 275, 80, 30);
+        updateGenreButton.setBackground(new Color(47, 120, 152));
+        updateGenreButton.setForeground(LightColor);
+        updateGenreButton.setFont(new Font("Tahoma", Font.BOLD, 12));
+        updateGenreButton.setFocusPainted(false);
+        updateGenreButton.setBorder(null);
+        panel.add(updateGenreButton);
+
+        JButton deleteGenreButton = new RoundedButton("Delete Genre");
+        deleteGenreButton.setBounds(195, 275, 80, 30);
+        deleteGenreButton.setBackground(new Color(47, 120, 152));
+        deleteGenreButton.setForeground(LightColor);
+        deleteGenreButton.setFont(new Font("Tahoma", Font.BOLD, 12));
+        deleteGenreButton.setFocusPainted(false);
+        deleteGenreButton.setBorder(null);
+        panel.add(deleteGenreButton);
+
+        addGenreButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    if (mainGenreField.getSelectedItem() == null) {
+                        throw new IllegalArgumentException("Please enter Main Genre ID and Name.");
+                    }
+
+                    String genreInput = mainGenreField.getSelectedItem().toString().trim();
+                    if (genreInput.isEmpty()) {
+                        throw new IllegalArgumentException("Please enter Main Genre ID and Name.");
+                    }
+
+                    String[] parts = genreInput.split(" - ");
+                    if (parts.length != 2) {
+                        throw new IllegalArgumentException("Genre must be in the format 'Genre_id - MainGenre_name'.");
+                    }
+
+                    int genreId;
+                    try {
+                        genreId = Integer.parseInt(parts[0]);
+                    } catch (NumberFormatException ex) {
+                        throw new IllegalArgumentException("Genre ID must be a valid integer.");
+                    }
+                    String genreName = parts[1];
+
+                    GenreDAO genreDAO = new GenreDAO();
+                    if (genreDAO.getById(genreId) != null) {
+                        throw new IllegalArgumentException("Genre with ID " + genreId + " already exists.");
+                    }
+
+                    Map<String, Object> genre = new HashMap<>();
+                    genre.put("MainGenre_id", String.valueOf(genreId));
+                    genre.put("MainGenre_name", genreName);
+                    genreDAO.insert(genre);
+
+                    populateGenreComboBox(mainGenreField);
+                    JOptionPane.showMessageDialog(null, "Genre added successfully!", "Success",
+                            JOptionPane.INFORMATION_MESSAGE);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        updateGenreButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    if (mainGenreField.getSelectedItem() == null) {
+                        throw new IllegalArgumentException("Please enter Main Genre ID and Name.");
+                    }
+
+                    String genreInput = mainGenreField.getSelectedItem().toString().trim();
+                    if (genreInput.isEmpty()) {
+                        throw new IllegalArgumentException("Please enter Main Genre ID and Name.");
+                    }
+
+                    String[] parts = genreInput.split(" - ");
+                    if (parts.length != 2) {
+                        throw new IllegalArgumentException("Genre must be in the format 'Genre_id - MainGenre_name'.");
+                    }
+
+                    int genreId;
+                    try {
+                        genreId = Integer.parseInt(parts[0]);
+                    } catch (NumberFormatException ex) {
+                        throw new IllegalArgumentException("Genre ID must be a valid integer.");
+                    }
+                    String genreName = parts[1];
+
+                    GenreDAO genreDAO = new GenreDAO();
+                    Map<String, Object> existingGenre = genreDAO.getById(genreId);
+                    if (existingGenre == null) {
+                        throw new IllegalArgumentException("Genre with ID " + genreId + " does not exist.");
+                    }
+
+                    Map<String, Object> genre = new HashMap<>();
+                    genre.put("MainGenre_id", String.valueOf(genreId));
+                    genre.put("MainGenre_name", genreName);
+                    genreDAO.update(genre);
+
+                    populateGenreComboBox(mainGenreField);
+                    JOptionPane.showMessageDialog(null, "Genre updated successfully!", "Success",
+                            JOptionPane.INFORMATION_MESSAGE);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        deleteGenreButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    if (mainGenreField.getSelectedItem() == null) {
+                        throw new IllegalArgumentException("Please enter Main Genre ID to delete.");
+                    }
+
+                    String genreInput = mainGenreField.getSelectedItem().toString().trim();
+                    if (genreInput.isEmpty()) {
+                        throw new IllegalArgumentException("Please enter Main Genre ID to delete.");
+                    }
+
+                    String[] parts = genreInput.split(" - ");
+                    if (parts.length != 2) {
+                        throw new IllegalArgumentException("Genre must be in the format 'Genre_id - MainGenre_name'.");
+                    }
+
+                    int genreId;
+                    try {
+                        genreId = Integer.parseInt(parts[0]);
+                    } catch (NumberFormatException ex) {
+                        throw new IllegalArgumentException("Genre ID must be a valid integer.");
+                    }
+
+                    GenreDAO genreDAO = new GenreDAO();
+                    if (genreDAO.getById(genreId) == null) {
+                        throw new IllegalArgumentException("Genre with ID " + genreId + " does not exist.");
+                    }
+
+                    ShelfDAO shelfDAO = new ShelfDAO();
+                    List<Map<String, Object>> shelves = shelfDAO.findAll();
+                    for (Map<String, Object> shelf : shelves) {
+                        if (((Number) shelf.get("MainGenre_id")).intValue() == genreId) {
+                            throw new IllegalArgumentException(
+                                    "Cannot delete genre with ID " + genreId + " because it is being used by a shelf.");
+                        }
+                    }
+
+                    genreDAO.delete(String.valueOf(genreId));
+                    populateGenreComboBox(mainGenreField);
+                    JOptionPane.showMessageDialog(null, "Genre deleted successfully!", "Success",
+                            JOptionPane.INFORMATION_MESSAGE);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
         managerIDLabel = new JLabel("Enter Manager ID:");
         managerIDLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         managerIDLabel.setForeground(Color.WHITE);
-        managerIDLabel.setBounds(15, 375, 500, 15);
+        managerIDLabel.setBounds(15, 325, 500, 15);
         panel.add(managerIDLabel);
 
         managerIDField = new JComboBox<>();
         managerIDField.setEditable(true);
-        managerIDField.setBounds(15, 400, 260, 45);
+        managerIDField.setBounds(15, 350, 260, 30);
         managerIDField.setBackground(LightColor);
         managerIDField.setForeground(DarkColor);
         managerIDField.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -663,7 +927,7 @@ public class ManageBooks extends JFrame {
         panel.add(managerIDField);
 
         addButton = new RoundedButton("Add");
-        addButton.setBounds(15, 575, 60, 45);
+        addButton.setBounds(15, 525, 60, 45);
         addButton.setBackground(new Color(47, 120, 152));
         addButton.setForeground(LightColor);
         addButton.setFont(new Font("Tahoma", Font.BOLD, 15));
@@ -707,6 +971,12 @@ public class ManageBooks extends JFrame {
                         throw new IllegalArgumentException("Manager with ID " + managerID + " does not exist.");
                     }
 
+                    GenreDAO genreDAO = new GenreDAO();
+                    if (genreDAO.getById(mainGenre) == null) {
+                        throw new IllegalArgumentException(
+                                "Genre with ID " + mainGenre + " does not exist. Please add the genre first.");
+                    }
+
                     Map<String, Object> shelf = new HashMap<>();
                     shelf.put("Shelves_id", shelfID);
                     shelf.put("Shelf_number", shelfNumber);
@@ -727,7 +997,7 @@ public class ManageBooks extends JFrame {
         });
 
         deleteButton = new RoundedButton("Delete");
-        deleteButton.setBounds(110, 575, 70, 45);
+        deleteButton.setBounds(110, 525, 70, 45);
         deleteButton.setBackground(new Color(47, 120, 152));
         deleteButton.setForeground(LightColor);
         deleteButton.setFont(new Font("Tahoma", Font.BOLD, 15));
@@ -768,7 +1038,7 @@ public class ManageBooks extends JFrame {
         });
 
         updateButton = new RoundedButton("Update");
-        updateButton.setBounds(215, 575, 70, 45);
+        updateButton.setBounds(215, 525, 70, 45);
         updateButton.setBackground(new Color(47, 120, 152));
         updateButton.setForeground(LightColor);
         updateButton.setFont(new Font("Tahoma", Font.BOLD, 15));
@@ -822,6 +1092,11 @@ public class ManageBooks extends JFrame {
 
                     if (mainGenreField.getSelectedItem() != null) {
                         int mainGenreId = parseIdFromComboBox(mainGenreField, "Main Genre ID");
+                        GenreDAO genreDAO = new GenreDAO();
+                        if (genreDAO.getById(mainGenreId) == null) {
+                            throw new IllegalArgumentException(
+                                    "Genre with ID " + mainGenreId + " does not exist. Please add the genre first.");
+                        }
                         shelf.put("MainGenre_id", mainGenreId);
                     } else {
                         shelf.put("MainGenre_id", existingShelf.get("MainGenre_id"));
@@ -883,7 +1158,7 @@ public class ManageBooks extends JFrame {
         panel.add(authorID);
 
         authorIDField = new JTextField(15);
-        authorIDField.setBounds(15, 100, 260, 45);
+        authorIDField.setBounds(15, 100, 260, 30);
         authorIDField.setBackground(LightColor);
         authorIDField.setForeground(DarkColor);
         authorIDField.setBorder(BorderFactory.createCompoundBorder(
@@ -894,11 +1169,11 @@ public class ManageBooks extends JFrame {
         firstNameLabel = new JLabel("Enter First Name:");
         firstNameLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         firstNameLabel.setForeground(Color.WHITE);
-        firstNameLabel.setBounds(15, 175, 500, 15);
+        firstNameLabel.setBounds(15, 150, 500, 15);
         panel.add(firstNameLabel);
 
         firstNameField = new JTextField(15);
-        firstNameField.setBounds(15, 200, 260, 45);
+        firstNameField.setBounds(15, 175, 260, 30);
         firstNameField.setBackground(LightColor);
         firstNameField.setForeground(DarkColor);
         firstNameField.setBorder(BorderFactory.createCompoundBorder(
@@ -909,11 +1184,11 @@ public class ManageBooks extends JFrame {
         lastNameLabel = new JLabel("Enter Last Name:");
         lastNameLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         lastNameLabel.setForeground(Color.WHITE);
-        lastNameLabel.setBounds(15, 275, 500, 15);
+        lastNameLabel.setBounds(15, 225, 500, 15);
         panel.add(lastNameLabel);
 
         lastNameField = new JTextField(15);
-        lastNameField.setBounds(15, 300, 260, 45);
+        lastNameField.setBounds(15, 250, 260, 30);
         lastNameField.setBackground(LightColor);
         lastNameField.setForeground(DarkColor);
         lastNameField.setBorder(BorderFactory.createCompoundBorder(
@@ -924,11 +1199,11 @@ public class ManageBooks extends JFrame {
         birthDateLabel = new JLabel("Enter Birth Date (YYYY-MM-DD):");
         birthDateLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         birthDateLabel.setForeground(Color.WHITE);
-        birthDateLabel.setBounds(15, 375, 500, 15);
+        birthDateLabel.setBounds(15, 300, 500, 15);
         panel.add(birthDateLabel);
 
         birthDateField = new JTextField(15);
-        birthDateField.setBounds(15, 400, 260, 45);
+        birthDateField.setBounds(15, 325, 260, 30);
         birthDateField.setBackground(LightColor);
         birthDateField.setForeground(DarkColor);
         birthDateField.setBorder(BorderFactory.createCompoundBorder(
@@ -939,11 +1214,11 @@ public class ManageBooks extends JFrame {
         nationalityLabel = new JLabel("Enter Nationality:");
         nationalityLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         nationalityLabel.setForeground(Color.WHITE);
-        nationalityLabel.setBounds(15, 475, 500, 15);
+        nationalityLabel.setBounds(15, 375, 500, 15);
         panel.add(nationalityLabel);
 
         nationalityField = new JTextField(15);
-        nationalityField.setBounds(15, 500, 260, 45);
+        nationalityField.setBounds(15, 400, 260, 30);
         nationalityField.setBackground(LightColor);
         nationalityField.setForeground(DarkColor);
         nationalityField.setBorder(BorderFactory.createCompoundBorder(
@@ -951,8 +1226,23 @@ public class ManageBooks extends JFrame {
                 new EmptyBorder(5, 10, 5, 10)));
         panel.add(nationalityField);
 
+        bioLabel = new JLabel("Enter Bio:");
+        bioLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
+        bioLabel.setForeground(Color.WHITE);
+        bioLabel.setBounds(15, 450, 500, 15);
+        panel.add(bioLabel);
+
+        bioField = new JTextField(15);
+        bioField.setBounds(15, 475, 260, 30);
+        bioField.setBackground(LightColor);
+        bioField.setForeground(DarkColor);
+        bioField.setBorder(BorderFactory.createCompoundBorder(
+                new LineBorder(DarkColor),
+                new EmptyBorder(5, 10, 5, 10)));
+        panel.add(bioField);
+
         addButton = new RoundedButton("Add");
-        addButton.setBounds(15, 575, 60, 45);
+        addButton.setBounds(15, 525, 60, 45);
         addButton.setBackground(new Color(47, 120, 152));
         addButton.setForeground(LightColor);
         addButton.setFont(new Font("Tahoma", Font.BOLD, 15));
@@ -969,6 +1259,7 @@ public class ManageBooks extends JFrame {
                     String lastName = lastNameField.getText().trim();
                     String birthDate = birthDateField.getText().trim();
                     String nationality = nationalityField.getText().trim();
+                    String bio = bioField.getText().trim();
 
                     if (authorIdStr.isEmpty()) {
                         throw new IllegalArgumentException("Author ID is required.");
@@ -1013,7 +1304,7 @@ public class ManageBooks extends JFrame {
                     author.put("Last_name", lastName);
                     author.put("BirthDate", birthDateValue);
                     author.put("Nationality", nationality.isEmpty() ? null : nationality);
-                    author.put("Bio", null);
+                    author.put("Bio", bio.isEmpty() ? null : bio);
 
                     authorDAO.insert(author);
 
@@ -1029,7 +1320,7 @@ public class ManageBooks extends JFrame {
         });
 
         deleteButton = new RoundedButton("Delete");
-        deleteButton.setBounds(110, 575, 70, 45);
+        deleteButton.setBounds(110, 525, 70, 45);
         deleteButton.setBackground(new Color(47, 120, 152));
         deleteButton.setForeground(LightColor);
         deleteButton.setFont(new Font("Tahoma", Font.BOLD, 15));
@@ -1070,7 +1361,7 @@ public class ManageBooks extends JFrame {
         });
 
         updateButton = new RoundedButton("Update");
-        updateButton.setBounds(215, 575, 70, 45);
+        updateButton.setBounds(215, 525, 70, 45);
         updateButton.setBackground(new Color(47, 120, 152));
         updateButton.setForeground(LightColor);
         updateButton.setFont(new Font("Tahoma", Font.BOLD, 15));
@@ -1087,12 +1378,14 @@ public class ManageBooks extends JFrame {
                     String lastName = lastNameField.getText().trim();
                     String birthDate = birthDateField.getText().trim();
                     String nationality = nationalityField.getText().trim();
+                    String bio = bioField.getText().trim();
 
                     if (authorIdStr.isEmpty()) {
                         throw new IllegalArgumentException("Author ID is required.");
                     }
 
-                    if (firstName.isEmpty() && lastName.isEmpty() && birthDate.isEmpty() && nationality.isEmpty()) {
+                    if (firstName.isEmpty() && lastName.isEmpty() && birthDate.isEmpty() && nationality.isEmpty()
+                            && bio.isEmpty()) {
                         JOptionPane.showMessageDialog(null, "Nothing to update.", "Info",
                                 JOptionPane.INFORMATION_MESSAGE);
                         return;
@@ -1149,7 +1442,11 @@ public class ManageBooks extends JFrame {
                         author.put("Nationality", existingAuthor.get("Nationality"));
                     }
 
-                    author.put("Bio", existingAuthor.get("Bio"));
+                    if (!bio.isEmpty()) {
+                        author.put("Bio", bio);
+                    } else {
+                        author.put("Bio", existingAuthor.get("Bio"));
+                    }
 
                     authorDAO.update(author);
 
@@ -1197,7 +1494,7 @@ public class ManageBooks extends JFrame {
         panel.add(bookID);
 
         bookIDField = new JTextField(15);
-        bookIDField.setBounds(15, 100, 260, 45);
+        bookIDField.setBounds(15, 100, 260, 30);
         bookIDField.setBackground(LightColor);
         bookIDField.setForeground(DarkColor);
         bookIDField.setBorder(BorderFactory.createCompoundBorder(
@@ -1208,11 +1505,11 @@ public class ManageBooks extends JFrame {
         bookName = new JLabel("Enter Book Title:");
         bookName.setFont(new Font("Tahoma", Font.BOLD, 15));
         bookName.setForeground(Color.WHITE);
-        bookName.setBounds(15, 175, 500, 15);
+        bookName.setBounds(15, 150, 500, 15);
         panel.add(bookName);
 
         bookNameField = new JTextField(15);
-        bookNameField.setBounds(15, 200, 260, 45);
+        bookNameField.setBounds(15, 175, 260, 30);
         bookNameField.setBackground(LightColor);
         bookNameField.setForeground(DarkColor);
         bookNameField.setBorder(BorderFactory.createCompoundBorder(
@@ -1223,12 +1520,12 @@ public class ManageBooks extends JFrame {
         authorName = new JLabel("Enter Author ID:");
         authorName.setFont(new Font("Tahoma", Font.BOLD, 15));
         authorName.setForeground(Color.WHITE);
-        authorName.setBounds(15, 275, 500, 15);
+        authorName.setBounds(15, 225, 500, 15);
         panel.add(authorName);
 
         authorNameField = new JComboBox<>();
         authorNameField.setEditable(true);
-        authorNameField.setBounds(15, 300, 260, 45);
+        authorNameField.setBounds(15, 250, 260, 30);
         authorNameField.setBackground(LightColor);
         authorNameField.setForeground(DarkColor);
         authorNameField.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -1241,12 +1538,12 @@ public class ManageBooks extends JFrame {
         Category = new JLabel("Enter Genre ID:");
         Category.setFont(new Font("Tahoma", Font.BOLD, 15));
         Category.setForeground(Color.WHITE);
-        Category.setBounds(15, 375, 500, 15);
+        Category.setBounds(15, 300, 500, 15);
         panel.add(Category);
 
         mainGenreID = new JComboBox<>();
         mainGenreID.setEditable(true);
-        mainGenreID.setBounds(15, 400, 260, 45);
+        mainGenreID.setBounds(15, 325, 260, 30);
         mainGenreID.setBackground(LightColor);
         mainGenreID.setForeground(DarkColor);
         mainGenreID.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -1259,11 +1556,11 @@ public class ManageBooks extends JFrame {
         publishedDateLabel = new JLabel("Enter Published Date (YYYY-MM-DD):");
         publishedDateLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         publishedDateLabel.setForeground(Color.WHITE);
-        publishedDateLabel.setBounds(15, 475, 500, 15);
+        publishedDateLabel.setBounds(15, 375, 500, 15);
         panel.add(publishedDateLabel);
 
         publishedDateField = new JTextField(15);
-        publishedDateField.setBounds(15, 500, 260, 45);
+        publishedDateField.setBounds(15, 400, 260, 30);
         publishedDateField.setBackground(LightColor);
         publishedDateField.setForeground(DarkColor);
         publishedDateField.setBorder(BorderFactory.createCompoundBorder(
@@ -1272,7 +1569,7 @@ public class ManageBooks extends JFrame {
         panel.add(publishedDateField);
 
         addButton = new RoundedButton("Add");
-        addButton.setBounds(15, 575, 60, 45);
+        addButton.setBounds(15, 525, 60, 45);
         addButton.setBackground(new Color(47, 120, 152));
         addButton.setForeground(LightColor);
         addButton.setFont(new Font("Tahoma", Font.BOLD, 15));
@@ -1351,7 +1648,7 @@ public class ManageBooks extends JFrame {
         });
 
         deleteButton = new RoundedButton("Delete");
-        deleteButton.setBounds(110, 575, 70, 45);
+        deleteButton.setBounds(110, 525, 70, 45);
         deleteButton.setBackground(new Color(47, 120, 152));
         deleteButton.setForeground(LightColor);
         deleteButton.setFont(new Font("Tahoma", Font.BOLD, 15));
@@ -1386,7 +1683,7 @@ public class ManageBooks extends JFrame {
         });
 
         updateButton = new RoundedButton("Update");
-        updateButton.setBounds(215, 575, 70, 45);
+        updateButton.setBounds(215, 525, 70, 45);
         updateButton.setBackground(new Color(47, 120, 152));
         updateButton.setForeground(LightColor);
         updateButton.setFont(new Font("Tahoma", Font.BOLD, 15));
@@ -1471,6 +1768,7 @@ public class ManageBooks extends JFrame {
                     book.put("Status", existingBook.get("Status"));
 
                     bookDAO.update(book);
+
                     bookManageTable.loadBookData(bookTable);
                     JOptionPane.showMessageDialog(null, "Book updated successfully!", "Success",
                             JOptionPane.INFORMATION_MESSAGE);
@@ -1485,51 +1783,43 @@ public class ManageBooks extends JFrame {
         return panel;
     }
 
-    class RoundedButton extends JButton {
-        private int radius = 10;
-        private Color normalColor = new Color(47, 120, 152);
-        private Color borderColor = DarkColor;
-        private Color hoverColor = new Color(0, 0, 0, 50);
-
+    @SuppressWarnings("serial")
+    private class RoundedButton extends JButton {
         public RoundedButton(String text) {
             super(text);
-            setOpaque(false);
-            setFocusPainted(false);
             setContentAreaFilled(false);
-            setBorderPainted(false);
-
-            addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseEntered(MouseEvent e) {
-                    setBackground(hoverColor);
-                    repaint();
-                }
-
-                @Override
-                public void mouseExited(MouseEvent e) {
-                    setBackground(normalColor);
-                    repaint();
-                }
-            });
+            setFocusPainted(false);
         }
 
         @Override
         protected void paintComponent(Graphics g) {
             Graphics2D g2 = (Graphics2D) g.create();
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-            int width = getWidth();
-            int height = getHeight();
-            int arc = radius * 5;
-
-            Color currentColor = getBackground();
-            g2.setColor(currentColor);
-            g2.fillRoundRect(1, 1, width - 3, height - 2, arc, arc);
-            g2.setColor(borderColor);
-            g2.drawRoundRect(1, 1, width - 3, height - 3, arc, arc);
-
+            if (getModel().isPressed()) {
+                g2.setColor(getBackground().darker());
+            } else if (getModel().isRollover()) {
+                g2.setColor(getBackground().brighter());
+            } else {
+                g2.setColor(getBackground());
+            }
+            g2.fillRoundRect(0, 0, getWidth(), getHeight(), 15, 15);
+            g2.setColor(getForeground());
+            g2.setFont(getFont());
+            FontMetrics fm = g2.getFontMetrics();
+            int textWidth = fm.stringWidth(getText());
+            int textHeight = fm.getAscent();
+            g2.drawString(getText(), (getWidth() - textWidth) / 2, (getHeight() + textHeight) / 2 - 2);
             g2.dispose();
             super.paintComponent(g);
+        }
+
+        @Override
+        protected void paintBorder(Graphics g) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.setColor(getBackground().darker());
+            g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 15, 15);
+            g2.dispose();
         }
     }
 }

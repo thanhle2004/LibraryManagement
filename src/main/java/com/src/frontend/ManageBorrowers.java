@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
@@ -48,6 +49,8 @@ public class ManageBorrowers extends JFrame {
     private JButton addButton;
     private JButton deleteButton;
     private JButton updateButton;
+    private JButton searchButton; 
+    private JButton clearButton; 
 
     private JLabel borrowerIDLabel;
     private JLabel borrowerNameLabel;
@@ -57,11 +60,9 @@ public class ManageBorrowers extends JFrame {
     private JLabel borrowerPhoneLabel;
     private JLabel manageBorrowerTitle;
 
-    // Content
     private JLabel ownerLabel;
     private JLabel dateLabel;
 
-    // Icons
     private JLabel borrowerIDIcon;
     private JLabel borrowerNameIcon;
     private JLabel borrowerBornYearIcon;
@@ -75,6 +76,7 @@ public class ManageBorrowers extends JFrame {
     private JTextField borrowerEmailField;
     private JTextField borrowerAddressField;
     private JTextField borrowerPhoneField;
+    private JTextField searchField; // Search keyword field
 
     private JTable manageTable;
     private BorrowerManageTable borrowerManageTable;
@@ -102,28 +104,24 @@ public class ManageBorrowers extends JFrame {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String formattedDate = currentDate.format(formatter);
 
-        // Main Panel
         mainPanel = new JPanel();
         mainPanel.setBackground(Color.WHITE);
         mainPanel.setPreferredSize(new Dimension(1100, 640));
         mainPanel.setLayout(null);
         add(mainPanel);
 
-        // Navigation Panel
         navigationPanel = new JPanel();
         navigationPanel.setBackground(darkColor);
         navigationPanel.setBounds(0, 0, 300, 640);
         navigationPanel.setLayout(null);
         mainPanel.add(navigationPanel);
 
-        // Right Panel
         rightPanel = new JPanel();
         rightPanel.setBackground(Color.WHITE);
         rightPanel.setBounds(300, 0, 800, 640);
         rightPanel.setLayout(null);
         mainPanel.add(rightPanel);
 
-        // Back Button
         backButton = new RoundedButton("Back");
         backButton.setBounds(-1, 0, 300, buttonHeight);
         backButton.setBackground(new Color(47, 120, 152));
@@ -141,16 +139,14 @@ public class ManageBorrowers extends JFrame {
             }
         });
 
-        // Borrower ID Label
         borrowerIDLabel = new JLabel("Borrower ID:");
         borrowerIDLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         borrowerIDLabel.setForeground(new Color(255, 255, 255));
         borrowerIDLabel.setBounds(75, 75, 500, 15);
         navigationPanel.add(borrowerIDLabel);
 
-        // Borrower ID Field
         borrowerIDField = new JTextField(15);
-        borrowerIDField.setBounds(75, 100, 200, 45);
+        borrowerIDField.setBounds(75, 100, 200, 30);
         borrowerIDField.setBackground(lightColor);
         borrowerIDField.setForeground(new Color(5, 77, 120));
         borrowerIDField.setBorder(BorderFactory.createCompoundBorder(
@@ -158,23 +154,20 @@ public class ManageBorrowers extends JFrame {
                 new EmptyBorder(5, 10, 5, 10)));
         navigationPanel.add(borrowerIDField);
 
-        // Borrower ID Icon
         ImageIcon originalBorrowerIcon = new ImageIcon(getClass().getResource("/com/res/ID.png"));
-        Image scaledBorrowerIcon = originalBorrowerIcon.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH);
+        Image scaledBorrowerIcon = originalBorrowerIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         borrowerIDIcon = new JLabel(new ImageIcon(scaledBorrowerIcon));
-        borrowerIDIcon.setBounds(15, 100, 45, 45);
+        borrowerIDIcon.setBounds(15, 100, 30, 30);
         navigationPanel.add(borrowerIDIcon);
 
-        // Borrower Name Label
         borrowerNameLabel = new JLabel("Borrower Name:");
         borrowerNameLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         borrowerNameLabel.setForeground(new Color(255, 255, 255));
         borrowerNameLabel.setBounds(75, 155, 500, 15);
         navigationPanel.add(borrowerNameLabel);
 
-        // Borrower Name Field
         borrowerNameField = new JTextField(15);
-        borrowerNameField.setBounds(75, 180, 200, 45);
+        borrowerNameField.setBounds(75, 175, 200, 30);
         borrowerNameField.setBackground(lightColor);
         borrowerNameField.setForeground(new Color(5, 77, 120));
         borrowerNameField.setBorder(BorderFactory.createCompoundBorder(
@@ -182,23 +175,20 @@ public class ManageBorrowers extends JFrame {
                 new EmptyBorder(5, 10, 5, 10)));
         navigationPanel.add(borrowerNameField);
 
-        // Borrower Name Icon
         ImageIcon originalNameIcon = new ImageIcon(getClass().getResource("/com/res/BorrowerNameIcon.png"));
-        Image scaledNameIcon = originalNameIcon.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH);
+        Image scaledNameIcon = originalNameIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         borrowerNameIcon = new JLabel(new ImageIcon(scaledNameIcon));
-        borrowerNameIcon.setBounds(15, 180, 45, 45);
+        borrowerNameIcon.setBounds(15, 175, 30, 30);
         navigationPanel.add(borrowerNameIcon);
 
-        // Borrower Born Year Label
-        borrowerBornYearLabel = new JLabel("Borrower Born Year:");
+        borrowerBornYearLabel = new JLabel("Birth Year:");
         borrowerBornYearLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         borrowerBornYearLabel.setForeground(new Color(255, 255, 255));
-        borrowerBornYearLabel.setBounds(75, 235, 500, 15);
+        borrowerBornYearLabel.setBounds(75, 225, 500, 15);
         navigationPanel.add(borrowerBornYearLabel);
 
-        // Borrower Born Year Field
         borrowerBornYearField = new JTextField(15);
-        borrowerBornYearField.setBounds(75, 260, 200, 45);
+        borrowerBornYearField.setBounds(75, 250, 200, 30);
         borrowerBornYearField.setBackground(lightColor);
         borrowerBornYearField.setForeground(new Color(5, 77, 120));
         borrowerBornYearField.setBorder(BorderFactory.createCompoundBorder(
@@ -206,23 +196,20 @@ public class ManageBorrowers extends JFrame {
                 new EmptyBorder(5, 10, 5, 10)));
         navigationPanel.add(borrowerBornYearField);
 
-        // Born Year Icon
         ImageIcon originalAgeIcon = new ImageIcon(getClass().getResource("/com/res/AgeIcon.png"));
-        Image scaledAgeIcon = originalAgeIcon.getImage().getScaledInstance(45, 55, Image.SCALE_SMOOTH);
+        Image scaledAgeIcon = originalAgeIcon.getImage().getScaledInstance(30, 55, Image.SCALE_SMOOTH);
         borrowerBornYearIcon = new JLabel(new ImageIcon(scaledAgeIcon));
-        borrowerBornYearIcon.setBounds(15, 260, 45, 55);
+        borrowerBornYearIcon.setBounds(15, 250, 30, 30);
         navigationPanel.add(borrowerBornYearIcon);
 
-        // Borrower Email Label
         borrowerEmailLabel = new JLabel("Borrower Email:");
         borrowerEmailLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         borrowerEmailLabel.setForeground(new Color(255, 255, 255));
-        borrowerEmailLabel.setBounds(75, 315, 500, 15);
+        borrowerEmailLabel.setBounds(75, 300, 500, 15);
         navigationPanel.add(borrowerEmailLabel);
 
-        // Borrower Email Field
         borrowerEmailField = new JTextField(15);
-        borrowerEmailField.setBounds(75, 340, 200, 45);
+        borrowerEmailField.setBounds(75, 325, 200, 30);
         borrowerEmailField.setBackground(lightColor);
         borrowerEmailField.setForeground(new Color(5, 77, 120));
         borrowerEmailField.setBorder(BorderFactory.createCompoundBorder(
@@ -230,23 +217,20 @@ public class ManageBorrowers extends JFrame {
                 new EmptyBorder(5, 10, 5, 10)));
         navigationPanel.add(borrowerEmailField);
 
-        // Email Icon
         ImageIcon originalEmailIcon = new ImageIcon(getClass().getResource("/com/res/EmailIcon.jpg"));
-        Image scaledEmailIcon = originalEmailIcon.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH);
+        Image scaledEmailIcon = originalEmailIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         borrowerEmailIcon = new JLabel(new ImageIcon(scaledEmailIcon));
-        borrowerEmailIcon.setBounds(15, 340, 45, 45);
+        borrowerEmailIcon.setBounds(15, 325, 30, 30);
         navigationPanel.add(borrowerEmailIcon);
 
-        // Borrower Address Label
         borrowerAddressLabel = new JLabel("Borrower Address:");
         borrowerAddressLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         borrowerAddressLabel.setForeground(new Color(255, 255, 255));
-        borrowerAddressLabel.setBounds(75, 395, 500, 15);
+        borrowerAddressLabel.setBounds(75, 375, 500, 15);
         navigationPanel.add(borrowerAddressLabel);
 
-        // Borrower Address Field
         borrowerAddressField = new JTextField(15);
-        borrowerAddressField.setBounds(75, 420, 200, 45);
+        borrowerAddressField.setBounds(75, 400, 200, 30);
         borrowerAddressField.setBackground(lightColor);
         borrowerAddressField.setForeground(new Color(5, 77, 120));
         borrowerAddressField.setBorder(BorderFactory.createCompoundBorder(
@@ -254,23 +238,20 @@ public class ManageBorrowers extends JFrame {
                 new EmptyBorder(5, 10, 5, 10)));
         navigationPanel.add(borrowerAddressField);
 
-        // Address Icon
         ImageIcon originalAddressIcon = new ImageIcon(getClass().getResource("/com/res/AddressIcon.png"));
-        Image scaledAddressIcon = originalAddressIcon.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH);
+        Image scaledAddressIcon = originalAddressIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         borrowerAddressIcon = new JLabel(new ImageIcon(scaledAddressIcon));
-        borrowerAddressIcon.setBounds(15, 420, 45, 45);
+        borrowerAddressIcon.setBounds(15, 400, 30, 30);
         navigationPanel.add(borrowerAddressIcon);
 
-        // Borrower Phone Number Label
-        borrowerPhoneLabel = new JLabel("Borrower Phone:");
+        borrowerPhoneLabel = new JLabel("Phone Number:");
         borrowerPhoneLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         borrowerPhoneLabel.setForeground(new Color(255, 255, 255));
-        borrowerPhoneLabel.setBounds(75, 475, 500, 15);
+        borrowerPhoneLabel.setBounds(75, 450, 500, 15);
         navigationPanel.add(borrowerPhoneLabel);
 
-        // Borrower Phone Number Field
         borrowerPhoneField = new JTextField(15);
-        borrowerPhoneField.setBounds(75, 500, 200, 45);
+        borrowerPhoneField.setBounds(75, 475, 200, 30);
         borrowerPhoneField.setBackground(lightColor);
         borrowerPhoneField.setForeground(new Color(5, 77, 120));
         borrowerPhoneField.setBorder(BorderFactory.createCompoundBorder(
@@ -278,16 +259,14 @@ public class ManageBorrowers extends JFrame {
                 new EmptyBorder(5, 10, 5, 10)));
         navigationPanel.add(borrowerPhoneField);
 
-        // Phone Icon
         ImageIcon originalPhoneIcon = new ImageIcon(getClass().getResource("/com/res/PhoneIcon.png"));
-        Image scaledPhoneIcon = originalPhoneIcon.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH);
+        Image scaledPhoneIcon = originalPhoneIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         borrowerPhoneIcon = new JLabel(new ImageIcon(scaledPhoneIcon));
-        borrowerPhoneIcon.setBounds(15, 500, 45, 45);
+        borrowerPhoneIcon.setBounds(15, 475, 30, 30);
         navigationPanel.add(borrowerPhoneIcon);
 
-        // Add Button
         addButton = new RoundedButton("Add");
-        addButton.setBounds(15, 555, 60, buttonHeight);
+        addButton.setBounds(15, 525, 60, buttonHeight);
         addButton.setBackground(new Color(47, 120, 152));
         addButton.setForeground(new Color(220, 238, 229));
         addButton.setFont(new Font("Tahoma", Font.BOLD, 15));
@@ -316,7 +295,7 @@ public class ManageBorrowers extends JFrame {
                         return;
                     }
                     if (bornYearText.isEmpty()) {
-                        JOptionPane.showMessageDialog(null, "Born year cannot be empty!", "Error",
+                        JOptionPane.showMessageDialog(null, "Birth year cannot be empty!", "Error",
                                 JOptionPane.ERROR_MESSAGE);
                         return;
                     }
@@ -334,7 +313,7 @@ public class ManageBorrowers extends JFrame {
                     int currentYear = LocalDate.now().getYear();
                     if (bornYear < 1900 || bornYear > currentYear) {
                         JOptionPane.showMessageDialog(null,
-                                "Invalid birth year! Must be between 1900 and " + currentYear, "Error",
+                                "Invalid birth year! It must be between 1900 and " + currentYear, "Error",
                                 JOptionPane.ERROR_MESSAGE);
                         return;
                     }
@@ -346,7 +325,7 @@ public class ManageBorrowers extends JFrame {
                     }
 
                     if (!phoneNumber.isEmpty() && !phoneNumber.matches("^\\d{10}$")) {
-                        JOptionPane.showMessageDialog(null, "Invalid phone number! Must be 10 digits.", "Error",
+                        JOptionPane.showMessageDialog(null, "Invalid phone number! It must be 10 digits.", "Error",
                                 JOptionPane.ERROR_MESSAGE);
                         return;
                     }
@@ -394,9 +373,8 @@ public class ManageBorrowers extends JFrame {
 
         navigationPanel.add(addButton);
 
-        // Delete Button
         deleteButton = new RoundedButton("Delete");
-        deleteButton.setBounds(110, 555, 70, buttonHeight);
+        deleteButton.setBounds(110, 525, 70, buttonHeight);
         deleteButton.setBackground(new Color(47, 120, 152));
         deleteButton.setForeground(new Color(220, 238, 229));
         deleteButton.setFont(new Font("Tahoma", Font.BOLD, 15));
@@ -414,15 +392,15 @@ public class ManageBorrowers extends JFrame {
                     JOptionPane.showMessageDialog(null, "Borrower deleted successfully!");
                 } catch (Exception ex) {
                     ex.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Error deleting borrower: " + ex.getMessage());
+                    JOptionPane.showMessageDialog(null, "Error deleting borrower: " + ex.getMessage(), "Error",
+                            JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
         navigationPanel.add(deleteButton);
 
-        // Update Button
         updateButton = new RoundedButton("Update");
-        updateButton.setBounds(215, 555, 70, buttonHeight);
+        updateButton.setBounds(215, 525, 70, buttonHeight);
         updateButton.setBackground(new Color(47, 120, 152));
         updateButton.setForeground(new Color(220, 238, 229));
         updateButton.setFont(new Font("Tahoma", Font.BOLD, 15));
@@ -448,7 +426,7 @@ public class ManageBorrowers extends JFrame {
 
                     if (fullName.isEmpty() && bornYearText.isEmpty() && email.isEmpty() && address.isEmpty()
                             && phoneNumber.isEmpty()) {
-                        JOptionPane.showMessageDialog(null, "Nothing to update!", "Info",
+                        JOptionPane.showMessageDialog(null, "Nothing to update!", "Information",
                                 JOptionPane.INFORMATION_MESSAGE);
                         return;
                     }
@@ -486,7 +464,7 @@ public class ManageBorrowers extends JFrame {
                         int currentYear = LocalDate.now().getYear();
                         if (bornYear < 1900 || bornYear > currentYear) {
                             JOptionPane.showMessageDialog(null,
-                                    "Invalid birth year! Must be between 1900 and " + currentYear, "Error",
+                                    "Invalid birth year! It must be between 1900 and " + currentYear, "Error",
                                     JOptionPane.ERROR_MESSAGE);
                             return;
                         }
@@ -507,10 +485,10 @@ public class ManageBorrowers extends JFrame {
                         updatedAddress = address;
                     }
 
-                    String updatedPhoneNumber = (String) existingBorrower.get("Phone Number");
+                    String updatedPhoneNumber = (String) existingBorrower.get("Phone_number");
                     if (!phoneNumber.isEmpty()) {
                         if (!phoneNumber.matches("^\\d{10}$")) {
-                            JOptionPane.showMessageDialog(null, "Invalid phone number! Must be 10 digits.", "Error",
+                            JOptionPane.showMessageDialog(null, "Invalid phone number! It must be 10 digits.", "Error",
                                     JOptionPane.ERROR_MESSAGE);
                             return;
                         }
@@ -542,60 +520,119 @@ public class ManageBorrowers extends JFrame {
 
         navigationPanel.add(updateButton);
 
-        // Manage Borrower Title
-        manageBorrowerTitle = new JLabel("Manage Borrower");
+        manageBorrowerTitle = new JLabel("Manage Borrowers");
         manageBorrowerTitle.setFont(new Font("Tahoma", Font.BOLD, 30));
         manageBorrowerTitle.setForeground(darkColor);
         manageBorrowerTitle.setBounds(220, 0, 600, 100);
         rightPanel.add(manageBorrowerTitle);
 
-        // Separator Line
         separatorLine = new JPanel();
         separatorLine.setBackground(darkColor);
         separatorLine.setBounds(230, 75, 250, 5);
         rightPanel.add(separatorLine);
 
-        // Owner Label
         ownerLabel = new JLabel("Owner: Admin");
         ownerLabel.setFont(new Font("Tahoma", Font.BOLD, 27));
         ownerLabel.setForeground(darkColor);
         ownerLabel.setBounds(40, 110, 250, 30);
         rightPanel.add(ownerLabel);
 
-        // Date Label
         dateLabel = new JLabel("Date: " + formattedDate);
         dateLabel.setFont(new Font("Tahoma", Font.BOLD, 27));
         dateLabel.setForeground(darkColor);
         dateLabel.setBounds(400, 110, 500, 30);
         rightPanel.add(dateLabel);
 
-        // Borrower Table Panel
+       
+        searchField = new JTextField(15);
+        searchField.setBounds(40, 160, 500, 30); 
+        searchField.setBackground(lightColor);
+        searchField.setForeground(new Color(5, 77, 120));
+        searchField.setBorder(BorderFactory.createCompoundBorder(
+                new LineBorder(new Color(5, 77, 120)),
+                new EmptyBorder(5, 10, 5, 10)));
+        rightPanel.add(searchField);
+
+        
+        searchButton = new RoundedButton("Search");
+        searchButton.setBounds(550, 160, 80, 30); // Adjusted x-position due to longer search bar
+        searchButton.setBackground(new Color(47, 120, 152));
+        searchButton.setForeground(new Color(220, 238, 229));
+        searchButton.setFont(new Font("Tahoma", Font.BOLD, 15));
+        searchButton.setFocusPainted(false);
+        searchButton.setBorder(null);
+        rightPanel.add(searchButton);
+
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String searchTerm = searchField.getText().trim();
+                try {
+                    BorrowerDAO borrowerDAO = new BorrowerDAO();
+                    List<Map<String, Object>> borrowers;
+                    if (searchTerm.isEmpty()) {
+                        // If search term is empty, display all borrowers
+                        borrowerManageTable.loadBorrowerData(manageTable);
+                    } else {
+                        // If there's a search term, call searchBorrowers and use loadSearchResults
+                        borrowers = borrowerDAO.searchBorrowers(searchTerm);
+                        borrowerManageTable.loadSearchResults(manageTable, borrowers);
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Error searching borrowers: " + ex.getMessage(), "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        // Clear Search Button (Adjusted Position)
+        clearButton = new RoundedButton("Clear");
+        clearButton.setBounds(645, 160, 60, 30);
+        clearButton.setBackground(new Color(47, 120, 152));
+        clearButton.setForeground(new Color(220, 238, 229));
+        clearButton.setFont(new Font("Tahoma", Font.BOLD, 15));
+        clearButton.setFocusPainted(false);
+        clearButton.setBorder(null);
+        rightPanel.add(clearButton);
+
+        clearButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                searchField.setText(""); // Clear the search field
+                try {
+                    borrowerManageTable.loadBorrowerData(manageTable); // Reload all borrowers
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Error clearing search: " + ex.getMessage(), "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
         borrowerTablePanel = new JPanel();
         borrowerTablePanel.setBackground(lightColor);
-        borrowerTablePanel.setBounds(0, 225, 800, 150);
+        borrowerTablePanel.setBounds(0, 250, 800, 150); // Moved down to make space for the search bar
         borrowerTablePanel.setLayout(null);
         rightPanel.add(borrowerTablePanel);
 
-        String[] columnManageTable = { "ID", "Name", "Born Year", "Address", "Email", "Phone Number" };
+        String[] columnManageTable = { "ID", "Name", "Birth Year", "Address", "Email", "Phone Number" };
 
-        Object[][] dataManageTable = {
-                { "1", "Borrower 1", 1990, "123 Street", "borrower1@example.com", "1234567890" },
-                { "2", "Borrower 2", 1991, "456 Avenue", "borrower2@example.com", "0987654321" },
-                { "3", "Borrower 3", 1992, "789 Boulevard", "borrower3@example.com", "1234509876" },
-                { "4", "Borrower 4", 1993, "321 Road", "borrower4@example.com", "6543210987" },
-                { "5", "Borrower 5", 1994, "654 Lane", "borrower5@example.com", "7894561230" },
-                { "6", "Borrower 6", 1995, "987 Drive", "borrower6@example.com", "3216549870" },
-                { "7", "Borrower 7", 1996, "147 Circle", "borrower7@example.com", "4567891230" },
-                { "8", "Borrower 8", 1997, "258 Square", "borrower8@example.com", "9876543210" },
-                { "9", "Borrower 9", 1998, "369 Place", "borrower9@example.com", "1237894560" },
-                { "10", "Borrower 10", 1999, "741 Court", "borrower10@example.com", "6549871230" },
-        };
-
-        DefaultTableModel modelManageTable = new DefaultTableModel(dataManageTable, columnManageTable);
+        // Initialize the table without static data
+        DefaultTableModel modelManageTable = new DefaultTableModel(columnManageTable, 0);
         manageTable = new JTable(modelManageTable);
         manageTable.setBackground(lightColor);
         manageTable.setForeground(darkColor);
-        borrowerManageTable.loadBorrowerData(manageTable);
+        borrowerManageTable.loadBorrowerData(manageTable); // Load data from the database
+
+        manageTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
+        manageTable.getColumnModel().getColumn(0).setPreferredWidth(70);
+        manageTable.getColumnModel().getColumn(1).setPreferredWidth(110);
+        manageTable.getColumnModel().getColumn(2).setPreferredWidth(120);
+        manageTable.getColumnModel().getColumn(3).setPreferredWidth(230);
+        manageTable.getColumnModel().getColumn(4).setPreferredWidth(150);
+        manageTable.getColumnModel().getColumn(5).setPreferredWidth(100);
 
         JTableHeader headerManageTable = manageTable.getTableHeader();
         headerManageTable.setOpaque(false);
@@ -603,17 +640,19 @@ public class ManageBorrowers extends JFrame {
         headerManageTable.setForeground(lightColor);
 
         JScrollPane scrollManageTablePanel = new JScrollPane(manageTable);
-        scrollManageTablePanel.setBounds(0, 0, 500, 150);
+        scrollManageTablePanel.setBounds(0, 0, 800, 150);
         scrollManageTablePanel.getViewport().setOpaque(false);
         scrollManageTablePanel.setOpaque(false);
         borrowerTablePanel.add(scrollManageTablePanel);
     }
 
     class RoundedButton extends JButton {
-        private int radius = 10;
+        private int radius = 5;
         private Color normalColor = new Color(47, 120, 152);
         private Color borderColor = new Color(5, 77, 120);
-        private Color hoverColor = new Color(0, 0, 0, 50);
+        private Color hoverColor = new Color(80, 140, 180);
+        private Color pressedColor = new Color(30, 90, 120);
+        private boolean isPressed = false;
 
         public RoundedButton(String text) {
             super(text);
@@ -625,13 +664,35 @@ public class ManageBorrowers extends JFrame {
             addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseEntered(MouseEvent e) {
-                    setBackground(hoverColor);
+                    if (!isPressed) {
+                        setBackground(hoverColor);
+                    }
                     repaint();
                 }
 
                 @Override
                 public void mouseExited(MouseEvent e) {
-                    setBackground(normalColor);
+                    if (!isPressed) {
+                        setBackground(normalColor);
+                    }
+                    repaint();
+                }
+
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    isPressed = true;
+                    setBackground(pressedColor);
+                    repaint();
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    isPressed = false;
+                    if (getMousePosition() != null) {
+                        setBackground(hoverColor);
+                    } else {
+                        setBackground(normalColor);
+                    }
                     repaint();
                 }
             });
@@ -644,7 +705,7 @@ public class ManageBorrowers extends JFrame {
 
             int width = getWidth();
             int height = getHeight();
-            int arc = radius * 5;
+            int arc = radius * 2;
 
             Color currentColor = getBackground();
             g2.setColor(currentColor);
