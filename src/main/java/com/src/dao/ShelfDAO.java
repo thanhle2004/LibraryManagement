@@ -35,23 +35,39 @@ public class ShelfDAO extends AbstractGenericDAO<Map<String, Object>, Integer> {
 
     @Override
     protected String getInsertQuery() {
-        return "INSERT INTO shelves (Shelf_number, MainGenre_id, Manager_id) VALUES (?, ?, ?)";
+        return "INSERT INTO shelves (Shelves_id, Shelf_number, MainGenre_id, Manager_id) VALUES (?, ?, ?, ?)";
     }
 
     @Override
     protected void setInsertParameters(PreparedStatement stmt, Map<String, Object> entity) throws SQLException {
-        stmt.setInt(1, (Integer) entity.get("Shelf_number"));
-        stmt.setInt(2, (Integer) entity.get("MainGenre_id"));
+        Integer shelvesId = (Integer) entity.get("Shelves_id");
+        if (shelvesId == null) {
+            throw new IllegalArgumentException("Shelves_id is required but was not provided.");
+        }
+        stmt.setInt(1, shelvesId);
+
+        Integer shelfNumber = (Integer) entity.get("Shelf_number");
+        if (shelfNumber == null) {
+            throw new IllegalArgumentException("Shelf_number is required but was not provided.");
+        }
+        stmt.setInt(2, shelfNumber);
+
+        Integer mainGenreId = (Integer) entity.get("MainGenre_id");
+        if (mainGenreId == null) {
+            throw new IllegalArgumentException("MainGenre_id is required but was not provided.");
+        }
+        stmt.setInt(3, mainGenreId);
+
         if (entity.get("Manager_id") != null) {
-            stmt.setInt(3, (Integer) entity.get("Manager_id"));
+            stmt.setInt(4, (Integer) entity.get("Manager_id"));
         } else {
-            stmt.setNull(3, java.sql.Types.INTEGER);
+            stmt.setNull(4, java.sql.Types.INTEGER);
         }
     }
 
     @Override
     protected String getUpdateQuery() {
-        return "UPDATE shelves SET Shelf_number=?, MainGenre_id=?, Manager_id=? WHERE Shelves_id=?";
+        return "UPDATE shelves SET Shelf_number = ?, MainGenre_id = ?, Manager_id = ? WHERE Shelves_id = ?";
     }
 
     @Override
@@ -91,15 +107,15 @@ public class ShelfDAO extends AbstractGenericDAO<Map<String, Object>, Integer> {
                      "    OR m.Last_name LIKE ? " +
                      "    OR m.Email LIKE ? " +
                      "    OR m.Phone_number LIKE ?";
-    
+
         try (Connection conn = DatabaseAccessManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-    
+
             String searchPattern = "%" + keyword + "%";
             for (int i = 1; i <= 7; i++) {
                 stmt.setString(i, searchPattern);
             }
-    
+
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 Map<String, Object> shelf = new HashMap<>();
@@ -108,7 +124,7 @@ public class ShelfDAO extends AbstractGenericDAO<Map<String, Object>, Integer> {
                 shelf.put("Genre", rs.getString("Genre"));
                 shelf.put("MainGenre_id", rs.getInt("MainGenre_id"));
                 shelf.put("Manager_Name", rs.getString("Manager_Name"));
-                shelf.put("Manager_id", rs.getInt("Manager_id"));
+                shelf.put("Manager_id", rs.getObject("Manager_id"));
                 shelf.put("Email", rs.getString("Email"));
                 shelf.put("Phone", rs.getString("Phone"));
                 results.add(shelf);
@@ -129,15 +145,15 @@ public class ShelfDAO extends AbstractGenericDAO<Map<String, Object>, Integer> {
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 Map<String, Object> shelf = new HashMap<>();
-                shelf.put("Shelf_ID", rs.getInt("Shelves_id"));
+                shelf.put("Shelves_id", rs.getInt("Shelves_id"));
                 shelf.put("Shelf_number", rs.getInt("Shelf_number"));
                 shelf.put("MainGenre_id", rs.getInt("MainGenre_id"));
-                shelf.put("Manager_id", rs.getInt("Manager_id"));
+                shelf.put("Manager_id", rs.getObject("Manager_id"));
                 return shelf;
             }
             return null;
         } catch (SQLException e) {
-            throw new RuntimeException("Lỗi khi lấy thông tin kệ sách: " + e.getMessage());
+            throw new RuntimeException("Error retrieving shelf with ID " + shelfId + ": " + e.getMessage());
         }
     }
 }

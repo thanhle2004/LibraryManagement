@@ -36,21 +36,22 @@ public class AuthorDAO extends AbstractGenericDAO<Map<String, Object>, Integer> 
 
     @Override
     protected String getInsertQuery() {
-        return "INSERT INTO Author (Author_id, First_name, Last_name, BirthDate, Nationality) VALUES (?, ?, ?, ?, ?)";
+        return "INSERT INTO Author (Author_id, First_name, Last_name, BirthDate, Nationality, Bio) VALUES (?, ?, ?, ?, ?, ?)";
     }
 
     @Override
     protected void setInsertParameters(PreparedStatement stmt, Map<String, Object> entity) throws SQLException {
-        stmt.setInt(1, (Integer) entity.get("Author_id")); // Dòng này gây lỗi
+        stmt.setInt(1, (Integer) entity.get("Author_id")); 
         stmt.setString(2, (String) entity.get("First_name"));
         stmt.setString(3, (String) entity.get("Last_name"));
         stmt.setDate(4, (java.sql.Date) entity.get("BirthDate"));
         stmt.setString(5, (String) entity.get("Nationality"));
+        stmt.setString(6, (String) entity.get("Bio"));
     }
 
     @Override
     protected String getUpdateQuery() {
-        return "UPDATE Author SET First_name=?, Last_name=?, BirthDate=?, Nationality=? WHERE Author_id=?";
+        return "UPDATE Author SET First_name=?, Last_name=?, BirthDate=?, Nationality=?, Bio = ? WHERE Author_id=?";
     }
 
     @Override
@@ -59,7 +60,9 @@ public class AuthorDAO extends AbstractGenericDAO<Map<String, Object>, Integer> 
         stmt.setString(2, (String) entity.get("Last_name"));
         stmt.setDate(3, (java.sql.Date) entity.get("BirthDate"));
         stmt.setString(4, (String) entity.get("Nationality"));
-        stmt.setInt(5, (Integer) entity.get("Author_id"));
+        stmt.setString(5, (String) entity.get("Bio"));
+        stmt.setInt(6, (Integer) entity.get("Author_id"));
+       
     }
 
     public List<Map<String, Object>> searchAuthors(String keyword) {

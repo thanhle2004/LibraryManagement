@@ -35,6 +35,7 @@ public class BookDAO extends AbstractGenericDAO<Map<String, Object>, String> {
         book.put("Status", rs.getString("Status"));
         return book;
     }
+
     @Override
     protected String getInsertQuery() {
         return "INSERT INTO book (ISBN, Title, Author_id, MainGenre_id, published_day, Status) VALUES (?, ?, ?, ?, ?, ?)";
@@ -52,7 +53,7 @@ public class BookDAO extends AbstractGenericDAO<Map<String, Object>, String> {
 
     @Override
     protected String getUpdateQuery() {
-        return "UPDATE book SET Title=?, Author_id=?, MainGenre_id=?, published_day=?, Status=? WHERE ISBN=?";
+        return "UPDATE book SET Title=?, Author_id=?, MainGenre_id=?, published_day=? WHERE ISBN=?";
     }
 
     @Override
@@ -61,33 +62,33 @@ public class BookDAO extends AbstractGenericDAO<Map<String, Object>, String> {
         stmt.setInt(2, (Integer) entity.get("Author_id"));
         stmt.setInt(3, (Integer) entity.get("MainGenre_id"));
         stmt.setDate(4, (Date) entity.get("published_day"));
-        stmt.setString(5, (String) entity.get("Status"));
-        stmt.setString(6, (String) entity.get("ISBN"));
+        stmt.setString(5, (String) entity.get("ISBN"));
     }
 
     public List<Map<String, Object>> searchBooks(String keyword) {
         List<Map<String, Object>> results = new ArrayList<>();
-        String sql = "SELECT b.ISBN, b.Title, CONCAT(a.First_name, ' ', a.Last_name) AS Author, g.MainGenre_name AS MainGenre, b.published_day, b.Status " +
-                    "FROM book b " +
-                    "INNER JOIN Author a ON b.Author_id = a.Author_id " +
-                    "INNER JOIN Genre g ON b.MainGenre_id = g.MainGenre_id " +
-                    "WHERE b.ISBN LIKE ? " +
-                    "OR b.Title LIKE ? " +
-                    "OR CONCAT(a.First_name, ' ', a.Last_name) LIKE ? " +
-                    "OR g.MainGenre_name LIKE ? " +
-                    "OR CAST(b.published_day AS CHAR) LIKE ? " +
-                    "OR b.Status LIKE ?";
-    
+        String sql = "SELECT b.ISBN, b.Title, CONCAT(a.First_name, ' ', a.Last_name) AS Author, g.MainGenre_name AS MainGenre, b.published_day, b.Status "
+                +
+                "FROM book b " +
+                "INNER JOIN Author a ON b.Author_id = a.Author_id " +
+                "INNER JOIN Genre g ON b.MainGenre_id = g.MainGenre_id " +
+                "WHERE b.ISBN LIKE ? " +
+                "OR b.Title LIKE ? " +
+                "OR CONCAT(a.First_name, ' ', a.Last_name) LIKE ? " +
+                "OR g.MainGenre_name LIKE ? " +
+                "OR CAST(b.published_day AS CHAR) LIKE ? " +
+                "OR b.Status LIKE ?";
+
         try (Connection conn = DatabaseAccessManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
             String searchPattern = "%" + keyword + "%";
-            stmt.setString(1, searchPattern); 
-            stmt.setString(2, searchPattern); 
-            stmt.setString(3, searchPattern); 
-            stmt.setString(4, searchPattern); 
-            stmt.setString(5, searchPattern); 
-            stmt.setString(6, searchPattern); 
-    
+            stmt.setString(1, searchPattern);
+            stmt.setString(2, searchPattern);
+            stmt.setString(3, searchPattern);
+            stmt.setString(4, searchPattern);
+            stmt.setString(5, searchPattern);
+            stmt.setString(6, searchPattern);
+
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 Map<String, Object> book = new HashMap<>();
@@ -109,7 +110,7 @@ public class BookDAO extends AbstractGenericDAO<Map<String, Object>, String> {
     public Map<String, Object> getById(String isbn) {
         String sql = "SELECT ISBN, Title, Author_id, MainGenre_id, published_day FROM Book WHERE ISBN = ?";
         try (Connection conn = DatabaseAccessManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, isbn);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
