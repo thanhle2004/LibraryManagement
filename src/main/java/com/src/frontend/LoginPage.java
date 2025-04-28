@@ -18,13 +18,15 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
-
+import com.src.auth.Login;
+import com.src.auth.Register;
 
 public class LoginPage extends JFrame {
     private JPanel Panel1;
@@ -39,7 +41,7 @@ public class LoginPage extends JFrame {
     private JLabel IconPassword;
     private JPasswordField passwordField;
     private JButton loginButton;
-
+    private JButton registerButton;
 
     public LoginPage() {
         setPreferredSize(new Dimension(1000, 640));
@@ -106,8 +108,7 @@ public class LoginPage extends JFrame {
         usernameField.setForeground(new Color(5, 77, 120));
         usernameField.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(new Color(5, 77, 120)),
-                new EmptyBorder(5, 10, 5, 10)
-        ));
+                new EmptyBorder(5, 10, 5, 10)));
 
         ImageIcon originalIconUser = new ImageIcon(getClass().getResource("/com/res/IconUser.png"));
         Image scaledImageUser = originalIconUser.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH);
@@ -134,14 +135,12 @@ public class LoginPage extends JFrame {
         passwordField.setBackground(new Color(220, 238, 229));
         passwordField.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(new Color(5, 77, 120)),
-                new EmptyBorder(5, 10, 5, 10)
-        ));
+                new EmptyBorder(5, 10, 5, 10)));
         passwordPanel.add(IconPassword);
         passwordPanel.add(passwordField);
 
         BottomRightPanel.add(passwordPanel);
 
-        // Login Button
         loginButton = new RoundedButton("LOGIN");
         loginButton.setBounds(158, 120, 100, 35);
         loginButton.setBackground(new Color(220, 238, 229));
@@ -149,24 +148,52 @@ public class LoginPage extends JFrame {
         loginButton.setFont(new Font("Tahoma", Font.BOLD, 14));
 
         loginButton.addActionListener(new ActionListener() {
-            //Notification access successfully
+
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Login login = new Login();
-                // String username = usernameField.getText();
-                // String password = new String(passwordField.getPassword());
-            
-                // if (login.handleLogin(username, password)) {
-                //     new HomePage();
-                //     setVisible(false);
-                // }
-                new HomePage();
-                setVisible(false);
+                Login login = new Login();
+                String username = usernameField.getText();
+                String password = new String(passwordField.getPassword());
+
+                if (login.handleLogin(username, password)) {
+                    new HomePage();
+                    setVisible(false);
+                } else {
+                    JOptionPane.showMessageDialog(LoginPage.this, "Login failed! Check your username or password",
+                            "Fail",
+                            JOptionPane.INFORMATION_MESSAGE);
+                }
             }
-            
+
+        });
+
+        registerButton = new RoundedButton("Register");
+        registerButton.setBounds(18, 120, 100, 35);
+        registerButton.setBackground(new Color(220, 238, 229));
+        registerButton.setForeground(new Color(5, 77, 120));
+        registerButton.setFont(new Font("Tahoma", Font.BOLD, 14));
+
+        registerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Register register = new Register();
+                String username = usernameField.getText();
+                String password = new String(passwordField.getPassword());
+
+                if (register.handleRegister(username, password)) {
+                    JOptionPane.showMessageDialog(LoginPage.this, "Register successfully!", "Success",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    new LoginPage();
+                    setVisible(false);
+                } else {
+                    JOptionPane.showMessageDialog(LoginPage.this, "Username already used!", "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
         });
 
         BottomRightPanel.add(loginButton);
+        BottomRightPanel.add(registerButton);
         RightPanel.add(BottomRightPanel);
     }
 
@@ -217,5 +244,5 @@ public class LoginPage extends JFrame {
             super.paintComponent(g);
         }
     }
-    
+
 }

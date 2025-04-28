@@ -32,13 +32,13 @@ public class BorrowerDAO extends AbstractGenericDAO<Map<String, Object>, String>
         borrower.put("Email", rs.getString("Email"));
         borrower.put("Address", rs.getString("Address"));
         borrower.put("Phone_number", rs.getString("Phone_number"));
-        borrower.put("born_year", rs.getInt("born_year"));
+        borrower.put("birthday", rs.getString("birthday")); 
         return borrower;
     }
 
     @Override
     protected String getInsertQuery() {
-        return "INSERT INTO borrower (Borrower_id, First_name, Last_name, Email, Address, Phone_number, born_year) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        return "INSERT INTO borrower (Borrower_id, First_name, Last_name, Email, Address, Phone_number, birthday) VALUES (?, ?, ?, ?, ?, ?, ?)"; 
     }
 
     @Override
@@ -49,12 +49,12 @@ public class BorrowerDAO extends AbstractGenericDAO<Map<String, Object>, String>
         stmt.setString(4, (String) entity.get("Email"));
         stmt.setString(5, (String) entity.get("Address"));
         stmt.setString(6, (String) entity.get("Phone_number"));
-        stmt.setInt(7, (Integer) entity.get("born_year"));
+        stmt.setString(7, (String) entity.get("birthday"));
     }
 
     @Override
     protected String getUpdateQuery() {
-        return "UPDATE borrower SET First_name = ?, Last_name = ?, Email = ?, Address = ?, Phone_number = ?, born_year = ? WHERE Borrower_id = ?";
+        return "UPDATE borrower SET First_name = ?, Last_name = ?, Email = ?, Address = ?, Phone_number = ?, birthday = ? WHERE Borrower_id = ?"; 
     }
 
     @Override
@@ -64,7 +64,7 @@ public class BorrowerDAO extends AbstractGenericDAO<Map<String, Object>, String>
         stmt.setString(3, (String) entity.get("Email"));
         stmt.setString(4, (String) entity.get("Address"));
         stmt.setString(5, (String) entity.get("Phone_number"));
-        stmt.setInt(6, (Integer) entity.get("born_year"));
+        stmt.setString(6, (String) entity.get("birthday")); 
         stmt.setString(7, (String) entity.get("Borrower_id"));
     }
 
@@ -80,19 +80,19 @@ public class BorrowerDAO extends AbstractGenericDAO<Map<String, Object>, String>
                       "OR Email LIKE ? " +
                       "OR Address LIKE ? " +
                       "OR Phone_number LIKE ? " +
-                      "OR CAST(born_year AS CHAR) LIKE ?";
+                      "OR CAST(birthday AS CHAR) LIKE ?"; 
 
         try (Connection connection = DatabaseAccessManager.getConnection();
              PreparedStatement stmt = connection.prepareStatement(query)) {
             String likeTerm = "%" + searchTerm + "%";
             String upperLikeTerm = "%" + searchTerm.toUpperCase() + "%";
 
-            stmt.setString(1, likeTerm); 
-            stmt.setString(2, upperLikeTerm); 
-            stmt.setString(3, likeTerm); 
-            stmt.setString(4, likeTerm); 
-            stmt.setString(5, likeTerm); 
-            stmt.setString(6, likeTerm); 
+            stmt.setString(1, likeTerm);
+            stmt.setString(2, upperLikeTerm);
+            stmt.setString(3, likeTerm);
+            stmt.setString(4, likeTerm);
+            stmt.setString(5, likeTerm);
+            stmt.setString(6, likeTerm);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {

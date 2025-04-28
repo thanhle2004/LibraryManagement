@@ -10,27 +10,59 @@ import com.src.dao.StaffDAO;
 
 public class StaffManageTable {
 
-    public void loadStaffData(JTable table) {
+    public void loadStaffData(JTable manageTable) {
+        DefaultTableModel model = (DefaultTableModel) manageTable.getModel();
+        model.setRowCount(0); 
         try {
-            DefaultTableModel model = (DefaultTableModel) table.getModel();
-            model.setRowCount(0); // Clear existing rows
-
             StaffDAO staffDAO = new StaffDAO();
-            List<Map<String, Object>> staffList = staffDAO.findAll();
-
+            Object staffData = staffDAO.findAll();
+            if (staffData == null || !(staffData instanceof List)) {
+                System.out.println("No staff data found or invalid data type: " + staffData);
+                return;
+            }
+            @SuppressWarnings("unchecked")
+            List<Map<String, Object>> staffList = (List<Map<String, Object>>) staffData;
             for (Map<String, Object> staff : staffList) {
-                Object[] row = new Object[] {
-                    staff.get("Manager_id"),
-                    staff.get("First_name"),
-                    staff.get("Last_name"),
-                    staff.get("Email"),
-                    staff.get("Phone_number"),
-                    staff.get("supervisor_username")
-                };
+                Object[] row = new Object[8]; 
+                row[0] = staff.get("Manager_id");
+                row[1] = staff.get("First_name");
+                row[2] = staff.get("Last_name");
+                row[3] = staff.get("Email");
+                row[4] = staff.get("Phone_number");
+                row[5] = staff.get("supervisor_username");
+                row[6] = staff.get("birthday");
+                row[7] = staff.get("address");
                 model.addRow(row);
             }
+            manageTable.revalidate();
+            manageTable.repaint();
         } catch (Exception e) {
             e.printStackTrace();
+            throw new RuntimeException("Error loading staff data: " + e.getMessage());
         }
+    }
+
+    public void loadSearchResults(JTable manageTable, Object searchStaff) {
+        DefaultTableModel model = (DefaultTableModel) manageTable.getModel();
+        model.setRowCount(0);
+        if (searchStaff == null || !(searchStaff instanceof List)) {
+            return;
+        }
+        @SuppressWarnings("unchecked")
+        List<Map<String, Object>> staffList = (List<Map<String, Object>>) searchStaff;
+        for (Map<String, Object> staff : staffList) {
+            Object[] row = new Object[8]; 
+            row[0] = staff.get("Manager_id");
+            row[1] = staff.get("First_name");
+            row[2] = staff.get("Last_name");
+            row[3] = staff.get("Email");
+            row[4] = staff.get("Phone_number");
+            row[5] = staff.get("supervisor_username");
+            row[6] = staff.get("birthday");
+            row[7] = staff.get("address");
+            model.addRow(row);
+        }
+        manageTable.revalidate();
+        manageTable.repaint();
     }
 }

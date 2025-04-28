@@ -32,4 +32,28 @@ public class DatabaseAccessManager {
             return false;
         }
     }
+
+    public static boolean registerUser(String username, String password) {
+        String checkQuery = "SELECT * FROM librarydb.manager WHERE Username = ?";
+        String insertQuery = "INSERT INTO librarydb.manager (Username, User_password) VALUES (?, ?)";
+    
+        try (Connection conn = getConnection();
+             PreparedStatement checkStmt = conn.prepareStatement(checkQuery);
+             PreparedStatement insertStmt = conn.prepareStatement(insertQuery)) {
+            checkStmt.setString(1, username);
+            ResultSet rs = checkStmt.executeQuery();
+            if (rs.next()) {
+                return false;
+            }
+            insertStmt.setString(1, username);
+            insertStmt.setString(2, password);
+            int rowsInserted = insertStmt.executeUpdate();
+            return rowsInserted > 0; 
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
 }
