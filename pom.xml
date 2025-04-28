@@ -27,7 +27,7 @@
       <artifactId>mysql-connector-j</artifactId>
       <version>9.2.0</version> 
     </dependency>
-        <dependency>
+        <!-- <dependency>
             <groupId>unknown.binary</groupId>
             <artifactId>RSFoto_v1.0</artifactId>
             <version>SNAPSHOT</version>
@@ -41,6 +41,6 @@
             <groupId>unknown.binary</groupId>
             <artifactId>RojeruSan.parte1</artifactId>
             <version>SNAPSHOT</version>
-        </dependency>
+        </dependency> -->
     </dependencies>
 </project>

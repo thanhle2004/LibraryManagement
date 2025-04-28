@@ -23,7 +23,7 @@ public class BorrowerDAO extends AbstractGenericDAO<Map<String, Object>, String>
         Map<String, Object> borrower = new HashMap<>();
         borrower.put("Borrower_id", rs.getString("Borrower_id"));
         borrower.put("First_name", rs.getString("First_name"));
-        borrower.put("Last_Name", rs.getString("Last_name"));
+        borrower.put("Last_name", rs.getString("Last_name"));   ////////
         borrower.put("born_year", rs.getInt("born_year"));
         borrower.put("Address", rs.getString("Address"));
         borrower.put("Email", rs.getString("Email"));

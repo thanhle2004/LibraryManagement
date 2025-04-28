@@ -8,6 +8,21 @@ import javax.swing.border.LineBorder;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+
+import com.src.auth.DatabaseAccessManager;
+import com.src.dao.BookDAO;
+import com.src.dao.BorrowerDAO;
+import com.src.dao.BorrowingDAO;
 
 
 public class IssueBook extends JFrame {
@@ -35,7 +50,6 @@ public class IssueBook extends JFrame {
     private void initComponents() {
         Color DarkColor = new Color(5, 77, 120);
         Color LightColor = new Color(220,238,229);
-
 
         // Main Panel
         mainPanel = new JPanel();
@@ -78,7 +92,7 @@ public class IssueBook extends JFrame {
        
         bookIdField = new JTextField();
         bookIdField.setBounds(20, 60, 260, 30);
-        issuePanel.add(bookIdField);
+        issuePanel.add(bookIdField); 
        
         JLabel borrowerIdLabel = new JLabel("Enter Borrower ID:");
         borrowerIdLabel.setForeground(LightColor);
@@ -107,7 +121,6 @@ public class IssueBook extends JFrame {
         dueDateField.setBounds(20, 270, 260, 30);
         issuePanel.add(dueDateField);
 
-
         checkButton = new CustomButton("Check Infomation", false);
         checkButton.setBounds(20, 320, 260, 40);
         checkButton.setBackground(new Color(47, 120, 152));
@@ -127,18 +140,153 @@ public class IssueBook extends JFrame {
             String issueDate = issueDateField.getText().trim();
             String dueDate = dueDateField.getText().trim();
 
-
             if (bookId.isEmpty() || borrowerId.isEmpty() || issueDate.isEmpty() || dueDate.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Please enter all information", "Input Error", JOptionPane.ERROR_MESSAGE);
-            } else {
-                //DÀNH CHO GIANG
-                //CHECK LOGIN BẰNG DATABASE Ở ĐÂY
-                issuePanel.add(issueButton);
+                return;
+            } 
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // Validate date format
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            dateFormat.setLenient(false);
+            Date parsedIssueDate = null;
+            Date parsedDueDate = null;
+
+            try {
+                parsedIssueDate = dateFormat.parse(issueDate);
+                parsedDueDate = dateFormat.parse(dueDate);
+            } catch (ParseException ex) {
+                JOptionPane.showMessageDialog(this, "Invalid date format. Please use YYYY-MM-DD", "Date Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (parsedDueDate.before(parsedIssueDate)) {
+                JOptionPane.showMessageDialog(this, "Due Date must be after Issue Date", "Date Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            // Check book information
+            BookDAO bookDAO = new BookDAO();
+            Map<String, Object> book = bookDAO.findById(bookId);
+
+            if (book == null) {
+                JOptionPane.showMessageDialog(this, "Book ID does not exist", "Book Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Check book status
+            String bookStatus = (String) book.get("Status");
+            if (!bookStatus.equals("Available")) {
+                JOptionPane.showMessageDialog(this, "Book is not available for borrowing", "Book Status Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Get additional book details (Author and Genre)
+            String sql = "SELECT b.ISBN, b.Title, CONCAT(a.First_name, ' ', a.Last_name) AS Author, g.MainGenre_name AS MainGenre " +
+                         "FROM book b " +
+                         "INNER JOIN Author a ON b.Author_id = a.Author_id " +
+                         "INNER JOIN Genre g ON b.MainGenre_id = g.MainGenre_id " +
+                         "WHERE b.ISBN = ?";
+
+            try (Connection conn = DatabaseAccessManager.getConnection();
+                 PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setString(1, bookId);
+                ResultSet rs = stmt.executeQuery();
+
+                if (rs.next()) {
+                    bookDetailIdField.setText(rs.getString("ISBN"));
+                    bookNameField.setText(rs.getString("Title"));
+                    typeField.setText(rs.getString("MainGenre"));
+                    authorField.setText(rs.getString("Author"));
+                }
+
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Error fetching book details: " + ex.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Check borrower information
+            BorrowerDAO borrowerDAO = new BorrowerDAO();
+            Map<String, Object> borrower = borrowerDAO.findById(borrowerId);
+
+            if (borrower == null) {
+                JOptionPane.showMessageDialog(this, "Borrower ID does not exist", "Borrower Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Display borrower details
+            borrowerDetailIdField.setText(String.valueOf(borrower.get("Borrower_id")));
+            borrowerNameField.setText(borrower.get("First_name") + " " + borrower.get("Last_name"));
+            phoneNumberField.setText((String) borrower.get("Phone_number"));
+            addressField.setText((String) borrower.get("Address"));
+
+            // Show Issue Book button
+            issuePanel.add(issueButton);
+            issuePanel.revalidate();
+            issuePanel.repaint();
+        });
+
+        issueButton.addActionListener(e -> {
+            String bookId = bookIdField.getText().trim();
+            String borrowerId = borrowerIdField.getText().trim();
+            String issueDate = issueDateField.getText().trim();
+            String dueDate = dueDateField.getText().trim();
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            dateFormat.setLenient(false);
+            java.sql.Date sqlIssueDate = null;
+            java.sql.Date sqlDueDate = null;
+            try {
+                sqlIssueDate = new java.sql.Date(dateFormat.parse(issueDate).getTime());
+                sqlDueDate = new java.sql.Date(dateFormat.parse(dueDate).getTime());
+            } catch (ParseException ex) {
+                JOptionPane.showMessageDialog(this, "Invalid date format. Please use YYYY-MM-DD", "Date Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            // Check if DueDate is before current date
+            Date currentDate = new Date();
+            String borrowingStatus = sqlDueDate.before(currentDate) ? "Overdue" : "Borrowed";
+
+            // Generate a random Borrowing_id
+            Random random = new Random();
+            int borrowingId = random.nextInt(1000000);
+
+            // Create borrowing record
+            Map<String, Object> borrowing = new HashMap<>();
+            borrowing.put("Borrowing_id", borrowingId);
+            borrowing.put("ISBN", bookId);
+            borrowing.put("Borrower_id", Integer.parseInt(borrowerId));
+            borrowing.put("BorrowerDate", sqlIssueDate);
+            borrowing.put("DueDate", sqlDueDate);
+            borrowing.put("ReturnDay", null);
+            borrowing.put("Fine_AMOUNT", java.math.BigDecimal.ZERO);
+            borrowing.put("Status", borrowingStatus);
+            borrowing.put("Renewed", false);
+
+            BorrowingDAO borrowingDAO = new BorrowingDAO();
+            BookDAO bookDAO = new BookDAO();
+
+            try {
+                borrowingDAO.insert(borrowing);
+
+                // Update book status to "Borrowed"
+                Map<String, Object> book = bookDAO.findById(bookId);
+                if (book != null) {
+                    book.put("Status", borrowingStatus);
+                    bookDAO.update(book);
+                }
+
+                JOptionPane.showMessageDialog(this, "Book issued successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                clearFields();
+                issuePanel.remove(issueButton);
                 issuePanel.revalidate();
                 issuePanel.repaint();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Error issuing book: " + ex.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
             }
         });
        
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////
         // Book Details Panel (Middle)
         bookPanel = createPanel(new Color(220, 238, 229), 310, 0, 400, 640);
         bookPanel.setLayout(null);
@@ -168,6 +316,7 @@ public class IssueBook extends JFrame {
        
         bookDetailIdField = new JTextField();
         bookDetailIdField.setBounds(20, 110, 360, 30);
+        bookDetailIdField.setEditable(false);   // Make non-editable
         bookPanel.add(bookDetailIdField);
        
         JLabel bookNameDetailLabel = new JLabel("Book Name:");
@@ -178,6 +327,7 @@ public class IssueBook extends JFrame {
        
         bookNameField = new JTextField();
         bookNameField.setBounds(20, 190, 360, 30);
+        bookNameField.setEditable(false); // Make non-editable
         bookPanel.add(bookNameField);
        
         JLabel bookTypeLabel = new JLabel("Type:");
@@ -188,6 +338,7 @@ public class IssueBook extends JFrame {
        
         typeField = new JTextField();
         typeField.setBounds(20, 270, 360, 30);
+        typeField.setEditable(false); // Make non-editable
         bookPanel.add(typeField);
        
         JLabel authorLabel = new JLabel("Author:");
@@ -198,9 +349,11 @@ public class IssueBook extends JFrame {
        
         authorField = new JTextField();
         authorField.setBounds(20, 350, 360, 30);
+        authorField.setEditable(false); // Make non-editable
         bookPanel.add(authorField);
        
-        // Student Details Panel (Right)
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // borrower Details Panel (Right)
         borrowerPanel = createPanel(new Color(220, 238, 229), 720, 0, 380, 640);
         borrowerPanel.setLayout(null);
         mainPanel.add(borrowerPanel);
@@ -229,6 +382,7 @@ public class IssueBook extends JFrame {
        
         borrowerDetailIdField = new JTextField();
         borrowerDetailIdField.setBounds(20, 110, 340, 30);
+        borrowerDetailIdField.setEditable(false); // Make non-editable
         borrowerPanel.add(borrowerDetailIdField);
        
         JLabel borrowerNameDetailLabel = new JLabel("Borrower Name:");
@@ -239,6 +393,7 @@ public class IssueBook extends JFrame {
        
         borrowerNameField = new JTextField();
         borrowerNameField.setBounds(20, 190, 340, 30);
+        borrowerNameField.setEditable(false); // Make non-editable
         borrowerPanel.add(borrowerNameField);
        
         JLabel phoneNumberLabel = new JLabel("Phone Number:");
@@ -249,6 +404,7 @@ public class IssueBook extends JFrame {
        
         phoneNumberField = new JTextField();
         phoneNumberField.setBounds(20, 270, 340, 30);
+        phoneNumberField.setEditable(false); // Make non-editable
         borrowerPanel.add(phoneNumberField);
        
         JLabel addressLabel = new JLabel("Address:");
@@ -259,9 +415,27 @@ public class IssueBook extends JFrame {
        
         addressField = new JTextField();
         addressField.setBounds(20, 350, 340, 30);
+        addressField.setEditable(false); // Make non-editable
         borrowerPanel.add(addressField);
     }
-   
+
+    //////////////////////////////////////////
+    private void clearFields() {
+        bookIdField.setText("");
+        borrowerIdField.setText("");
+        issueDateField.setText("");
+        dueDateField.setText("");
+        bookDetailIdField.setText("");
+        bookNameField.setText("");
+        typeField.setText("");
+        authorField.setText("");
+        borrowerDetailIdField.setText("");
+        borrowerNameField.setText("");
+        phoneNumberField.setText("");
+        addressField.setText("");
+    }
+    
+    //////////////////////////////////
     private JPanel createPanel(Color color, int x, int y, int width, int height) {
         JPanel panel = new JPanel();
         panel.setBackground(color);
@@ -288,14 +462,12 @@ public class IssueBook extends JFrame {
             setFont(new Font("Tahoma", Font.BOLD, 15));
             setBackground(normalColor);
 
-
             addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseEntered(MouseEvent e) {
                     setBackground(hoverColor);
                     repaint();
                 }
-
 
                 @Override
                 public void mouseExited(MouseEvent e) {
@@ -305,19 +477,15 @@ public class IssueBook extends JFrame {
             });
         }
 
-
         @Override
         protected void paintComponent(Graphics g) {
             Graphics2D g2 = (Graphics2D) g.create();
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-
             int width = getWidth();
             int height = getHeight();
 
-
             g2.setColor(getBackground());
-
 
             if (rounded) {
                 int arc = radius * 2;
@@ -330,12 +498,9 @@ public class IssueBook extends JFrame {
                 g2.drawRect(0, 0, width - 1, height - 1);
             }
 
-
             g2.dispose();
             super.paintComponent(g);
         }
     }
-
-
 }
 
