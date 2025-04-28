@@ -13,7 +13,7 @@ import com.src.auth.DatabaseAccessManager;
 
 public class BorrowerManageTable {
     public void loadBorrowerData(JTable BorrowerTable) {
-        String query = "SELECT Borrower_id, CONCAT(First_name, ' ', Last_Name) AS Name, born_year, Address, Email, Phone_number FROM borrower";
+        String query = "SELECT Borrower_id, CONCAT(First_name, ' ', Last_Name) AS Name, birthday, Address, Email, Phone_number FROM borrower";
  
             try (Connection conn = DatabaseAccessManager.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query);
@@ -26,7 +26,7 @@ public class BorrowerManageTable {
                     Object[] row = {
                         rs.getString("Borrower_id"),
                         rs.getString("Name"),
-                        rs.getString("born_year"),
+                        rs.getString("birthday"),
                         rs.getString("Address"),
                         rs.getString("Email"),
                         rs.getString("Phone_number")
@@ -52,7 +52,7 @@ public class BorrowerManageTable {
             model.addRow(new Object[]{
                 borrower.get("Borrower_id"),
                 fullName.trim(),
-                borrower.get("born_year"),
+                borrower.get("birthday"),
                 borrower.get("Address"),
                 borrower.get("Email"),
                 borrower.get("Phone_number")

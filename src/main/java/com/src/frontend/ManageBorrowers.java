@@ -49,8 +49,8 @@ public class ManageBorrowers extends JFrame {
     private JButton addButton;
     private JButton deleteButton;
     private JButton updateButton;
-    private JButton searchButton; 
-    private JButton clearButton; 
+    private JButton searchButton;
+    private JButton clearButton;
 
     private JLabel borrowerIDLabel;
     private JLabel borrowerNameLabel;
@@ -76,8 +76,7 @@ public class ManageBorrowers extends JFrame {
     private JTextField borrowerEmailField;
     private JTextField borrowerAddressField;
     private JTextField borrowerPhoneField;
-    private JTextField searchField; // Search keyword field
-
+    private JTextField searchField;
     private JTable manageTable;
     private BorrowerManageTable borrowerManageTable;
 
@@ -181,7 +180,7 @@ public class ManageBorrowers extends JFrame {
         borrowerNameIcon.setBounds(15, 175, 30, 30);
         navigationPanel.add(borrowerNameIcon);
 
-        borrowerBornYearLabel = new JLabel("Birth Year:");
+        borrowerBornYearLabel = new JLabel("Birthday:");
         borrowerBornYearLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         borrowerBornYearLabel.setForeground(new Color(255, 255, 255));
         borrowerBornYearLabel.setBounds(75, 225, 500, 15);
@@ -238,7 +237,7 @@ public class ManageBorrowers extends JFrame {
                 new EmptyBorder(5, 10, 5, 10)));
         navigationPanel.add(borrowerAddressField);
 
-        ImageIcon originalAddressIcon = new ImageIcon(getClass().getResource("/com/res/AddressIcon.png"));
+        ImageIcon originalAddressIcon = new ImageIcon(getClass().getResource("/com/res/AddressIcon.jpg"));
         Image scaledAddressIcon = originalAddressIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         borrowerAddressIcon = new JLabel(new ImageIcon(scaledAddressIcon));
         borrowerAddressIcon.setBounds(15, 400, 30, 30);
@@ -279,7 +278,7 @@ public class ManageBorrowers extends JFrame {
                 try {
                     String borrowerId = borrowerIDField.getText().trim();
                     String fullName = borrowerNameField.getText().trim();
-                    String bornYearText = borrowerBornYearField.getText().trim();
+                    String birthdayText = borrowerBornYearField.getText().trim();
                     String email = borrowerEmailField.getText().trim();
                     String address = borrowerAddressField.getText().trim();
                     String phoneNumber = borrowerPhoneField.getText().trim();
@@ -294,26 +293,31 @@ public class ManageBorrowers extends JFrame {
                                 JOptionPane.ERROR_MESSAGE);
                         return;
                     }
-                    if (bornYearText.isEmpty()) {
-                        JOptionPane.showMessageDialog(null, "Birth year cannot be empty!", "Error",
+                    if (birthdayText.isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "Birthday cannot be empty!", "Error",
                                 JOptionPane.ERROR_MESSAGE);
                         return;
                     }
 
-                    int bornYear;
+                    if (!birthdayText.matches("^\\d{4}-\\d{2}-\\d{2}$")) {
+                        JOptionPane.showMessageDialog(null, "Invalid birthday format! Use YYYY-MM-DD.", "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                    LocalDate birthday;
                     try {
-                        bornYear = Integer.parseInt(bornYearText);
-                    } catch (NumberFormatException ex) {
-                        JOptionPane.showMessageDialog(null,
-                                "Invalid birth year! Please enter a valid year (e.g., 1990).", "Error",
+                        birthday = LocalDate.parse(birthdayText);
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(null, "Invalid birthday! Please enter a valid date.", "Error",
                                 JOptionPane.ERROR_MESSAGE);
                         return;
                     }
 
-                    int currentYear = LocalDate.now().getYear();
-                    if (bornYear < 1900 || bornYear > currentYear) {
+                    LocalDate currentDate = LocalDate.now();
+                    if (birthday.isBefore(LocalDate.of(1900, 1, 1)) || birthday.isAfter(currentDate)) {
                         JOptionPane.showMessageDialog(null,
-                                "Invalid birth year! It must be between 1900 and " + currentYear, "Error",
+                                "Invalid birthday! It must be between 1900-01-01 and " + currentDate, "Error",
                                 JOptionPane.ERROR_MESSAGE);
                         return;
                     }
@@ -345,7 +349,7 @@ public class ManageBorrowers extends JFrame {
                     borrower.put("Borrower_id", borrowerId);
                     borrower.put("First_name", firstName);
                     borrower.put("Last_name", lastName);
-                    borrower.put("born_year", bornYear);
+                    borrower.put("birthday", birthdayText);
                     borrower.put("Email", email);
                     borrower.put("Address", address.isEmpty() ? null : address);
                     borrower.put("Phone_number", phoneNumber.isEmpty() ? null : phoneNumber);
@@ -413,7 +417,7 @@ public class ManageBorrowers extends JFrame {
                 try {
                     String id = borrowerIDField.getText().trim();
                     String fullName = borrowerNameField.getText().trim();
-                    String bornYearText = borrowerBornYearField.getText().trim();
+                    String birthdayText = borrowerBornYearField.getText().trim();
                     String email = borrowerEmailField.getText().trim();
                     String address = borrowerAddressField.getText().trim();
                     String phoneNumber = borrowerPhoneField.getText().trim();
@@ -424,7 +428,7 @@ public class ManageBorrowers extends JFrame {
                         return;
                     }
 
-                    if (fullName.isEmpty() && bornYearText.isEmpty() && email.isEmpty() && address.isEmpty()
+                    if (fullName.isEmpty() && birthdayText.isEmpty() && email.isEmpty() && address.isEmpty()
                             && phoneNumber.isEmpty()) {
                         JOptionPane.showMessageDialog(null, "Nothing to update!", "Information",
                                 JOptionPane.INFORMATION_MESSAGE);
@@ -450,24 +454,31 @@ public class ManageBorrowers extends JFrame {
                         }
                     }
 
-                    int bornYear = (Integer) existingBorrower.get("born_year");
-                    if (!bornYearText.isEmpty()) {
+                    String updatedBirthday = existingBorrower.get("birthday") != null
+                            ? existingBorrower.get("birthday").toString()
+                            : null;
+                    if (!birthdayText.isEmpty()) {
+                        if (!birthdayText.matches("^\\d{4}-\\d{2}-\\d{2}$")) {
+                            JOptionPane.showMessageDialog(null, "Invalid birthday format! Use YYYY-MM-DD.", "Error",
+                                    JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
+                        LocalDate birthday;
                         try {
-                            bornYear = Integer.parseInt(bornYearText);
-                        } catch (NumberFormatException ex) {
-                            JOptionPane.showMessageDialog(null,
-                                    "Invalid birth year! Please enter a valid year (e.g., 1990).", "Error",
+                            birthday = LocalDate.parse(birthdayText);
+                        } catch (Exception ex) {
+                            JOptionPane.showMessageDialog(null, "Invalid birthday! Please enter a valid date.", "Error",
                                     JOptionPane.ERROR_MESSAGE);
                             return;
                         }
-
-                        int currentYear = LocalDate.now().getYear();
-                        if (bornYear < 1900 || bornYear > currentYear) {
+                        LocalDate currentDate = LocalDate.now();
+                        if (birthday.isBefore(LocalDate.of(1900, 1, 1)) || birthday.isAfter(currentDate)) {
                             JOptionPane.showMessageDialog(null,
-                                    "Invalid birth year! It must be between 1900 and " + currentYear, "Error",
+                                    "Invalid birthday! It must be between 1900-01-01 and " + currentDate, "Error",
                                     JOptionPane.ERROR_MESSAGE);
                             return;
                         }
+                        updatedBirthday = birthdayText;
                     }
 
                     String updatedEmail = (String) existingBorrower.get("Email");
@@ -480,12 +491,16 @@ public class ManageBorrowers extends JFrame {
                         updatedEmail = email;
                     }
 
-                    String updatedAddress = (String) existingBorrower.get("Address");
+                    String updatedAddress = existingBorrower.get("Address") != null
+                            ? existingBorrower.get("Address").toString()
+                            : null;
                     if (!address.isEmpty()) {
                         updatedAddress = address;
                     }
 
-                    String updatedPhoneNumber = (String) existingBorrower.get("Phone_number");
+                    String updatedPhoneNumber = existingBorrower.get("Phone_number") != null
+                            ? existingBorrower.get("Phone_number").toString()
+                            : null;
                     if (!phoneNumber.isEmpty()) {
                         if (!phoneNumber.matches("^\\d{10}$")) {
                             JOptionPane.showMessageDialog(null, "Invalid phone number! It must be 10 digits.", "Error",
@@ -499,7 +514,7 @@ public class ManageBorrowers extends JFrame {
                     borrower.put("Borrower_id", id);
                     borrower.put("First_name", firstName);
                     borrower.put("Last_name", lastName);
-                    borrower.put("born_year", bornYear);
+                    borrower.put("birthday", updatedBirthday);
                     borrower.put("Email", updatedEmail);
                     borrower.put("Address", updatedAddress);
                     borrower.put("Phone_number", updatedPhoneNumber);
@@ -543,9 +558,8 @@ public class ManageBorrowers extends JFrame {
         dateLabel.setBounds(400, 110, 500, 30);
         rightPanel.add(dateLabel);
 
-       
         searchField = new JTextField(15);
-        searchField.setBounds(40, 160, 500, 30); 
+        searchField.setBounds(40, 160, 500, 30);
         searchField.setBackground(lightColor);
         searchField.setForeground(new Color(5, 77, 120));
         searchField.setBorder(BorderFactory.createCompoundBorder(
@@ -553,9 +567,8 @@ public class ManageBorrowers extends JFrame {
                 new EmptyBorder(5, 10, 5, 10)));
         rightPanel.add(searchField);
 
-        
         searchButton = new RoundedButton("Search");
-        searchButton.setBounds(550, 160, 80, 30); // Adjusted x-position due to longer search bar
+        searchButton.setBounds(550, 160, 80, 30);
         searchButton.setBackground(new Color(47, 120, 152));
         searchButton.setForeground(new Color(220, 238, 229));
         searchButton.setFont(new Font("Tahoma", Font.BOLD, 15));
@@ -571,10 +584,8 @@ public class ManageBorrowers extends JFrame {
                     BorrowerDAO borrowerDAO = new BorrowerDAO();
                     List<Map<String, Object>> borrowers;
                     if (searchTerm.isEmpty()) {
-                        // If search term is empty, display all borrowers
                         borrowerManageTable.loadBorrowerData(manageTable);
                     } else {
-                        // If there's a search term, call searchBorrowers and use loadSearchResults
                         borrowers = borrowerDAO.searchBorrowers(searchTerm);
                         borrowerManageTable.loadSearchResults(manageTable, borrowers);
                     }
@@ -586,7 +597,6 @@ public class ManageBorrowers extends JFrame {
             }
         });
 
-        // Clear Search Button (Adjusted Position)
         clearButton = new RoundedButton("Clear");
         clearButton.setBounds(645, 160, 60, 30);
         clearButton.setBackground(new Color(47, 120, 152));
@@ -599,9 +609,9 @@ public class ManageBorrowers extends JFrame {
         clearButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                searchField.setText(""); // Clear the search field
+                searchField.setText("");
                 try {
-                    borrowerManageTable.loadBorrowerData(manageTable); // Reload all borrowers
+                    borrowerManageTable.loadBorrowerData(manageTable);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Error clearing search: " + ex.getMessage(), "Error",
@@ -612,18 +622,17 @@ public class ManageBorrowers extends JFrame {
 
         borrowerTablePanel = new JPanel();
         borrowerTablePanel.setBackground(lightColor);
-        borrowerTablePanel.setBounds(0, 250, 800, 150); // Moved down to make space for the search bar
+        borrowerTablePanel.setBounds(0, 250, 800, 150);
         borrowerTablePanel.setLayout(null);
         rightPanel.add(borrowerTablePanel);
 
-        String[] columnManageTable = { "ID", "Name", "Birth Year", "Address", "Email", "Phone Number" };
+        String[] columnManageTable = { "ID", "Name", "Birthday", "Address", "Email", "Phone Number" };
 
-        // Initialize the table without static data
         DefaultTableModel modelManageTable = new DefaultTableModel(columnManageTable, 0);
         manageTable = new JTable(modelManageTable);
         manageTable.setBackground(lightColor);
         manageTable.setForeground(darkColor);
-        borrowerManageTable.loadBorrowerData(manageTable); // Load data from the database
+        borrowerManageTable.loadBorrowerData(manageTable);
 
         manageTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
