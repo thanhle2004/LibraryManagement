@@ -53,7 +53,7 @@ public class BookDAO extends AbstractGenericDAO<Map<String, Object>, String> {
 
     @Override
     protected String getUpdateQuery() {
-        return "UPDATE book SET Title=?, Author_id=?, MainGenre_id=?, published_day=? WHERE ISBN=?";
+        return "UPDATE book SET Title=?, Author_id=?, MainGenre_id=?, published_day=?, WHERE ISBN=?";
     }
 
     @Override
@@ -124,7 +124,7 @@ public class BookDAO extends AbstractGenericDAO<Map<String, Object>, String> {
             }
             return null;
         } catch (SQLException e) {
-            throw new RuntimeException("Lỗi khi lấy thông tin sách: " + e.getMessage());
+            throw new RuntimeException("Error" + e.getMessage());
         }
     }
 
