@@ -1,10 +1,16 @@
 package com.src.dao;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import com.src.auth.DatabaseAccessManager;
 
 public class BorrowingDAO extends AbstractGenericDAO<Map<String, Object>, Integer> {
 
@@ -68,4 +74,22 @@ public class BorrowingDAO extends AbstractGenericDAO<Map<String, Object>, Intege
         stmt.setBoolean(8, (Boolean) entity.get("Renewed"));
         stmt.setInt(9, (Integer) entity.get("Borrowing_id"));
     }
+
+    public List<Map<String, Object>> findByDateRange(Date from, Date to) throws SQLException {
+    List<Map<String, Object>> borrowings = new ArrayList<>();
+    String query = "SELECT * FROM Borrowing WHERE (BorrowerDate BETWEEN ? AND ?) OR (ReturnDay BETWEEN ? AND ?)";
+    try (Connection connection = DatabaseAccessManager.getConnection();
+         PreparedStatement stmt = connection.prepareStatement(query)) {
+        stmt.setDate(1, new java.sql.Date(from.getTime()));
+        stmt.setDate(2, new java.sql.Date(to.getTime()));
+        stmt.setDate(3, new java.sql.Date(from.getTime()));
+        stmt.setDate(4, new java.sql.Date(to.getTime()));
+        try (ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                borrowings.add(mapResultSetToEntity(rs));
+            }
+        }
+    }
+    return borrowings;
+}
 }

@@ -240,7 +240,6 @@ public class ReturnBook extends JFrame {
                 return;
             }
 
-            // Find borrowing record
             BorrowingDAO borrowingDAO = new BorrowingDAO();
             Map<String, Object> borrowing = null;
             for (Map<String, Object> record : borrowingDAO.findAll()) {
@@ -258,7 +257,6 @@ public class ReturnBook extends JFrame {
                 return;
             }
 
-            // Get book details
             BookDAO bookDAO = new BookDAO();
             Map<String, Object> book = bookDAO.findById(bookId);
             if (book == null) {
@@ -266,7 +264,7 @@ public class ReturnBook extends JFrame {
                 return;
             }
 
-            // Get borrower details
+            
             BorrowerDAO borrowerDAO = new BorrowerDAO();
             Map<String, Object> borrower = borrowerDAO.findById(borrowerId);
             if (borrower == null) {
@@ -275,7 +273,6 @@ public class ReturnBook extends JFrame {
                 return;
             }
 
-            // Calculate fine
             LocalDate dueDate = ((Date) borrowing.get("DueDate")).toLocalDate();
             LocalDate returnDate = LocalDate.now();
             long daysLate = ChronoUnit.DAYS.between(dueDate, returnDate);
@@ -318,13 +315,13 @@ public class ReturnBook extends JFrame {
                 return;
             }
 
-            // Calculate fine again for update
+           
             LocalDate dueDate = ((Date) borrowing.get("DueDate")).toLocalDate();
             LocalDate returnDate = LocalDate.now();
             long daysLate = ChronoUnit.DAYS.between(dueDate, returnDate);
             double fine = daysLate > 0 ? daysLate * 1.0 : 0.0;
 
-            // Update borrowing record
+          
             borrowing.put("ReturnDay", Date.valueOf(returnDate));
             borrowing.put("Fine_AMOUNT", new java.math.BigDecimal(fine));
             borrowing.put("Status", "Returned");
