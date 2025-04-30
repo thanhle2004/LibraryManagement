@@ -256,7 +256,7 @@ public class ManageStaff extends JFrame {
         staffSupervisorIcon.setBounds(15, 375, 30, 30); 
         navigationPanel.add(staffSupervisorIcon);
     
-        // Add Birthday Field
+       
         staffBirthdayLabel = new JLabel("Birthday:");
         staffBirthdayLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         staffBirthdayLabel.setForeground(new Color(255, 255, 255));
@@ -272,7 +272,7 @@ public class ManageStaff extends JFrame {
                 new EmptyBorder(5, 10, 5, 10)));
         navigationPanel.add(staffBirthdayField);
     
-        // Add Address Field
+      
         staffAddressLabel = new JLabel("Address:");
         staffAddressLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         staffAddressLabel.setForeground(new Color(255, 255, 255));

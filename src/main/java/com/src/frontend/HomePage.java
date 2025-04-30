@@ -34,7 +34,7 @@ import com.src.view.menu.IssuedBookCard;
 public class HomePage extends JFrame {
     private JPanel MainPanel;
 
-    // Navigation
+
     private JPanel NavigationPanel;
     private JLabel AvataIcon;
     private JButton HomeButton;
@@ -46,32 +46,32 @@ public class HomePage extends JFrame {
     private JButton ViewStatisticButton;
     private JButton LogOutButton;
 
-    // Content
+
     private JPanel ContentPanel;
-    // Header
+ 
     private JPanel HeaderPanel;
     private JLabel Title;
     private JLabel Owner;
     private JLabel Date;
-    // Stat
+ 
     private JPanel StatPanel;
-    // Book
+
     private JPanel BookPanel;
     private JLabel BookPanelTitle;
     private JLabel BookPanelIcon;
     private JLabel BookPanelStat;
-    // Borrower
+
     private JPanel BorrowerPanel;
     private JLabel BorrowerPanelTitle;
     private JLabel BorrowerPanelIcon;
     private JLabel BorrowerPanelStat;
-    // Issued
+   
     private JPanel IssuedPanel;
     private JLabel IssuedPanelTitle;
     private JLabel IssuedPanelIcon;
     private JLabel IssuedPanelStat;
 
-    // Table
+  
     private JPanel TablePanel;
     private JPanel BookTablePanel;
     private JLabel BookTablePanelTitle;
@@ -80,7 +80,7 @@ public class HomePage extends JFrame {
     private JLabel BorrowerTablePanelTitle;
     private JTable BorrowerTable;
 
-    // Access database
+   
     private BookCard bookCard;
     private BorrowerCard borrowerCard;
     private IssuedBookCard issuedBookCard;
@@ -100,7 +100,7 @@ public class HomePage extends JFrame {
     }
 
     private void initComponents() {
-        // Init access database
+       
         bookCard = new BookCard();
         borrowerCard = new BorrowerCard();
         issuedBookCard = new IssuedBookCard();
@@ -115,14 +115,14 @@ public class HomePage extends JFrame {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String formattedDate = currentDate.format(formatter);
 
-        // Main Panel
+     
         MainPanel = new JPanel();
         MainPanel.setBackground(Color.WHITE);
         MainPanel.setPreferredSize(new Dimension(1050, 640));
         MainPanel.setLayout(null);
         add(MainPanel);
 
-        // Navigation Panel
+        
         NavigationPanel = new JPanel();
         NavigationPanel.setBackground(new Color(5, 77, 120));
         NavigationPanel.setBounds(0, 0, 200, 640);
@@ -262,8 +262,7 @@ public class HomePage extends JFrame {
         ContentPanel.setLayout(null);
         MainPanel.add(ContentPanel);
 
-        // Content Panel
-        // Header
+      
         HeaderPanel = new JPanel();
         HeaderPanel.setBackground(Color.WHITE);
         HeaderPanel.setBounds(0, 0, 800, 150);
@@ -288,7 +287,7 @@ public class HomePage extends JFrame {
         Date.setBounds(480, 110, 500, 30);
         HeaderPanel.add(Date);
 
-        // Stat
+        
         StatPanel = new JPanel();
         StatPanel.setBackground(Color.WHITE);
         StatPanel.setBounds(-2, 180, 800, 160);

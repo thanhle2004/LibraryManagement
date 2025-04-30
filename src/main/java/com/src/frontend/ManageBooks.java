@@ -67,7 +67,7 @@ public class ManageBooks extends JFrame {
     private JLabel publishedDateLabel;
     private JLabel managerIDLabel;
     private JLabel shelfIDLabel;
-    private JLabel bioLabel; // Added for Bio
+    private JLabel bioLabel;
 
     private JLabel manageBook;
 
@@ -77,7 +77,7 @@ public class ManageBooks extends JFrame {
     private JButton deleteButton;
     private JButton updateButton;
     private JButton searchButton;
-    private JButton clearButton; // Added Clear button
+    private JButton clearButton;
     private JButton authorButton;
     private JButton bookButton;
     private JButton shelfButton;
@@ -97,7 +97,7 @@ public class ManageBooks extends JFrame {
     private JTextField publishedDateField;
     private JComboBox<String> managerIDField;
     private JTextField shelfIDField;
-    private JTextField bioField; // Added for Bio
+    private JTextField bioField;
 
     private JTable bookTable;
     private JTable authorTable;

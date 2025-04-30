@@ -56,21 +56,21 @@ public class ReturnBook extends JFrame {
         DateTimeFormatter returnDateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String returnDateFormatted = currentDate.format(returnDateFormatter);
 
-        // Main Panel
+    
         mainPanel = new JPanel();
         mainPanel.setBackground(Color.WHITE);
         mainPanel.setPreferredSize(new Dimension(1100, 640));
         mainPanel.setLayout(null);
         add(mainPanel);
 
-        // Navigation Panel (Left)
+      
         leftPanel = new JPanel();
         leftPanel.setBackground(new Color(5, 77, 120));
         leftPanel.setBounds(0, 0, 300, 640);
         leftPanel.setLayout(null);
         mainPanel.add(leftPanel);
 
-        // Back Button
+   
         backButton = new CustomButton("Back", true);
         backButton.setBounds(10, 10, 280, 45);
         backButton.setBackground(new Color(47, 120, 152));
@@ -83,7 +83,7 @@ public class ReturnBook extends JFrame {
             setVisible(false);
         });
 
-        // Return Information Panel (Left Form)
+ 
         returnPanel = new JPanel();
         returnPanel.setBackground(new Color(5, 77, 120));
         returnPanel.setBounds(0, 60, 300, 580);
@@ -129,7 +129,7 @@ public class ReturnBook extends JFrame {
         confirmButton.setForeground(new Color(220, 238, 229));
         confirmButton.setFocusPainted(false);
 
-        // Issue Information (Right Panel)
+    
         rightPanel = new JPanel();
         rightPanel.setBounds(300, 0, 800, 640);
         rightPanel.setBackground(new Color(220, 235, 220));
