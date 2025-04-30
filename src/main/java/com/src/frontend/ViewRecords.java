@@ -1,19 +1,40 @@
 package com.src.frontend;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
-import javax.swing.*;
-import javax.swing.table.*;
-import java.awt.*;
-import java.awt.event.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SpinnerDateModel;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
+import com.src.dao.BorrowingDAO;
+import com.src.view.viewRecord.BorrowingManageTable;
 
 public class ViewRecords extends JFrame {
-
 
     private JTable table;
     private JButton backButton, searchButton;
     private JSpinner fromDate, toDate;
-
+    private BorrowingManageTable borrowingManageTable;
 
     public ViewRecords() {
         setPreferredSize(new Dimension(1000, 640));
@@ -22,21 +43,17 @@ public class ViewRecords extends JFrame {
         setLayout(new BorderLayout());
         pack();
 
-
         initComponents();
-
 
         setVisible(true);
         setLocationRelativeTo(null);
     }
 
-
     private void initComponents() {
-        //Header
+
         JPanel headerPanel = new JPanel(null);
         headerPanel.setPreferredSize(new Dimension(1000, 230));
         headerPanel.setBackground(new Color(47, 120, 152));
-
 
         JLabel title = new JLabel("View Records");
         title.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 40));
@@ -45,14 +62,11 @@ public class ViewRecords extends JFrame {
         title.setIcon(new ImageIcon(getClass().getResource("/com/res/BookIDIcon.png")));
         headerPanel.add(title);
 
-
-        //Date
         JLabel fromLabel = new JLabel("From");
         fromLabel.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 20));
         fromLabel.setForeground(new Color(220, 238, 229));
         fromLabel.setBounds(60, 150, 150, 40);
         headerPanel.add(fromLabel);
-
 
         fromDate = new JSpinner(new SpinnerDateModel());
         fromDate.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 16));
@@ -62,13 +76,11 @@ public class ViewRecords extends JFrame {
         fromDate.setBounds(120, 150, 160, 40);
         headerPanel.add(fromDate);
 
-
         JLabel toLabel = new JLabel("To");
         toLabel.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 20));
         toLabel.setForeground(new Color(220, 238, 229));
         toLabel.setBounds(400, 150, 150, 40);
         headerPanel.add(toLabel);
-
 
         toDate = new JSpinner(new SpinnerDateModel());
         toDate.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 16));
@@ -78,8 +90,6 @@ public class ViewRecords extends JFrame {
         toDate.setBounds(450, 150, 160, 40);
         headerPanel.add(toDate);
 
-
-        //Search button
         searchButton = new JButton("Search");
         searchButton.setBounds(800, 150, 150, 40);
         searchButton.setBackground(new Color(3, 47, 90));
@@ -91,24 +101,19 @@ public class ViewRecords extends JFrame {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 searchButton.setBackground(new Color(5, 77, 120));
             }
-
-
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 searchButton.setBackground(new Color(3, 47, 90));
             }
         });
-        //Search on click
+
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //Search code
-                //Search days that borrowers issue books or return books
+                searchRecords();
             }
         });
         headerPanel.add(searchButton);
 
-
-        //Back button
         backButton = new JButton("Back");
         backButton.setBounds(0, 0, 100, 40);
         backButton.setBackground(new Color(3, 47, 90));
@@ -120,7 +125,6 @@ public class ViewRecords extends JFrame {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 backButton.setBackground(new Color(5, 77, 120));
             }
-
 
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 backButton.setBackground(new Color(3, 47, 90));
@@ -135,25 +139,20 @@ public class ViewRecords extends JFrame {
         });
         headerPanel.add(backButton);
 
-
         add(headerPanel, BorderLayout.NORTH);
-   
-        //Table
+
         String[] columnNames = {
-            "No.", "BookID", "BorrowerID", "Issue Date", "Due Date", "Return Date", "Days Overdue", "Fine Amount"
+                "Borrowing ID", "Book ID", "Borrower ID", "Issue Date", "Due Date", "Return Date", "Days Overdue", "Fine Amount"
         };
 
-
-        Object[][] data = {
-            {"1", "12345", "54321", "20/03/2025", "01/04/2025", "03/04/2025", "2", "$2"},
-            {"2", "12347", "54721", "10/04/2025", "15/04/2025", "", "8", "$8"},
-            {"3", "12346", "54621", "20/04/2025", "25/04/2025", "", "0", "0"},
-            {null, null, null, null, null, null, null, null},
-            {null, null, null, null, null, null, null, null},
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
         };
 
-
-        table = new JTable(data, columnNames);
+        table = new JTable(model);
         table.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 14));
         table.getTableHeader().setReorderingAllowed(false);
         table.setGridColor(new Color(3, 128, 128));
@@ -166,24 +165,56 @@ public class ViewRecords extends JFrame {
         for (int i = 0; i < table.getColumnCount(); i++) {
             table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
         }
-       
+
         table.setRowHeight(40);
         table.setFont(new Font("SansSerif", Font.BOLD, 14));
         table.setBackground(new Color(220, 238, 229));
-        table.setForeground(new Color(47, 120, 152));  
+        table.setForeground(new Color(47, 120, 152));
         table.setSelectionBackground(new Color(3, 47, 90));
         table.setSelectionForeground(new Color(124, 182, 192));
-
 
         JScrollPane scrollPane = new JScrollPane(table);
         JPanel tablePanel = new JPanel(new BorderLayout());
         tablePanel.setBackground(Color.WHITE);
         tablePanel.add(scrollPane, BorderLayout.CENTER);
         add(tablePanel, BorderLayout.CENTER);
+
+        borrowingManageTable = new BorrowingManageTable();
+        borrowingManageTable.loadBorrowingData(table);
     }
 
+    private void searchRecords() {
+        Date from = (Date) fromDate.getValue();
+        Date to = (Date) toDate.getValue();
 
+        if (from.after(to)) {
+            JOptionPane.showMessageDialog(this, "The 'From' date must be before the 'To' date.", "Date Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        BorrowingDAO borrowingDAO = new BorrowingDAO();
+        try {
+            List<Map<String, Object>> borrowings = borrowingDAO.findAll();
+
+            borrowings.removeIf(borrowing -> {
+                Date issueDate = (Date) borrowing.get("BorrowerDate");
+                Date returnDate = (Date) borrowing.get("ReturnDay");
+                boolean matchesIssueDate = issueDate != null && !issueDate.before(from) && !issueDate.after(to);
+                boolean matchesReturnDate = returnDate != null && !returnDate.before(from) && !returnDate.after(to);
+                return !(matchesIssueDate || matchesReturnDate);
+            });
+
+            borrowingManageTable.loadSearchResults(table, borrowings);
+
+            if (borrowings.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "No records found for the specified date range.", "Information",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+
+        } catch (RuntimeException e) {
+            JOptionPane.showMessageDialog(this, "Error loading records: " + e.getMessage(), "Database Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
 }
-
-
-

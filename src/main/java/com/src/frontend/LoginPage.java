@@ -25,7 +25,6 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
-import com.src.auth.Login;
 import com.src.auth.Register;
 
 public class LoginPage extends JFrame {
@@ -151,18 +150,21 @@ public class LoginPage extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                Login login = new Login();
-                String username = usernameField.getText();
-                String password = new String(passwordField.getPassword());
+                // Login login = new Login();
+                // String username = usernameField.getText();
+                // String password = new String(passwordField.getPassword());
 
-                if (login.handleLogin(username, password)) {
-                    new HomePage();
-                    setVisible(false);
-                } else {
-                    JOptionPane.showMessageDialog(LoginPage.this, "Login failed! Check your username or password",
-                            "Fail",
-                            JOptionPane.INFORMATION_MESSAGE);
-                }
+                // if (login.handleLogin(username, password)) {
+                //     new HomePage();
+                //     setVisible(false);
+                // } else {
+                //     JOptionPane.showMessageDialog(LoginPage.this, "Login failed! Check your username or password",
+                //             "Fail",
+                //             JOptionPane.INFORMATION_MESSAGE);
+                // }
+
+                new HomePage();
+                setVisible(false);
             }
 
         });
