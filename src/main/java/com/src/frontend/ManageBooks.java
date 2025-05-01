@@ -1198,6 +1198,26 @@ public class ManageBooks extends JFrame {
             }
         });
 
+        JButton clear = new RoundedButton("X");
+        clear.setBounds(260, 30, 35, 35);
+        clear.setBackground(new Color(47, 120, 152));
+        clear.setForeground(LightColor);
+        clear.setFont(new Font("Tahoma", Font.BOLD, 15));
+        clear.setFocusPainted(false);
+        clear.setBorder(null);
+        panel.add(clear);
+
+        clear.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                shelfIDField.setText("");
+                shelfNumberField.setText("");
+                mainGenreField.setSelectedIndex(-1);
+                managerIDField.setSelectedIndex(-1);
+                isFillingFromTable = true;
+            }
+        });
+
         return panel;
     }
 
@@ -1549,6 +1569,27 @@ public class ManageBooks extends JFrame {
                     JOptionPane.showMessageDialog(null, "Error updating author: " + ex.getMessage(), "Error",
                             JOptionPane.ERROR_MESSAGE);
                 }
+            }
+        });
+
+        JButton clear = new RoundedButton("X");
+        clear.setBounds(260, 30, 35, 35);
+        clear.setBackground(new Color(47, 120, 152));
+        clear.setForeground(LightColor);
+        clear.setFont(new Font("Tahoma", Font.BOLD, 15));
+        clear.setFocusPainted(false);
+        clear.setBorder(null);
+        panel.add(clear);
+
+        clear.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                authorIDField.setText("");
+                firstNameField.setText("");
+                lastNameField.setText("");
+                birthDateField.setText("");
+                nationalityField.setText("");
+                bioField.setText("");
             }
         });
 
@@ -1947,6 +1988,29 @@ public class ManageBooks extends JFrame {
                     JOptionPane.showMessageDialog(null, "Error updating book: " + ex.getMessage(), "Error",
                             JOptionPane.ERROR_MESSAGE);
                 }
+            }
+
+        });
+
+        JButton clear = new RoundedButton("X");
+        clear.setBounds(260, 30, 35, 35);
+        clear.setBackground(new Color(47, 120, 152));
+        clear.setForeground(LightColor);
+        clear.setFont(new Font("Tahoma", Font.BOLD, 15));
+        clear.setFocusPainted(false);
+        clear.setBorder(null);
+        panel.add(clear);
+
+        clear.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                bookIDField.setText("");
+                bookNameField.setText("");
+                authorNameField.setSelectedIndex(-1);
+                mainGenreID.setSelectedIndex(-1);
+                publishedDateField.setText("");
+                isFillingFromTable = false;
+                isEditing = false;
             }
         });
 

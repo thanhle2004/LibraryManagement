@@ -6,7 +6,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -63,12 +61,7 @@ public class ManageBorrowers extends JFrame {
     private JLabel ownerLabel;
     private JLabel dateLabel;
 
-    private JLabel borrowerIDIcon;
-    private JLabel borrowerNameIcon;
-    private JLabel borrowerBornYearIcon;
-    private JLabel borrowerEmailIcon;
-    private JLabel borrowerAddressIcon;
-    private JLabel borrowerPhoneIcon;
+
 
     private JTextField borrowerIDField;
     private JTextField borrowerNameField;
@@ -141,11 +134,11 @@ public class ManageBorrowers extends JFrame {
         borrowerIDLabel = new JLabel("Borrower ID:");
         borrowerIDLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         borrowerIDLabel.setForeground(new Color(255, 255, 255));
-        borrowerIDLabel.setBounds(75, 75, 500, 15);
+        borrowerIDLabel.setBounds(15, 75, 500, 15);
         navigationPanel.add(borrowerIDLabel);
 
         borrowerIDField = new JTextField(15);
-        borrowerIDField.setBounds(75, 100, 200, 30);
+        borrowerIDField.setBounds(15, 100, 260, 30);
         borrowerIDField.setBackground(lightColor);
         borrowerIDField.setForeground(new Color(5, 77, 120));
         borrowerIDField.setBorder(BorderFactory.createCompoundBorder(
@@ -153,20 +146,16 @@ public class ManageBorrowers extends JFrame {
                 new EmptyBorder(5, 10, 5, 10)));
         navigationPanel.add(borrowerIDField);
 
-        ImageIcon originalBorrowerIcon = new ImageIcon(getClass().getResource("/com/res/ID.png"));
-        Image scaledBorrowerIcon = originalBorrowerIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-        borrowerIDIcon = new JLabel(new ImageIcon(scaledBorrowerIcon));
-        borrowerIDIcon.setBounds(15, 100, 30, 30);
-        navigationPanel.add(borrowerIDIcon);
+ 
 
         borrowerNameLabel = new JLabel("Borrower Name:");
         borrowerNameLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         borrowerNameLabel.setForeground(new Color(255, 255, 255));
-        borrowerNameLabel.setBounds(75, 155, 500, 15);
+        borrowerNameLabel.setBounds(15, 155, 500, 15);
         navigationPanel.add(borrowerNameLabel);
 
         borrowerNameField = new JTextField(15);
-        borrowerNameField.setBounds(75, 175, 200, 30);
+        borrowerNameField.setBounds(15, 175, 260, 30);
         borrowerNameField.setBackground(lightColor);
         borrowerNameField.setForeground(new Color(5, 77, 120));
         borrowerNameField.setBorder(BorderFactory.createCompoundBorder(
@@ -174,20 +163,16 @@ public class ManageBorrowers extends JFrame {
                 new EmptyBorder(5, 10, 5, 10)));
         navigationPanel.add(borrowerNameField);
 
-        ImageIcon originalNameIcon = new ImageIcon(getClass().getResource("/com/res/BorrowerNameIcon.png"));
-        Image scaledNameIcon = originalNameIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-        borrowerNameIcon = new JLabel(new ImageIcon(scaledNameIcon));
-        borrowerNameIcon.setBounds(15, 175, 30, 30);
-        navigationPanel.add(borrowerNameIcon);
+  
 
         borrowerBornYearLabel = new JLabel("Birthday:");
         borrowerBornYearLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         borrowerBornYearLabel.setForeground(new Color(255, 255, 255));
-        borrowerBornYearLabel.setBounds(75, 225, 500, 15);
+        borrowerBornYearLabel.setBounds(15, 225, 500, 15);
         navigationPanel.add(borrowerBornYearLabel);
 
         borrowerBornYearField = new JTextField(15);
-        borrowerBornYearField.setBounds(75, 250, 200, 30);
+        borrowerBornYearField.setBounds(15, 250, 260, 30);
         borrowerBornYearField.setBackground(lightColor);
         borrowerBornYearField.setForeground(new Color(5, 77, 120));
         borrowerBornYearField.setBorder(BorderFactory.createCompoundBorder(
@@ -195,20 +180,16 @@ public class ManageBorrowers extends JFrame {
                 new EmptyBorder(5, 10, 5, 10)));
         navigationPanel.add(borrowerBornYearField);
 
-        ImageIcon originalAgeIcon = new ImageIcon(getClass().getResource("/com/res/AgeIcon.png"));
-        Image scaledAgeIcon = originalAgeIcon.getImage().getScaledInstance(30, 55, Image.SCALE_SMOOTH);
-        borrowerBornYearIcon = new JLabel(new ImageIcon(scaledAgeIcon));
-        borrowerBornYearIcon.setBounds(15, 250, 30, 30);
-        navigationPanel.add(borrowerBornYearIcon);
+
 
         borrowerEmailLabel = new JLabel("Borrower Email:");
         borrowerEmailLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         borrowerEmailLabel.setForeground(new Color(255, 255, 255));
-        borrowerEmailLabel.setBounds(75, 300, 500, 15);
+        borrowerEmailLabel.setBounds(15, 300, 500, 15);
         navigationPanel.add(borrowerEmailLabel);
 
         borrowerEmailField = new JTextField(15);
-        borrowerEmailField.setBounds(75, 325, 200, 30);
+        borrowerEmailField.setBounds(15, 325, 260, 30);
         borrowerEmailField.setBackground(lightColor);
         borrowerEmailField.setForeground(new Color(5, 77, 120));
         borrowerEmailField.setBorder(BorderFactory.createCompoundBorder(
@@ -216,20 +197,16 @@ public class ManageBorrowers extends JFrame {
                 new EmptyBorder(5, 10, 5, 10)));
         navigationPanel.add(borrowerEmailField);
 
-        ImageIcon originalEmailIcon = new ImageIcon(getClass().getResource("/com/res/EmailIcon.jpg"));
-        Image scaledEmailIcon = originalEmailIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-        borrowerEmailIcon = new JLabel(new ImageIcon(scaledEmailIcon));
-        borrowerEmailIcon.setBounds(15, 325, 30, 30);
-        navigationPanel.add(borrowerEmailIcon);
+
 
         borrowerAddressLabel = new JLabel("Borrower Address:");
         borrowerAddressLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         borrowerAddressLabel.setForeground(new Color(255, 255, 255));
-        borrowerAddressLabel.setBounds(75, 375, 500, 15);
+        borrowerAddressLabel.setBounds(15, 375, 500, 15);
         navigationPanel.add(borrowerAddressLabel);
 
         borrowerAddressField = new JTextField(15);
-        borrowerAddressField.setBounds(75, 400, 200, 30);
+        borrowerAddressField.setBounds(15, 400, 260, 30);
         borrowerAddressField.setBackground(lightColor);
         borrowerAddressField.setForeground(new Color(5, 77, 120));
         borrowerAddressField.setBorder(BorderFactory.createCompoundBorder(
@@ -237,20 +214,16 @@ public class ManageBorrowers extends JFrame {
                 new EmptyBorder(5, 10, 5, 10)));
         navigationPanel.add(borrowerAddressField);
 
-        ImageIcon originalAddressIcon = new ImageIcon(getClass().getResource("/com/res/AddressIcon.jpg"));
-        Image scaledAddressIcon = originalAddressIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-        borrowerAddressIcon = new JLabel(new ImageIcon(scaledAddressIcon));
-        borrowerAddressIcon.setBounds(15, 400, 30, 30);
-        navigationPanel.add(borrowerAddressIcon);
+ 
 
         borrowerPhoneLabel = new JLabel("Phone Number:");
         borrowerPhoneLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         borrowerPhoneLabel.setForeground(new Color(255, 255, 255));
-        borrowerPhoneLabel.setBounds(75, 450, 500, 15);
+        borrowerPhoneLabel.setBounds(15, 450, 500, 15);
         navigationPanel.add(borrowerPhoneLabel);
 
         borrowerPhoneField = new JTextField(15);
-        borrowerPhoneField.setBounds(75, 475, 200, 30);
+        borrowerPhoneField.setBounds(15, 475, 260, 30);
         borrowerPhoneField.setBackground(lightColor);
         borrowerPhoneField.setForeground(new Color(5, 77, 120));
         borrowerPhoneField.setBorder(BorderFactory.createCompoundBorder(
@@ -258,11 +231,6 @@ public class ManageBorrowers extends JFrame {
                 new EmptyBorder(5, 10, 5, 10)));
         navigationPanel.add(borrowerPhoneField);
 
-        ImageIcon originalPhoneIcon = new ImageIcon(getClass().getResource("/com/res/PhoneIcon.png"));
-        Image scaledPhoneIcon = originalPhoneIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-        borrowerPhoneIcon = new JLabel(new ImageIcon(scaledPhoneIcon));
-        borrowerPhoneIcon.setBounds(15, 475, 30, 30);
-        navigationPanel.add(borrowerPhoneIcon);
 
         addButton = new RoundedButton("Add");
         addButton.setBounds(15, 525, 60, buttonHeight);
@@ -644,6 +612,30 @@ public class ManageBorrowers extends JFrame {
         manageTable.getColumnModel().getColumn(3).setPreferredWidth(230);
         manageTable.getColumnModel().getColumn(4).setPreferredWidth(150);
         manageTable.getColumnModel().getColumn(5).setPreferredWidth(100);
+
+        manageTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int selectedRow = manageTable.getSelectedRow();
+                if (selectedRow != -1) { 
+                  
+                    String id = manageTable.getValueAt(selectedRow, 0).toString();
+                    String name = manageTable.getValueAt(selectedRow, 1).toString();
+                    String birthday = manageTable.getValueAt(selectedRow, 2).toString();
+                    String address = manageTable.getValueAt(selectedRow, 3) != null ? manageTable.getValueAt(selectedRow, 3).toString() : "";
+                    String email = manageTable.getValueAt(selectedRow, 4).toString();
+                    String phoneNumber = manageTable.getValueAt(selectedRow, 5) != null ? manageTable.getValueAt(selectedRow, 5).toString() : "";
+        
+                 
+                    borrowerIDField.setText(id);
+                    borrowerNameField.setText(name);
+                    borrowerBornYearField.setText(birthday);
+                    borrowerEmailField.setText(email);
+                    borrowerAddressField.setText(address);
+                    borrowerPhoneField.setText(phoneNumber);
+                }
+            }
+        });
 
         JTableHeader headerManageTable = manageTable.getTableHeader();
         headerManageTable.setOpaque(false);

@@ -7,7 +7,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -67,13 +65,7 @@ public class ManageStaff extends JFrame {
     private JLabel ownerLabel;
     private JLabel dateLabel;
 
-    private JLabel staffIdIcon;
-    private JLabel staffNameIcon;
-    private JLabel staffEmailIcon;
-    private JLabel staffPhoneIcon;
-    private JLabel staffSupervisorIcon;
-    private JLabel staffBirthdayIcon;
-    private JLabel staffAddressIcon;
+
 
     private JTextField staffIdField;
     private JTextField staffNameField;
@@ -148,11 +140,11 @@ public class ManageStaff extends JFrame {
         staffIdLabel = new JLabel("Manager ID:");
         staffIdLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         staffIdLabel.setForeground(new Color(255, 255, 255));
-        staffIdLabel.setBounds(75, 50, 500, 15); 
+        staffIdLabel.setBounds(15, 50, 500, 15); 
         navigationPanel.add(staffIdLabel);
     
         staffIdField = new JTextField(15);
-        staffIdField.setBounds(75, 75, 200, 30); 
+        staffIdField.setBounds(15, 75, 260, 30); 
         staffIdField.setBackground(lightColor);
         staffIdField.setForeground(new Color(5, 77, 120));
         staffIdField.setBorder(BorderFactory.createCompoundBorder(
@@ -160,20 +152,16 @@ public class ManageStaff extends JFrame {
                 new EmptyBorder(5, 10, 5, 10)));
         navigationPanel.add(staffIdField);
     
-        ImageIcon originalIdIcon = new ImageIcon(getClass().getResource("/com/res/ID.png"));
-        Image scaledIdIcon = originalIdIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-        staffIdIcon = new JLabel(new ImageIcon(scaledIdIcon));
-        staffIdIcon.setBounds(15, 75, 30, 30); 
-        navigationPanel.add(staffIdIcon);
+  
     
         staffNameLabel = new JLabel("Staff Name:");
         staffNameLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         staffNameLabel.setForeground(new Color(255, 255, 255));
-        staffNameLabel.setBounds(75, 130, 500, 15); 
+        staffNameLabel.setBounds(15, 130, 500, 15); 
         navigationPanel.add(staffNameLabel);
     
         staffNameField = new JTextField(15);
-        staffNameField.setBounds(75, 150, 200, 30); 
+        staffNameField.setBounds(15, 150, 260, 30); 
         staffNameField.setBackground(lightColor);
         staffNameField.setForeground(new Color(5, 77, 120));
         staffNameField.setBorder(BorderFactory.createCompoundBorder(
@@ -181,20 +169,16 @@ public class ManageStaff extends JFrame {
                 new EmptyBorder(5, 10, 5, 10)));
         navigationPanel.add(staffNameField);
     
-        ImageIcon originalNameIcon = new ImageIcon(getClass().getResource("/com/res/BorrowerNameIcon.png"));
-        Image scaledNameIcon = originalNameIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-        staffNameIcon = new JLabel(new ImageIcon(scaledNameIcon));
-        staffNameIcon.setBounds(15, 150, 30, 30); 
-        navigationPanel.add(staffNameIcon);
+ 
     
         staffEmailLabel = new JLabel("Staff Email:");
         staffEmailLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         staffEmailLabel.setForeground(new Color(255, 255, 255));
-        staffEmailLabel.setBounds(75, 200, 500, 15); 
+        staffEmailLabel.setBounds(15, 200, 500, 15); 
         navigationPanel.add(staffEmailLabel);
     
         staffEmailField = new JTextField(15);
-        staffEmailField.setBounds(75, 225, 200, 30); 
+        staffEmailField.setBounds(15, 225, 260, 30); 
         staffEmailField.setBackground(lightColor);
         staffEmailField.setForeground(new Color(5, 77, 120));
         staffEmailField.setBorder(BorderFactory.createCompoundBorder(
@@ -202,20 +186,16 @@ public class ManageStaff extends JFrame {
                 new EmptyBorder(5, 10, 5, 10)));
         navigationPanel.add(staffEmailField);
     
-        ImageIcon originalEmailIcon = new ImageIcon(getClass().getResource("/com/res/EmailIcon.jpg"));
-        Image scaledEmailIcon = originalEmailIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-        staffEmailIcon = new JLabel(new ImageIcon(scaledEmailIcon));
-        staffEmailIcon.setBounds(15, 225, 30, 30); 
-        navigationPanel.add(staffEmailIcon);
+   
     
         staffPhoneLabel = new JLabel("Staff Phone:");
         staffPhoneLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         staffPhoneLabel.setForeground(new Color(255, 255, 255));
-        staffPhoneLabel.setBounds(75, 275, 500, 15); 
+        staffPhoneLabel.setBounds(15, 275, 500, 15); 
         navigationPanel.add(staffPhoneLabel);
     
         staffPhoneField = new JTextField(15);
-        staffPhoneField.setBounds(75, 300, 200, 30); 
+        staffPhoneField.setBounds(15, 300, 260, 30); 
         staffPhoneField.setBackground(lightColor);
         staffPhoneField.setForeground(new Color(5, 77, 120));
         staffPhoneField.setBorder(BorderFactory.createCompoundBorder(
@@ -223,16 +203,12 @@ public class ManageStaff extends JFrame {
                 new EmptyBorder(5, 10, 5, 10)));
         navigationPanel.add(staffPhoneField);
     
-        ImageIcon originalPhoneIcon = new ImageIcon(getClass().getResource("/com/res/PhoneIcon.png"));
-        Image scaledPhoneIcon = originalPhoneIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-        staffPhoneIcon = new JLabel(new ImageIcon(scaledPhoneIcon));
-        staffPhoneIcon.setBounds(15, 300, 30, 30); 
-        navigationPanel.add(staffPhoneIcon);
+
     
         staffSupervisorLabel = new JLabel("Supervisor:");
         staffSupervisorLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         staffSupervisorLabel.setForeground(new Color(255, 255, 255));
-        staffSupervisorLabel.setBounds(75, 350, 500, 15); 
+        staffSupervisorLabel.setBounds(15, 350, 500, 15); 
         navigationPanel.add(staffSupervisorLabel);
     
         ManagerDAO managerDAO = new ManagerDAO();
@@ -241,7 +217,7 @@ public class ManageStaff extends JFrame {
             supervisorUsernames.add("No Supervisors");
         }
         staffSupervisorComboBox = new JComboBox<>(supervisorUsernames.toArray(new String[0]));
-        staffSupervisorComboBox.setBounds(75, 375, 200, 30);
+        staffSupervisorComboBox.setBounds(15, 375, 260, 30);
         staffSupervisorComboBox.setBackground(lightColor);
         staffSupervisorComboBox.setForeground(darkColor);
         staffSupervisorComboBox.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -250,21 +226,16 @@ public class ManageStaff extends JFrame {
                 new EmptyBorder(5, 10, 5, 10)));
         navigationPanel.add(staffSupervisorComboBox);
     
-        ImageIcon originalSupervisorIcon = new ImageIcon(getClass().getResource("/com/res/AddressIcon.jpg"));
-        Image scaledSupervisorIcon = originalSupervisorIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-        staffSupervisorIcon = new JLabel(new ImageIcon(scaledSupervisorIcon));
-        staffSupervisorIcon.setBounds(15, 375, 30, 30); 
-        navigationPanel.add(staffSupervisorIcon);
     
        
         staffBirthdayLabel = new JLabel("Birthday:");
         staffBirthdayLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         staffBirthdayLabel.setForeground(new Color(255, 255, 255));
-        staffBirthdayLabel.setBounds(75, 425, 500, 15); 
+        staffBirthdayLabel.setBounds(15, 425, 500, 15); 
         navigationPanel.add(staffBirthdayLabel);
     
         staffBirthdayField = new JTextField(15);
-        staffBirthdayField.setBounds(75, 450, 200, 30); 
+        staffBirthdayField.setBounds(15, 450, 260, 30); 
         staffBirthdayField.setBackground(lightColor);
         staffBirthdayField.setForeground(new Color(5, 77, 120));
         staffBirthdayField.setBorder(BorderFactory.createCompoundBorder(
@@ -276,11 +247,11 @@ public class ManageStaff extends JFrame {
         staffAddressLabel = new JLabel("Address:");
         staffAddressLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         staffAddressLabel.setForeground(new Color(255, 255, 255));
-        staffAddressLabel.setBounds(75, 500, 500, 15); 
+        staffAddressLabel.setBounds(15, 500, 500, 15); 
         navigationPanel.add(staffAddressLabel);
     
         staffAddressField = new JTextField(15);
-        staffAddressField.setBounds(75, 525, 200, 30); 
+        staffAddressField.setBounds(15, 525, 260, 30); 
         staffAddressField.setBackground(lightColor);
         staffAddressField.setForeground(new Color(5, 77, 120));
         staffAddressField.setBorder(BorderFactory.createCompoundBorder(
