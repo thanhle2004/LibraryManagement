@@ -53,7 +53,7 @@ public class BookDAO extends AbstractGenericDAO<Map<String, Object>, String> {
 
     @Override
     protected String getUpdateQuery() {
-        return "UPDATE book SET Title=?, Author_id=?, MainGenre_id=?, published_day=?, WHERE ISBN=?";
+        return "UPDATE book SET Title=?, Author_id=?, MainGenre_id=?, published_day=? WHERE ISBN=?";
     }
 
     @Override
@@ -120,6 +120,40 @@ public class BookDAO extends AbstractGenericDAO<Map<String, Object>, String> {
                 book.put("Author_id", rs.getInt("Author_id"));
                 book.put("MainGenre_id", rs.getInt("MainGenre_id"));
                 book.put("published_day", rs.getDate("published_day"));
+                return book;
+            }
+            return null;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error" + e.getMessage());
+        }
+    }
+
+    public Map<String, Object> getAuthorID(String isbn) {
+        String sql = "SELECT Author_id FROM Book WHERE ISBN = ?";
+        try (Connection conn = DatabaseAccessManager.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, isbn);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                Map<String, Object> book = new HashMap<>();
+                book.put("Author_id", rs.getInt("Author_id"));
+                return book;
+            }
+            return null;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error" + e.getMessage());
+        }
+    }
+
+    public Map<String, Object> getGenreID(String isbn) {
+        String sql = "SELECT MainGenre_id FROM Book WHERE ISBN = ?";
+        try (Connection conn = DatabaseAccessManager.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, isbn);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                Map<String, Object> book = new HashMap<>();
+                book.put("MainGenre_id", rs.getInt("MainGenre_id"));
                 return book;
             }
             return null;

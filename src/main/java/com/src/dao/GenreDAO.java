@@ -52,4 +52,6 @@ public class GenreDAO extends AbstractGenericDAO<Map<String, Object>, String> {
         stmt.setString(1, (String) entity.get("MainGenre_name"));
         stmt.setString(2, (String) entity.get("MainGenre_id"));
     }
+
+
 }

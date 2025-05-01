@@ -288,6 +288,10 @@ public class ManageBorrowers extends JFrame {
                                 JOptionPane.ERROR_MESSAGE);
                         return;
                     }
+                    BorrowerDAO borrowerDAO = new BorrowerDAO();
+                    if (borrowerDAO.getById(borrowerId) != null) {
+                        throw new IllegalArgumentException("Borrrower with ISBN " + borrowerId + " already exists.");  
+                    }
                     if (fullName.isEmpty()) {
                         JOptionPane.showMessageDialog(null, "Name cannot be empty!", "Error",
                                 JOptionPane.ERROR_MESSAGE);
@@ -353,8 +357,6 @@ public class ManageBorrowers extends JFrame {
                     borrower.put("Email", email);
                     borrower.put("Address", address.isEmpty() ? null : address);
                     borrower.put("Phone_number", phoneNumber.isEmpty() ? null : phoneNumber);
-
-                    BorrowerDAO borrowerDAO = new BorrowerDAO();
                     borrowerDAO.insert(borrower);
 
                     borrowerManageTable.loadBorrowerData(manageTable);

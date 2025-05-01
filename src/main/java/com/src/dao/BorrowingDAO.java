@@ -76,20 +76,32 @@ public class BorrowingDAO extends AbstractGenericDAO<Map<String, Object>, Intege
     }
 
     public List<Map<String, Object>> findByDateRange(Date from, Date to) throws SQLException {
-    List<Map<String, Object>> borrowings = new ArrayList<>();
-    String query = "SELECT * FROM Borrowing WHERE (BorrowerDate BETWEEN ? AND ?) OR (ReturnDay BETWEEN ? AND ?)";
-    try (Connection connection = DatabaseAccessManager.getConnection();
-         PreparedStatement stmt = connection.prepareStatement(query)) {
-        stmt.setDate(1, new java.sql.Date(from.getTime()));
-        stmt.setDate(2, new java.sql.Date(to.getTime()));
-        stmt.setDate(3, new java.sql.Date(from.getTime()));
-        stmt.setDate(4, new java.sql.Date(to.getTime()));
-        try (ResultSet rs = stmt.executeQuery()) {
-            while (rs.next()) {
-                borrowings.add(mapResultSetToEntity(rs));
+        List<Map<String, Object>> borrowings = new ArrayList<>();
+        String query = "SELECT * FROM Borrowing WHERE (BorrowerDate BETWEEN ? AND ?) OR (ReturnDay BETWEEN ? AND ?)";
+        try (Connection connection = DatabaseAccessManager.getConnection();
+                PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setDate(1, new java.sql.Date(from.getTime()));
+            stmt.setDate(2, new java.sql.Date(to.getTime()));
+            stmt.setDate(3, new java.sql.Date(from.getTime()));
+            stmt.setDate(4, new java.sql.Date(to.getTime()));
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    borrowings.add(mapResultSetToEntity(rs));
+                }
+            }
+        }
+        return borrowings;
+    }
+
+    public boolean isBookBorrowedOrOverdue(String isbn) throws SQLException {
+        String query = "SELECT Status FROM Borrowing WHERE ISBN = ? AND (Status = 'Borrowed' OR Status = 'Overdue')";
+        try (Connection connection = DatabaseAccessManager.getConnection();
+                PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, isbn);
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next(); 
             }
         }
     }
-    return borrowings;
-}
+
 }

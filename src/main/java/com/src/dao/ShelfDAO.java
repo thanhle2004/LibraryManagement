@@ -156,4 +156,39 @@ public class ShelfDAO extends AbstractGenericDAO<Map<String, Object>, Integer> {
             throw new RuntimeException("Error retrieving shelf with ID " + shelfId + ": " + e.getMessage());
         }
     }
+
+
+    public Map<String, Object> getMainGenreId(int shelfId) {
+        String sql = "SELECT MainGenre_id FROM shelves WHERE Shelves_id = ?";
+        try (Connection conn = DatabaseAccessManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, shelfId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                Map<String, Object> shelf = new HashMap<>();
+                shelf.put("MainGenre_id", rs.getInt("MainGenre_id"));
+                return shelf;
+            }
+            return null;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error retrieving shelf with ID " + shelfId + ": " + e.getMessage());
+        }
+    }
+
+    public Map<String, Object> getManager_id(int shelfId) {
+        String sql = "SELECT Manager_id FROM shelves WHERE Shelves_id = ?";
+        try (Connection conn = DatabaseAccessManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, shelfId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                Map<String, Object> shelf = new HashMap<>();
+                shelf.put("Manager_id", rs.getObject("Manager_id"));
+                return shelf;
+            }
+            return null;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error retrieving shelf with ID " + shelfId + ": " + e.getMessage());
+        }
+    }
 }
