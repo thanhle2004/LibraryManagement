@@ -15,6 +15,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,11 +33,14 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
 import com.src.dao.AuthorDAO;
 import com.src.dao.BookDAO;
+import com.src.dao.BorrowingDAO;
 import com.src.dao.GenreDAO;
 import com.src.dao.ShelfDAO;
 import com.src.dao.StaffDAO;
@@ -106,7 +111,8 @@ public class ManageBooks extends JFrame {
     private AuthorManageTable authorManageTable;
     private ShelfManageTable shelfManageTable;
     private String currentMode = "Book";
-
+    private boolean isFillingFromTable = false;
+    private boolean isEditing = false;
     private int tableY = 250;
     Color DarkColor = new Color(5, 77, 120);
     Color LightColor = new Color(220, 238, 229);
@@ -399,10 +405,10 @@ public class ManageBooks extends JFrame {
         bookTable.setRowHeight(25);
         bookTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-        bookTable.getColumnModel().getColumn(0).setPreferredWidth(90);
-        bookTable.getColumnModel().getColumn(1).setPreferredWidth(180);
-        bookTable.getColumnModel().getColumn(2).setPreferredWidth(155);
-        bookTable.getColumnModel().getColumn(3).setPreferredWidth(110);
+        bookTable.getColumnModel().getColumn(0).setPreferredWidth(180);
+        bookTable.getColumnModel().getColumn(1).setPreferredWidth(160);
+        bookTable.getColumnModel().getColumn(2).setPreferredWidth(100);
+        bookTable.getColumnModel().getColumn(3).setPreferredWidth(100);
         bookTable.getColumnModel().getColumn(4).setPreferredWidth(90);
         bookTable.getColumnModel().getColumn(5).setPreferredWidth(65);
 
@@ -425,13 +431,35 @@ public class ManageBooks extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 int selectedRow = bookTable.getSelectedRow();
                 if (selectedRow != -1) {
+                    isFillingFromTable = true;
                     bookIDField.setText(bookTable.getValueAt(selectedRow, 0).toString());
                     bookNameField.setText(bookTable.getValueAt(selectedRow, 1).toString());
-                    authorNameField.setSelectedItem(bookTable.getValueAt(selectedRow, 2).toString());
-                    mainGenreID.setSelectedItem(bookTable.getValueAt(selectedRow, 3).toString());
+                    String authorIdStr = bookTable.getValueAt(selectedRow, 2).toString();
+                    BookDAO bookDAO = new BookDAO();
+                    Map<String, Object> author = bookDAO.getAuthorID(bookTable.getValueAt(selectedRow, 0).toString());
+                    if (author != null) {
+                        int authorId = (int) author.get("Author_id");
+                        authorNameField.setSelectedItem(authorId + " - " + authorIdStr);
+                    } else {
+                        authorNameField.setSelectedItem("");
+                    }
+
+                    String genreIdStr = bookTable.getValueAt(selectedRow, 3).toString();
+
+                    Map<String, Object> genre = bookDAO.getGenreID(bookTable.getValueAt(selectedRow, 0).toString());
+                    if (genre != null) {
+                        int genreId = (int) genre.get("MainGenre_id");
+
+                        mainGenreID.setSelectedItem(genreId + " - " + genreIdStr);
+                    } else {
+                        mainGenreID.setSelectedItem("");
+                    }
+
                     publishedDateField.setText(bookTable.getValueAt(selectedRow, 4) != null
                             ? bookTable.getValueAt(selectedRow, 4).toString()
                             : "");
+
+                    isFillingFromTable = false;
                 }
             }
         });
@@ -569,13 +597,42 @@ public class ManageBooks extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 int selectedRow = shelfTable.getSelectedRow();
                 if (selectedRow != -1) {
+                    isFillingFromTable = true;
+
                     shelfIDField.setText(shelfTable.getValueAt(selectedRow, 0).toString());
                     shelfNumberField.setText(shelfTable.getValueAt(selectedRow, 1).toString());
-                    mainGenreField.setSelectedItem(shelfTable.getValueAt(selectedRow, 2).toString());
-                    String managerName = shelfTable.getValueAt(selectedRow, 3).toString();
-                    String[] managerParts = managerName.split(" ", 2);
-                    String managerId = managerParts[0];
-                    managerIDField.setSelectedItem(managerId + " - " + managerName);
+
+                    int shelfId = Integer.parseInt(shelfTable.getValueAt(selectedRow, 0).toString());
+                    ShelfDAO shelfDAO = new ShelfDAO();
+                    GenreDAO genreDAO = new GenreDAO();
+                    StaffDAO managerDAO = new StaffDAO();
+
+                    Map<String, Object> genre = shelfDAO.getMainGenreId(shelfId);
+                    String genreDisplay = "";
+                    if (genre != null) {
+                        int genreId = (int) genre.get("MainGenre_id");
+                        Map<String, Object> genreInfo = genreDAO.findById(String.valueOf(genreId));
+                        if (genreInfo != null) {
+                            String genreName = (String) genreInfo.get("MainGenre_name");
+                            genreDisplay = genreId + " - " + genreName;
+                        }
+                    }
+                    mainGenreField.setSelectedItem(genreDisplay);
+
+                    Map<String, Object> manager = shelfDAO.getManager_id(shelfId);
+                    String managerDisplay = "";
+                    if (manager != null) {
+                        int managerId = (int) manager.get("Manager_id");
+                        Map<String, Object> managerInfo = managerDAO.getById(managerId);
+                        if (managerInfo != null) {
+                            String firstName = (String) managerInfo.get("First_name");
+                            String lastName = (String) managerInfo.get("Last_name");
+                            managerDisplay = managerId + " - " + firstName + " " + lastName;
+                        }
+                    }
+                    managerIDField.setSelectedItem(managerDisplay);
+
+                    isFillingFromTable = false;
                 }
             }
         });
@@ -739,7 +796,7 @@ public class ManageBooks extends JFrame {
         addGenreButton.setBounds(15, 275, 80, 30);
         addGenreButton.setBackground(new Color(47, 120, 152));
         addGenreButton.setForeground(LightColor);
-        addGenreButton.setFont(new Font("Tahoma", Font.BOLD, 12));
+        addGenreButton.setFont(new Font("Tahoma", Font.BOLD, 10));
         addGenreButton.setFocusPainted(false);
         addGenreButton.setBorder(null);
         panel.add(addGenreButton);
@@ -748,7 +805,7 @@ public class ManageBooks extends JFrame {
         updateGenreButton.setBounds(105, 275, 80, 30);
         updateGenreButton.setBackground(new Color(47, 120, 152));
         updateGenreButton.setForeground(LightColor);
-        updateGenreButton.setFont(new Font("Tahoma", Font.BOLD, 12));
+        updateGenreButton.setFont(new Font("Tahoma", Font.BOLD, 10));
         updateGenreButton.setFocusPainted(false);
         updateGenreButton.setBorder(null);
         panel.add(updateGenreButton);
@@ -757,7 +814,7 @@ public class ManageBooks extends JFrame {
         deleteGenreButton.setBounds(195, 275, 80, 30);
         deleteGenreButton.setBackground(new Color(47, 120, 152));
         deleteGenreButton.setForeground(LightColor);
-        deleteGenreButton.setFont(new Font("Tahoma", Font.BOLD, 12));
+        deleteGenreButton.setFont(new Font("Tahoma", Font.BOLD, 10));
         deleteGenreButton.setFocusPainted(false);
         deleteGenreButton.setBorder(null);
         panel.add(deleteGenreButton);
@@ -801,6 +858,8 @@ public class ManageBooks extends JFrame {
                     populateGenreComboBox(mainGenreField);
                     JOptionPane.showMessageDialog(null, "Genre added successfully!", "Success",
                             JOptionPane.INFORMATION_MESSAGE);
+                    mainGenreField.setSelectedIndex(-1);
+
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error",
@@ -849,6 +908,7 @@ public class ManageBooks extends JFrame {
                     populateGenreComboBox(mainGenreField);
                     JOptionPane.showMessageDialog(null, "Genre updated successfully!", "Success",
                             JOptionPane.INFORMATION_MESSAGE);
+                    mainGenreField.setSelectedIndex(-1);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error",
@@ -900,6 +960,7 @@ public class ManageBooks extends JFrame {
                     populateGenreComboBox(mainGenreField);
                     JOptionPane.showMessageDialog(null, "Genre deleted successfully!", "Success",
                             JOptionPane.INFORMATION_MESSAGE);
+                    mainGenreField.setSelectedIndex(-1);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error",
@@ -988,6 +1049,10 @@ public class ManageBooks extends JFrame {
                     shelfManageTable.loadShelfData(shelfTable);
                     JOptionPane.showMessageDialog(null, "Shelf added successfully!", "Success",
                             JOptionPane.INFORMATION_MESSAGE);
+                    shelfIDField.setText("");
+                    shelfNumberField.setText("");
+                    mainGenreField.setSelectedIndex(-1);
+                    managerIDField.setSelectedIndex(-1);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Error adding shelf: " + ex.getMessage(), "Error",
@@ -1029,6 +1094,10 @@ public class ManageBooks extends JFrame {
                     shelfManageTable.loadShelfData(shelfTable);
                     JOptionPane.showMessageDialog(null, "Shelf deleted successfully!", "Success",
                             JOptionPane.INFORMATION_MESSAGE);
+                    shelfIDField.setText("");
+                    shelfNumberField.setText("");
+                    mainGenreField.setSelectedIndex(-1);
+                    managerIDField.setSelectedIndex(-1);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Error deleting shelf: " + ex.getMessage(), "Error",
@@ -1117,6 +1186,10 @@ public class ManageBooks extends JFrame {
                     shelfManageTable.loadShelfData(shelfTable);
                     JOptionPane.showMessageDialog(null, "Shelf updated successfully!", "Success",
                             JOptionPane.INFORMATION_MESSAGE);
+                    shelfIDField.setText("");
+                    shelfNumberField.setText("");
+                    mainGenreField.setSelectedIndex(-1);
+                    managerIDField.setSelectedIndex(-1);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Error updating shelf: " + ex.getMessage(), "Error",
@@ -1311,6 +1384,12 @@ public class ManageBooks extends JFrame {
                     authorManageTable.loadAuthorData(authorTable);
                     JOptionPane.showMessageDialog(null, "Author added successfully!", "Success",
                             JOptionPane.INFORMATION_MESSAGE);
+                    authorIDField.setText("");
+                    firstNameField.setText("");
+                    lastNameField.setText("");
+                    birthDateField.setText("");
+                    nationalityField.setText("");
+                    bioField.setText("");
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Error adding author: " + ex.getMessage(), "Error",
@@ -1352,6 +1431,12 @@ public class ManageBooks extends JFrame {
                     authorManageTable.loadAuthorData(authorTable);
                     JOptionPane.showMessageDialog(null, "Author deleted successfully!", "Success",
                             JOptionPane.INFORMATION_MESSAGE);
+                    authorIDField.setText("");
+                    firstNameField.setText("");
+                    lastNameField.setText("");
+                    birthDateField.setText("");
+                    nationalityField.setText("");
+                    bioField.setText("");
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Error deleting author: " + ex.getMessage(), "Error",
@@ -1453,6 +1538,12 @@ public class ManageBooks extends JFrame {
                     authorManageTable.loadAuthorData(authorTable);
                     JOptionPane.showMessageDialog(null, "Author updated successfully!", "Success",
                             JOptionPane.INFORMATION_MESSAGE);
+                    authorIDField.setText("");
+                    firstNameField.setText("");
+                    lastNameField.setText("");
+                    birthDateField.setText("");
+                    nationalityField.setText("");
+                    bioField.setText("");
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Error updating author: " + ex.getMessage(), "Error",
@@ -1487,7 +1578,7 @@ public class ManageBooks extends JFrame {
             }
         });
 
-        bookID = new JLabel("Enter Book ISBN:");
+        bookID = new JLabel("Book ISBN (Auto-generated):");
         bookID.setFont(new Font("Tahoma", Font.BOLD, 15));
         bookID.setForeground(Color.WHITE);
         bookID.setBounds(15, 75, 500, 15);
@@ -1500,7 +1591,45 @@ public class ManageBooks extends JFrame {
         bookIDField.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(DarkColor),
                 new EmptyBorder(5, 10, 5, 10)));
+        bookIDField.setEditable(false);
         panel.add(bookIDField);
+
+        bookIDField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                checkISBN();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                checkISBN();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                checkISBN();
+            }
+
+            private void checkISBN() {
+                String isbn = bookIDField.getText().trim();
+                if (!isbn.isEmpty()) {
+                    BookDAO bookDAO = new BookDAO();
+                    if (bookDAO.getById(isbn) != null) {
+                        isEditing = true;
+                        isFillingFromTable = false;
+                        bookIDField.setEditable(false);
+                    } else {
+                        isEditing = false;
+                        isFillingFromTable = true;
+                        bookIDField.setEditable(false);
+                    }
+                } else {
+                    isEditing = false;
+                    isFillingFromTable = true;
+                    bookIDField.setEditable(false);
+                }
+            }
+        });
 
         bookName = new JLabel("Enter Book Title:");
         bookName.setFont(new Font("Tahoma", Font.BOLD, 15));
@@ -1581,20 +1710,20 @@ public class ManageBooks extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    String isbn = bookIDField.getText().trim();
                     String title = bookNameField.getText().trim();
                     String publishedDate = publishedDateField.getText().trim();
                     String status = "Available";
 
-                    if (isbn.isEmpty()) {
-                        throw new IllegalArgumentException("ISBN is required.");
-                    }
                     if (title.isEmpty()) {
                         throw new IllegalArgumentException("Book Title is required.");
                     }
 
                     int authorId = parseIdFromComboBox(authorNameField, "Author ID");
                     int mainGenreId = parseIdFromComboBox(mainGenreID, "Genre ID");
+
+                    String isbn = generateISBN(authorId, mainGenreId);
+                    bookIDField.setText(isbn);
+                    bookIDField.repaint();
 
                     BookDAO bookDAO = new BookDAO();
                     if (bookDAO.getById(isbn) != null) {
@@ -1639,11 +1768,32 @@ public class ManageBooks extends JFrame {
                     bookManageTable.loadBookData(bookTable);
                     JOptionPane.showMessageDialog(null, "Book added successfully!", "Success",
                             JOptionPane.INFORMATION_MESSAGE);
+                    bookNameField.setText("");
+                    authorNameField.setSelectedIndex(-1);
+                    mainGenreID.setSelectedIndex(-1);
+                    publishedDateField.setText("");
+                    bookIDField.setText("");
+                    isFillingFromTable = true;
+                    isEditing = false;
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Error adding book: " + ex.getMessage(), "Error",
                             JOptionPane.ERROR_MESSAGE);
                 }
+            }
+        });
+
+        authorNameField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateISBNField();
+            }
+        });
+
+        mainGenreID.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateISBNField();
             }
         });
 
@@ -1665,6 +1815,12 @@ public class ManageBooks extends JFrame {
                         throw new IllegalArgumentException("ISBN is required.");
                     }
 
+                    BorrowingDAO borrowingDAO = new BorrowingDAO();
+                    if (borrowingDAO.isBookBorrowedOrOverdue(isbn)) {
+                        throw new IllegalArgumentException(
+                                "This book is currently borrowed or overdue. Cannot delete.");
+                    }
+
                     BookDAO bookDAO = new BookDAO();
                     if (bookDAO.getById(isbn) == null) {
                         throw new IllegalArgumentException("Book with ISBN " + isbn + " does not exist.");
@@ -1674,6 +1830,13 @@ public class ManageBooks extends JFrame {
                     bookManageTable.loadBookData(bookTable);
                     JOptionPane.showMessageDialog(null, "Book deleted successfully!", "Success",
                             JOptionPane.INFORMATION_MESSAGE);
+                    bookNameField.setText("");
+                    authorNameField.setSelectedIndex(-1);
+                    mainGenreID.setSelectedIndex(-1);
+                    publishedDateField.setText("");
+                    bookIDField.setText("");
+                    isFillingFromTable = true;
+                    isEditing = false;
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Error deleting book: " + ex.getMessage(), "Error",
@@ -1772,6 +1935,13 @@ public class ManageBooks extends JFrame {
                     bookManageTable.loadBookData(bookTable);
                     JOptionPane.showMessageDialog(null, "Book updated successfully!", "Success",
                             JOptionPane.INFORMATION_MESSAGE);
+                    bookNameField.setText("");
+                    authorNameField.setSelectedIndex(-1);
+                    mainGenreID.setSelectedIndex(-1);
+                    publishedDateField.setText("");
+                    bookIDField.setText("");
+                    isFillingFromTable = true;
+                    isEditing = false;
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Error updating book: " + ex.getMessage(), "Error",
@@ -1783,18 +1953,46 @@ public class ManageBooks extends JFrame {
         return panel;
     }
 
+    private String generateISBN(int authorId, int mainGenreId) {
+        String formattedAuthorId = String.format("%03d", authorId);
+        String formattedGenreId = String.format("%03d", mainGenreId);
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HHmmss");
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("ddMMyyyy");
+        String timePart = now.format(timeFormatter);
+        String datePart = now.format(dateFormatter);
+        return String.format("1-%s-%s-%s-%s", formattedAuthorId, formattedGenreId, timePart, datePart);
+    }
+
+    private void updateISBNField() {
+
+        if (isFillingFromTable || isEditing)
+            return;
+        try {
+            int authorId = parseIdFromComboBox(authorNameField, "Author ID");
+            int genreId = parseIdFromComboBox(mainGenreID, "Genre ID");
+            String isbn = generateISBN(authorId, genreId);
+            bookIDField.setText(isbn);
+        } catch (Exception ex) {
+            bookIDField.setText("");
+        }
+    }
+
     @SuppressWarnings("serial")
     private class RoundedButton extends JButton {
         public RoundedButton(String text) {
             super(text);
             setContentAreaFilled(false);
             setFocusPainted(false);
+            setOpaque(false);
         }
 
         @Override
         protected void paintComponent(Graphics g) {
             Graphics2D g2 = (Graphics2D) g.create();
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.setColor(getBackground());
+            g2.fillRoundRect(0, 0, getWidth(), getHeight(), 15, 15);
             if (getModel().isPressed()) {
                 g2.setColor(getBackground().darker());
             } else if (getModel().isRollover()) {
@@ -1803,14 +2001,16 @@ public class ManageBooks extends JFrame {
                 g2.setColor(getBackground());
             }
             g2.fillRoundRect(0, 0, getWidth(), getHeight(), 15, 15);
+
             g2.setColor(getForeground());
             g2.setFont(getFont());
             FontMetrics fm = g2.getFontMetrics();
             int textWidth = fm.stringWidth(getText());
             int textHeight = fm.getAscent();
             g2.drawString(getText(), (getWidth() - textWidth) / 2, (getHeight() + textHeight) / 2 - 2);
+
             g2.dispose();
-            super.paintComponent(g);
+
         }
 
         @Override
