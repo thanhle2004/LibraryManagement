@@ -18,8 +18,8 @@ public class BookManageTable {
                 "g.MainGenre_name, " +
                 "b.published_day, b.Status " +
                 "FROM book b " +
-                "JOIN author a ON b.Author_id = a.Author_id " +
-                "JOIN genre g ON b.MainGenre_id = g.MainGenre_id";
+                "LEFT JOIN author a ON b.Author_id = a.Author_id " +
+                "LEFT JOIN genre g ON b.MainGenre_id = g.MainGenre_id";
         try (Connection conn = DatabaseAccessManager.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query)) {
             ResultSet rs = stmt.executeQuery();

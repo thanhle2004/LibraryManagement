@@ -17,8 +17,7 @@ public class BookTable {
             ) {
             ResultSet rs = stmt.executeQuery();
             DefaultTableModel model = (DefaultTableModel) BookTable.getModel();
-            model.setRowCount(0); // Xóa dữ liệu cũ
-
+            model.setRowCount(0); 
             while (rs.next()) {
                 Object[] row = {
                     rs.getString("ISBN"),
