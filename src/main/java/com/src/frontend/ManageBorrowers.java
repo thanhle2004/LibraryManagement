@@ -33,6 +33,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
 import com.src.dao.BorrowerDAO;
+import com.src.dao.BorrowingDAO;
 import com.src.view.manageBorrower.BorrowerManageTable;
 
 public class ManageBorrowers extends JFrame {
@@ -360,6 +361,12 @@ public class ManageBorrowers extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 try {
                     String id = borrowerIDField.getText().trim();
+                    BorrowingDAO borrowingDAO = new BorrowingDAO();
+
+                    if (borrowingDAO.isBorrowerBorrowedinRecord(id)) {
+                        throw new IllegalArgumentException(
+                                "This borrower is currently in record. Cannot delete.");
+                    }
                     BorrowerDAO borrowerDAO = new BorrowerDAO();
                     borrowerDAO.delete(id);
                     borrowerManageTable.loadBorrowerData(manageTable);
