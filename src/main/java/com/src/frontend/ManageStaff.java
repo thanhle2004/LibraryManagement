@@ -14,6 +14,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +36,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
 import com.src.dao.ManagerDAO;
+import com.src.dao.ShelfDAO;
 import com.src.dao.StaffDAO;
 import com.src.view.manageStaff.StaffManageTable;
 
@@ -64,8 +66,6 @@ public class ManageStaff extends JFrame {
 
     private JLabel ownerLabel;
     private JLabel dateLabel;
-
-
 
     private JTextField staffIdField;
     private JTextField staffNameField;
@@ -97,29 +97,29 @@ public class ManageStaff extends JFrame {
     private void initComponents() {
         staffManageTable = new StaffManageTable();
         int buttonHeight = 45;
-    
+
         LocalDate currentDate = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String formattedDate = currentDate.format(formatter);
-    
+
         mainPanel = new JPanel();
         mainPanel.setBackground(Color.WHITE);
         mainPanel.setPreferredSize(new Dimension(1100, 640));
         mainPanel.setLayout(null);
         add(mainPanel);
-    
+
         navigationPanel = new JPanel();
         navigationPanel.setBackground(darkColor);
         navigationPanel.setBounds(0, 0, 300, 640);
         navigationPanel.setLayout(null);
         mainPanel.add(navigationPanel);
-    
+
         rightPanel = new JPanel();
         rightPanel.setBackground(Color.WHITE);
         rightPanel.setBounds(300, 0, 800, 640);
         rightPanel.setLayout(null);
         mainPanel.add(rightPanel);
-    
+
         backButton = new RoundedButton("Back");
         backButton.setBounds(-1, 0, 300, buttonHeight);
         backButton.setBackground(new Color(47, 120, 152));
@@ -128,7 +128,7 @@ public class ManageStaff extends JFrame {
         backButton.setFocusPainted(false);
         backButton.setBorder(null);
         navigationPanel.add(backButton);
-    
+
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -136,81 +136,73 @@ public class ManageStaff extends JFrame {
                 setVisible(false);
             }
         });
-    
+
         staffIdLabel = new JLabel("Manager ID:");
         staffIdLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         staffIdLabel.setForeground(new Color(255, 255, 255));
-        staffIdLabel.setBounds(15, 50, 500, 15); 
+        staffIdLabel.setBounds(15, 50, 500, 15);
         navigationPanel.add(staffIdLabel);
-    
+
         staffIdField = new JTextField(15);
-        staffIdField.setBounds(15, 75, 260, 30); 
+        staffIdField.setBounds(15, 75, 260, 30);
         staffIdField.setBackground(lightColor);
         staffIdField.setForeground(new Color(5, 77, 120));
         staffIdField.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(new Color(5, 77, 120)),
                 new EmptyBorder(5, 10, 5, 10)));
         navigationPanel.add(staffIdField);
-    
-  
-    
+
         staffNameLabel = new JLabel("Staff Name:");
         staffNameLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         staffNameLabel.setForeground(new Color(255, 255, 255));
-        staffNameLabel.setBounds(15, 130, 500, 15); 
+        staffNameLabel.setBounds(15, 130, 500, 15);
         navigationPanel.add(staffNameLabel);
-    
+
         staffNameField = new JTextField(15);
-        staffNameField.setBounds(15, 150, 260, 30); 
+        staffNameField.setBounds(15, 150, 260, 30);
         staffNameField.setBackground(lightColor);
         staffNameField.setForeground(new Color(5, 77, 120));
         staffNameField.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(new Color(5, 77, 120)),
                 new EmptyBorder(5, 10, 5, 10)));
         navigationPanel.add(staffNameField);
-    
- 
-    
+
         staffEmailLabel = new JLabel("Staff Email:");
         staffEmailLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         staffEmailLabel.setForeground(new Color(255, 255, 255));
-        staffEmailLabel.setBounds(15, 200, 500, 15); 
+        staffEmailLabel.setBounds(15, 200, 500, 15);
         navigationPanel.add(staffEmailLabel);
-    
+
         staffEmailField = new JTextField(15);
-        staffEmailField.setBounds(15, 225, 260, 30); 
+        staffEmailField.setBounds(15, 225, 260, 30);
         staffEmailField.setBackground(lightColor);
         staffEmailField.setForeground(new Color(5, 77, 120));
         staffEmailField.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(new Color(5, 77, 120)),
                 new EmptyBorder(5, 10, 5, 10)));
         navigationPanel.add(staffEmailField);
-    
-   
-    
+
         staffPhoneLabel = new JLabel("Staff Phone:");
         staffPhoneLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         staffPhoneLabel.setForeground(new Color(255, 255, 255));
-        staffPhoneLabel.setBounds(15, 275, 500, 15); 
+        staffPhoneLabel.setBounds(15, 275, 500, 15);
         navigationPanel.add(staffPhoneLabel);
-    
+
         staffPhoneField = new JTextField(15);
-        staffPhoneField.setBounds(15, 300, 260, 30); 
+        staffPhoneField.setBounds(15, 300, 260, 30);
         staffPhoneField.setBackground(lightColor);
         staffPhoneField.setForeground(new Color(5, 77, 120));
         staffPhoneField.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(new Color(5, 77, 120)),
                 new EmptyBorder(5, 10, 5, 10)));
         navigationPanel.add(staffPhoneField);
-    
 
-    
         staffSupervisorLabel = new JLabel("Supervisor:");
         staffSupervisorLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         staffSupervisorLabel.setForeground(new Color(255, 255, 255));
-        staffSupervisorLabel.setBounds(15, 350, 500, 15); 
+        staffSupervisorLabel.setBounds(15, 350, 500, 15);
         navigationPanel.add(staffSupervisorLabel);
-    
+
         ManagerDAO managerDAO = new ManagerDAO();
         List<String> supervisorUsernames = managerDAO.getAllUsernames();
         if (supervisorUsernames.isEmpty()) {
@@ -225,49 +217,46 @@ public class ManageStaff extends JFrame {
                 new LineBorder(darkColor),
                 new EmptyBorder(5, 10, 5, 10)));
         navigationPanel.add(staffSupervisorComboBox);
-    
-    
-       
+
         staffBirthdayLabel = new JLabel("Birthday:");
         staffBirthdayLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         staffBirthdayLabel.setForeground(new Color(255, 255, 255));
-        staffBirthdayLabel.setBounds(15, 425, 500, 15); 
+        staffBirthdayLabel.setBounds(15, 425, 500, 15);
         navigationPanel.add(staffBirthdayLabel);
-    
+
         staffBirthdayField = new JTextField(15);
-        staffBirthdayField.setBounds(15, 450, 260, 30); 
+        staffBirthdayField.setBounds(15, 450, 260, 30);
         staffBirthdayField.setBackground(lightColor);
         staffBirthdayField.setForeground(new Color(5, 77, 120));
         staffBirthdayField.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(new Color(5, 77, 120)),
                 new EmptyBorder(5, 10, 5, 10)));
         navigationPanel.add(staffBirthdayField);
-    
-      
+
         staffAddressLabel = new JLabel("Address:");
         staffAddressLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         staffAddressLabel.setForeground(new Color(255, 255, 255));
-        staffAddressLabel.setBounds(15, 500, 500, 15); 
+        staffAddressLabel.setBounds(15, 500, 500, 15);
         navigationPanel.add(staffAddressLabel);
-    
+
         staffAddressField = new JTextField(15);
-        staffAddressField.setBounds(15, 525, 260, 30); 
+        staffAddressField.setBounds(15, 525, 260, 30);
         staffAddressField.setBackground(lightColor);
         staffAddressField.setForeground(new Color(5, 77, 120));
         staffAddressField.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(new Color(5, 77, 120)),
                 new EmptyBorder(5, 10, 5, 10)));
         navigationPanel.add(staffAddressField);
-    
+
         addButton = new RoundedButton("Add");
-        addButton.setBounds(15, 559, 60, buttonHeight); 
+        addButton.setBounds(15, 559, 60, buttonHeight);
         addButton.setBackground(new Color(47, 120, 152));
         addButton.setForeground(new Color(220, 238, 229));
         addButton.setFont(new Font("Tahoma", Font.BOLD, 15));
         addButton.setFocusPainted(false);
         addButton.setBorder(null);
         navigationPanel.add(addButton);
-    
+
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -279,13 +268,13 @@ public class ManageStaff extends JFrame {
                     String supervisorUsername = staffSupervisorComboBox.getSelectedItem().toString();
                     String birthday = staffBirthdayField.getText().trim();
                     String address = staffAddressField.getText().trim();
-    
+
                     if (idText.isEmpty()) {
                         JOptionPane.showMessageDialog(null, "Manager ID cannot be empty!", "Error",
                                 JOptionPane.ERROR_MESSAGE);
                         return;
                     }
-    
+
                     int managerId;
                     try {
                         managerId = Integer.parseInt(idText);
@@ -294,50 +283,81 @@ public class ManageStaff extends JFrame {
                                 JOptionPane.ERROR_MESSAGE);
                         return;
                     }
-    
+
                     StaffDAO staffDAO = new StaffDAO();
                     if (staffDAO.getById(managerId) != null) {
                         JOptionPane.showMessageDialog(null, "Staff with ID " + managerId + " already exists!", "Error",
                                 JOptionPane.ERROR_MESSAGE);
                         return;
                     }
-    
+
                     if (fullName.isEmpty()) {
                         JOptionPane.showMessageDialog(null, "Name cannot be empty!", "Error",
                                 JOptionPane.ERROR_MESSAGE);
                         return;
                     }
-    
+
                     if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
                         JOptionPane.showMessageDialog(null, "Invalid email format!", "Error",
                                 JOptionPane.ERROR_MESSAGE);
                         return;
                     }
-    
+
                     if (phoneNumber.isEmpty()) {
                         JOptionPane.showMessageDialog(null, "Phone number cannot be empty!", "Error",
                                 JOptionPane.ERROR_MESSAGE);
                         return;
                     }
-    
-                    // Validate birthday format (expected: YYYY-MM-DD)
-                    if (!birthday.isEmpty() && !birthday.matches("^\\d{4}-\\d{2}-\\d{2}$")) {
-                        JOptionPane.showMessageDialog(null, "Invalid birthday format! Use YYYY-MM-DD.", "Error",
+
+                    if (birthday.isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "Birthday cannot be empty!", "Error",
                                 JOptionPane.ERROR_MESSAGE);
                         return;
                     }
-    
+
+                    if (address.isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "Address cannot be empty!", "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                    if (!birthday.isEmpty()) {
+                        if (!birthday.matches("^\\d{4}-\\d{2}-\\d{2}$")) {
+                            JOptionPane.showMessageDialog(null,
+                                    "Invalid birthday format! Use YYYY-MM-DD.",
+                                    "Error", JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
+                        try {
+                            LocalDate birthDate = LocalDate.parse(birthday);
+                            LocalDate today = LocalDate.now();
+
+                            if (birthDate.isAfter(today)) {
+                                JOptionPane.showMessageDialog(null,
+                                        "Invalid birthday! Date cannot be in the future.",
+                                        "Error", JOptionPane.ERROR_MESSAGE);
+                                return;
+                            }
+
+                        } catch (DateTimeParseException ex) {
+                            JOptionPane.showMessageDialog(null,
+                                    "Invalid birthday! Date does not exist.",
+                                    "Error", JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
+                    }
+
                     String firstName = "";
                     String lastName = "";
                     String[] nameParts = fullName.split("\\s+");
-    
+
                     if (nameParts.length == 1) {
                         firstName = nameParts[0];
                     } else {
                         firstName = nameParts[nameParts.length - 1];
                         lastName = String.join(" ", Arrays.copyOf(nameParts, nameParts.length - 1));
                     }
-    
+
                     Map<String, Object> staff = new HashMap<>();
                     staff.put("Manager_id", managerId);
                     staff.put("First_name", firstName);
@@ -347,13 +367,13 @@ public class ManageStaff extends JFrame {
                     staff.put("supervisor_username", supervisorUsername);
                     staff.put("birthday", birthday.isEmpty() ? null : birthday);
                     staff.put("address", address.isEmpty() ? null : address);
-    
+
                     staffDAO.insert(staff);
-    
+
                     staffManageTable.loadStaffData(manageTable);
-    
+
                     JOptionPane.showMessageDialog(null, "Staff added successfully!");
-    
+
                     staffIdField.setText("");
                     staffNameField.setText("");
                     staffEmailField.setText("");
@@ -361,7 +381,7 @@ public class ManageStaff extends JFrame {
                     staffSupervisorComboBox.setSelectedIndex(0);
                     staffBirthdayField.setText("");
                     staffAddressField.setText("");
-    
+
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Error adding staff: " + ex.getMessage(), "Error",
@@ -369,16 +389,16 @@ public class ManageStaff extends JFrame {
                 }
             }
         });
-    
+
         deleteButton = new RoundedButton("Delete");
-        deleteButton.setBounds(110, 559, 70, buttonHeight); 
+        deleteButton.setBounds(110, 559, 70, buttonHeight);
         deleteButton.setBackground(new Color(47, 120, 152));
         deleteButton.setForeground(new Color(220, 238, 229));
         deleteButton.setFont(new Font("Tahoma", Font.BOLD, 15));
         deleteButton.setFocusPainted(false);
         deleteButton.setBorder(null);
         navigationPanel.add(deleteButton);
-    
+
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -389,7 +409,7 @@ public class ManageStaff extends JFrame {
                                 JOptionPane.ERROR_MESSAGE);
                         return;
                     }
-    
+
                     int managerId;
                     try {
                         managerId = Integer.parseInt(idText);
@@ -398,18 +418,26 @@ public class ManageStaff extends JFrame {
                                 JOptionPane.ERROR_MESSAGE);
                         return;
                     }
-    
+
                     StaffDAO staffDAO = new StaffDAO();
                     if (staffDAO.getById(managerId) == null) {
                         JOptionPane.showMessageDialog(null, "Staff with ID " + managerId + " does not exist!", "Error",
                                 JOptionPane.ERROR_MESSAGE);
                         return;
                     }
-    
+
+                    ShelfDAO shelfDAO = new ShelfDAO();
+                    if (shelfDAO.isManagerInUse(managerId)) {
+                        JOptionPane.showMessageDialog(null,
+                                "Cannot delete this staff because they are managing one or more shelves.",
+                                "Delete Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
                     staffDAO.delete(managerId);
                     staffManageTable.loadStaffData(manageTable);
                     JOptionPane.showMessageDialog(null, "Staff deleted successfully!");
-    
+
                     staffIdField.setText("");
                     staffNameField.setText("");
                     staffEmailField.setText("");
@@ -417,7 +445,7 @@ public class ManageStaff extends JFrame {
                     staffSupervisorComboBox.setSelectedIndex(0);
                     staffBirthdayField.setText("");
                     staffAddressField.setText("");
-    
+
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Error deleting staff: " + ex.getMessage(), "Error",
@@ -425,16 +453,16 @@ public class ManageStaff extends JFrame {
                 }
             }
         });
-    
+
         updateButton = new RoundedButton("Update");
-        updateButton.setBounds(215, 559, 70, buttonHeight); 
+        updateButton.setBounds(215, 559, 70, buttonHeight);
         updateButton.setBackground(new Color(47, 120, 152));
         updateButton.setForeground(new Color(220, 238, 229));
         updateButton.setFont(new Font("Tahoma", Font.BOLD, 15));
         updateButton.setFocusPainted(false);
         updateButton.setBorder(null);
         navigationPanel.add(updateButton);
-    
+
         updateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -446,13 +474,13 @@ public class ManageStaff extends JFrame {
                     String supervisorUsername = staffSupervisorComboBox.getSelectedItem().toString();
                     String birthday = staffBirthdayField.getText().trim();
                     String address = staffAddressField.getText().trim();
-    
+
                     if (idText.isEmpty()) {
                         JOptionPane.showMessageDialog(null, "Manager ID cannot be empty!", "Error",
                                 JOptionPane.ERROR_MESSAGE);
                         return;
                     }
-    
+
                     int managerId;
                     try {
                         managerId = Integer.parseInt(idText);
@@ -461,7 +489,7 @@ public class ManageStaff extends JFrame {
                                 JOptionPane.ERROR_MESSAGE);
                         return;
                     }
-    
+
                     StaffDAO staffDAO = new StaffDAO();
                     Map<String, Object> existingStaff = staffDAO.getById(managerId);
                     if (existingStaff == null) {
@@ -469,14 +497,14 @@ public class ManageStaff extends JFrame {
                                 JOptionPane.ERROR_MESSAGE);
                         return;
                     }
-    
+
                     if (fullName.isEmpty() && email.isEmpty() && phoneNumber.isEmpty() && birthday.isEmpty()
                             && address.isEmpty()) {
                         JOptionPane.showMessageDialog(null, "Nothing to update!", "Info",
                                 JOptionPane.INFORMATION_MESSAGE);
                         return;
                     }
-    
+
                     String finalEmail = existingStaff.get("Email").toString();
                     if (!email.isEmpty()) {
                         if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
@@ -486,14 +514,14 @@ public class ManageStaff extends JFrame {
                         }
                         finalEmail = email;
                     }
-    
+
                     String finalPhoneNumber = existingStaff.get("Phone_number") != null
                             ? existingStaff.get("Phone_number").toString()
                             : "";
                     if (!phoneNumber.isEmpty()) {
                         finalPhoneNumber = phoneNumber;
                     }
-    
+
                     String finalBirthday = existingStaff.get("birthday") != null
                             ? existingStaff.get("birthday").toString()
                             : "";
@@ -505,14 +533,14 @@ public class ManageStaff extends JFrame {
                         }
                         finalBirthday = birthday;
                     }
-    
+
                     String finalAddress = existingStaff.get("address") != null
                             ? existingStaff.get("address").toString()
                             : "";
                     if (!address.isEmpty()) {
                         finalAddress = address;
                     }
-    
+
                     String firstName = existingStaff.get("First_name").toString();
                     String lastName = existingStaff.get("Last_name") != null ? existingStaff.get("Last_name").toString()
                             : "";
@@ -526,7 +554,7 @@ public class ManageStaff extends JFrame {
                             lastName = String.join(" ", Arrays.copyOf(nameParts, nameParts.length - 1));
                         }
                     }
-    
+
                     Map<String, Object> staff = new HashMap<>();
                     staff.put("Manager_id", managerId);
                     staff.put("First_name", firstName);
@@ -536,13 +564,13 @@ public class ManageStaff extends JFrame {
                     staff.put("supervisor_username", supervisorUsername);
                     staff.put("birthday", finalBirthday.isEmpty() ? null : finalBirthday);
                     staff.put("address", finalAddress.isEmpty() ? null : finalAddress);
-    
+
                     staffDAO.update(staff);
-    
+
                     staffManageTable.loadStaffData(manageTable);
-    
+
                     JOptionPane.showMessageDialog(null, "Staff updated successfully!");
-    
+
                     staffIdField.setText("");
                     staffNameField.setText("");
                     staffEmailField.setText("");
@@ -550,7 +578,7 @@ public class ManageStaff extends JFrame {
                     staffSupervisorComboBox.setSelectedIndex(0);
                     staffBirthdayField.setText("");
                     staffAddressField.setText("");
-    
+
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Error updating staff: " + ex.getMessage(), "Error",
@@ -558,30 +586,30 @@ public class ManageStaff extends JFrame {
                 }
             }
         });
-    
+
         manageStaffTitle = new JLabel("Manage Staff");
         manageStaffTitle.setFont(new Font("Tahoma", Font.BOLD, 30));
         manageStaffTitle.setForeground(darkColor);
         manageStaffTitle.setBounds(220, 0, 600, 100);
         rightPanel.add(manageStaffTitle);
-    
+
         separatorLine = new JPanel();
         separatorLine.setBackground(darkColor);
         separatorLine.setBounds(230, 75, 250, 5);
         rightPanel.add(separatorLine);
-    
+
         ownerLabel = new JLabel("Owner: Admin");
         ownerLabel.setFont(new Font("Tahoma", Font.BOLD, 27));
         ownerLabel.setForeground(darkColor);
         ownerLabel.setBounds(40, 110, 250, 30);
         rightPanel.add(ownerLabel);
-    
+
         dateLabel = new JLabel("Date: " + formattedDate);
         dateLabel.setFont(new Font("Tahoma", Font.BOLD, 27));
         dateLabel.setForeground(darkColor);
         dateLabel.setBounds(400, 110, 500, 30);
         rightPanel.add(dateLabel);
-    
+
         searchField = new JTextField(15);
         searchField.setBounds(40, 160, 500, 30);
         searchField.setBackground(lightColor);
@@ -590,7 +618,7 @@ public class ManageStaff extends JFrame {
                 new LineBorder(new Color(5, 77, 120)),
                 new EmptyBorder(5, 10, 5, 10)));
         rightPanel.add(searchField);
-    
+
         searchButton = new RoundedButton("Search");
         searchButton.setBounds(550, 160, 80, 30);
         searchButton.setBackground(new Color(47, 120, 152));
@@ -599,7 +627,7 @@ public class ManageStaff extends JFrame {
         searchButton.setFocusPainted(false);
         searchButton.setBorder(null);
         rightPanel.add(searchButton);
-    
+
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -622,7 +650,7 @@ public class ManageStaff extends JFrame {
                 }
             }
         });
-    
+
         clearButton = new RoundedButton("Clear");
         clearButton.setBounds(645, 160, 60, 30);
         clearButton.setBackground(new Color(47, 120, 152));
@@ -631,7 +659,7 @@ public class ManageStaff extends JFrame {
         clearButton.setFocusPainted(false);
         clearButton.setBorder(null);
         rightPanel.add(clearButton);
-    
+
         clearButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -645,13 +673,13 @@ public class ManageStaff extends JFrame {
                 }
             }
         });
-    
+
         staffTablePanel = new JPanel();
         staffTablePanel.setBackground(lightColor);
         staffTablePanel.setBounds(0, 250, 800, 350);
         staffTablePanel.setLayout(null);
         rightPanel.add(staffTablePanel);
-    
+
         String[] columnManageTable = { "Manager ID", "First Name", "Last Name", "Email", "Phone Number",
                 "Supervisor Username", "Birthday", "Address" };
         DefaultTableModel modelManageTable = new DefaultTableModel(columnManageTable, 0) {
@@ -660,14 +688,14 @@ public class ManageStaff extends JFrame {
                 return false;
             }
         };
-    
+
         manageTable = new JTable(modelManageTable);
         manageTable.setBackground(lightColor);
         manageTable.setForeground(darkColor);
         manageTable.setFont(new Font("Tahoma", Font.PLAIN, 12));
         manageTable.setRowHeight(25);
         manageTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    
+
         manageTable.getColumnModel().getColumn(0).setPreferredWidth(70);
         manageTable.getColumnModel().getColumn(1).setPreferredWidth(100);
         manageTable.getColumnModel().getColumn(2).setPreferredWidth(100);
@@ -676,7 +704,7 @@ public class ManageStaff extends JFrame {
         manageTable.getColumnModel().getColumn(5).setPreferredWidth(100);
         manageTable.getColumnModel().getColumn(6).setPreferredWidth(80);
         manageTable.getColumnModel().getColumn(7).setPreferredWidth(100);
-    
+
         manageTable.setDefaultRenderer(Object.class, new javax.swing.table.DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
@@ -690,7 +718,7 @@ public class ManageStaff extends JFrame {
                 return c;
             }
         });
-    
+
         manageTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -721,15 +749,15 @@ public class ManageStaff extends JFrame {
                 }
             }
         });
-    
+
         JScrollPane scrollManageTablePanel = new JScrollPane(manageTable);
         scrollManageTablePanel.setBounds(0, 0, 800, 350);
         scrollManageTablePanel.getViewport().setOpaque(false);
         scrollManageTablePanel.setOpaque(false);
         staffTablePanel.add(scrollManageTablePanel);
-    
+
         staffManageTable.loadStaffData(manageTable);
-    
+
         JTableHeader headerManageTable = manageTable.getTableHeader();
         headerManageTable.setOpaque(false);
         headerManageTable.setBackground(new Color(47, 120, 152));

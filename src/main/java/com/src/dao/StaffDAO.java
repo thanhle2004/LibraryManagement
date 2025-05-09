@@ -16,6 +16,7 @@ public class StaffDAO extends AbstractGenericDAO<Map<String, Object>, Integer> {
     protected String getTableName() {
         return "shelfmanager";
     }
+
     @Override
     protected String getPrimaryKeyColumn() {
         return "Manager_id";
@@ -82,27 +83,27 @@ public class StaffDAO extends AbstractGenericDAO<Map<String, Object>, Integer> {
     public Object searchStaff(String searchText) {
         List<Map<String, Object>> results = new ArrayList<>();
         String sql = "SELECT " +
-                     "    Manager_id, " +
-                     "    First_name, " +
-                     "    Last_name, " +
-                     "    Email, " +
-                     "    Phone_number, " +
-                     "    supervisor_username, " +
-                     "    birthday, " +
-                     "    address " +
-                     "FROM " +
-                     "    shelfmanager " +
-                     "WHERE " +
-                     "    CAST(Manager_id AS CHAR) LIKE ? " +
-                     "    OR CONCAT(First_name, ' ', Last_name) LIKE ? " +
-                     "    OR Email LIKE ? " +
-                     "    OR Phone_number LIKE ? " +
-                     "    OR supervisor_username LIKE ? " +
-                     "    OR birthday LIKE ? " +
-                     "    OR address LIKE ?";
+                "    Manager_id, " +
+                "    First_name, " +
+                "    Last_name, " +
+                "    Email, " +
+                "    Phone_number, " +
+                "    supervisor_username, " +
+                "    birthday, " +
+                "    address " +
+                "FROM " +
+                "    shelfmanager " +
+                "WHERE " +
+                "    CAST(Manager_id AS CHAR) LIKE ? " +
+                "    OR CONCAT(First_name, ' ', Last_name) LIKE ? " +
+                "    OR Email LIKE ? " +
+                "    OR Phone_number LIKE ? " +
+                "    OR supervisor_username LIKE ? " +
+                "    OR birthday LIKE ? " +
+                "    OR address LIKE ?";
 
         try (Connection conn = DatabaseAccessManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             String searchPattern = "%" + searchText + "%";
             for (int i = 1; i <= 7; i++) {
@@ -122,5 +123,6 @@ public class StaffDAO extends AbstractGenericDAO<Map<String, Object>, Integer> {
         return results;
     }
 
+    
 
 }

@@ -1364,6 +1364,14 @@ public class ManageBooks extends JFrame {
                         throw new IllegalArgumentException("Last Name is required.");
                     }
 
+                    if (birthDate.isEmpty()) {
+                        throw new IllegalArgumentException("Birthday is required.");
+                    }
+
+                    if (nationality.isEmpty()) {
+                        throw new IllegalArgumentException("Nationality is required.");
+                    }
+
                     int authorId;
                     try {
                         authorId = Integer.parseInt(authorIdStr);
@@ -1495,6 +1503,7 @@ public class ManageBooks extends JFrame {
                                 JOptionPane.INFORMATION_MESSAGE);
                         return;
                     }
+
 
                     int authorId;
                     try {

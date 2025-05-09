@@ -61,8 +61,6 @@ public class ManageBorrowers extends JFrame {
     private JLabel ownerLabel;
     private JLabel dateLabel;
 
-
-
     private JTextField borrowerIDField;
     private JTextField borrowerNameField;
     private JTextField borrowerBornYearField;
@@ -146,8 +144,6 @@ public class ManageBorrowers extends JFrame {
                 new EmptyBorder(5, 10, 5, 10)));
         navigationPanel.add(borrowerIDField);
 
- 
-
         borrowerNameLabel = new JLabel("Borrower Name:");
         borrowerNameLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         borrowerNameLabel.setForeground(new Color(255, 255, 255));
@@ -162,8 +158,6 @@ public class ManageBorrowers extends JFrame {
                 new LineBorder(new Color(5, 77, 120)),
                 new EmptyBorder(5, 10, 5, 10)));
         navigationPanel.add(borrowerNameField);
-
-  
 
         borrowerBornYearLabel = new JLabel("Birthday:");
         borrowerBornYearLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
@@ -180,8 +174,6 @@ public class ManageBorrowers extends JFrame {
                 new EmptyBorder(5, 10, 5, 10)));
         navigationPanel.add(borrowerBornYearField);
 
-
-
         borrowerEmailLabel = new JLabel("Borrower Email:");
         borrowerEmailLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         borrowerEmailLabel.setForeground(new Color(255, 255, 255));
@@ -196,8 +188,6 @@ public class ManageBorrowers extends JFrame {
                 new LineBorder(new Color(5, 77, 120)),
                 new EmptyBorder(5, 10, 5, 10)));
         navigationPanel.add(borrowerEmailField);
-
-
 
         borrowerAddressLabel = new JLabel("Borrower Address:");
         borrowerAddressLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
@@ -214,8 +204,6 @@ public class ManageBorrowers extends JFrame {
                 new EmptyBorder(5, 10, 5, 10)));
         navigationPanel.add(borrowerAddressField);
 
- 
-
         borrowerPhoneLabel = new JLabel("Phone Number:");
         borrowerPhoneLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
         borrowerPhoneLabel.setForeground(new Color(255, 255, 255));
@@ -230,7 +218,6 @@ public class ManageBorrowers extends JFrame {
                 new LineBorder(new Color(5, 77, 120)),
                 new EmptyBorder(5, 10, 5, 10)));
         navigationPanel.add(borrowerPhoneField);
-
 
         addButton = new RoundedButton("Add");
         addButton.setBounds(15, 525, 60, buttonHeight);
@@ -258,15 +245,10 @@ public class ManageBorrowers extends JFrame {
                     }
                     BorrowerDAO borrowerDAO = new BorrowerDAO();
                     if (borrowerDAO.getById(borrowerId) != null) {
-                        throw new IllegalArgumentException("Borrrower with ISBN " + borrowerId + " already exists.");  
+                        throw new IllegalArgumentException("Borrrower with ISBN " + borrowerId + " already exists.");
                     }
                     if (fullName.isEmpty()) {
                         JOptionPane.showMessageDialog(null, "Name cannot be empty!", "Error",
-                                JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
-                    if (birthdayText.isEmpty()) {
-                        JOptionPane.showMessageDialog(null, "Birthday cannot be empty!", "Error",
                                 JOptionPane.ERROR_MESSAGE);
                         return;
                     }
@@ -293,6 +275,11 @@ public class ManageBorrowers extends JFrame {
                                 JOptionPane.ERROR_MESSAGE);
                         return;
                     }
+                    if (email.isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "Email cannot be empty!", "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
 
                     if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
                         JOptionPane.showMessageDialog(null, "Invalid email format!", "Error",
@@ -305,6 +292,19 @@ public class ManageBorrowers extends JFrame {
                                 JOptionPane.ERROR_MESSAGE);
                         return;
                     }
+
+                    if (address.isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "Address cannot be empty!", "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                    if (phoneNumber.isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "Phone number cannot be empty!", "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
 
                     String firstName = "";
                     String lastName = "";
@@ -617,16 +617,19 @@ public class ManageBorrowers extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 int selectedRow = manageTable.getSelectedRow();
-                if (selectedRow != -1) { 
-                  
+                if (selectedRow != -1) {
+
                     String id = manageTable.getValueAt(selectedRow, 0).toString();
                     String name = manageTable.getValueAt(selectedRow, 1).toString();
                     String birthday = manageTable.getValueAt(selectedRow, 2).toString();
-                    String address = manageTable.getValueAt(selectedRow, 3) != null ? manageTable.getValueAt(selectedRow, 3).toString() : "";
+                    String address = manageTable.getValueAt(selectedRow, 3) != null
+                            ? manageTable.getValueAt(selectedRow, 3).toString()
+                            : "";
                     String email = manageTable.getValueAt(selectedRow, 4).toString();
-                    String phoneNumber = manageTable.getValueAt(selectedRow, 5) != null ? manageTable.getValueAt(selectedRow, 5).toString() : "";
-        
-                 
+                    String phoneNumber = manageTable.getValueAt(selectedRow, 5) != null
+                            ? manageTable.getValueAt(selectedRow, 5).toString()
+                            : "";
+
                     borrowerIDField.setText(id);
                     borrowerNameField.setText(name);
                     borrowerBornYearField.setText(birthday);
