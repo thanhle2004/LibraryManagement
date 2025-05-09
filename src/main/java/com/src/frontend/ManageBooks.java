@@ -946,6 +946,12 @@ public class ManageBooks extends JFrame {
                     if (genreDAO.getById(genreId) == null) {
                         throw new IllegalArgumentException("Genre with ID " + genreId + " does not exist.");
                     }
+                    String genreIdString = String.valueOf(genreId);
+                    BookDAO bookDAO = new BookDAO();
+                    if(bookDAO.isGenreUsed(genreIdString)) {
+                        throw new IllegalArgumentException(
+                                    "Cannot delete genre with ID " + genreId + " because it is being used by a book.");
+                    }
 
                     ShelfDAO shelfDAO = new ShelfDAO();
                     List<Map<String, Object>> shelves = shelfDAO.findAll();
@@ -955,6 +961,7 @@ public class ManageBooks extends JFrame {
                                     "Cannot delete genre with ID " + genreId + " because it is being used by a shelf.");
                         }
                     }
+
 
                     genreDAO.delete(String.valueOf(genreId));
                     populateGenreComboBox(mainGenreField);
@@ -1362,6 +1369,14 @@ public class ManageBooks extends JFrame {
                     }
                     if (lastName.isEmpty()) {
                         throw new IllegalArgumentException("Last Name is required.");
+                    }
+
+                    if (birthDate.isEmpty()) {
+                        throw new IllegalArgumentException("Birthday is required.");
+                    }
+
+                    if (nationality.isEmpty()) {
+                        throw new IllegalArgumentException("Nationality is required.");
                     }
 
                     int authorId;
@@ -1857,9 +1872,9 @@ public class ManageBooks extends JFrame {
                     }
 
                     BorrowingDAO borrowingDAO = new BorrowingDAO();
-                    if (borrowingDAO.isBookBorrowedOrOverdue(isbn)) {
+                    if (borrowingDAO.isBookBorrowedinRecord(isbn)) {
                         throw new IllegalArgumentException(
-                                "This book is currently borrowed or overdue. Cannot delete.");
+                                "This book is currently in record. Cannot delete.");
                     }
 
                     BookDAO bookDAO = new BookDAO();

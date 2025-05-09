@@ -93,13 +93,24 @@ public class BorrowingDAO extends AbstractGenericDAO<Map<String, Object>, Intege
         return borrowings;
     }
 
-    public boolean isBookBorrowedOrOverdue(String isbn) throws SQLException {
-        String query = "SELECT Status FROM Borrowing WHERE ISBN = ? AND (Status = 'Borrowed' OR Status = 'Overdue')";
+    public boolean isBookBorrowedinRecord(String isbn) throws SQLException {
+        String query = "SELECT * FROM Borrowing WHERE ISBN = ? ";
         try (Connection connection = DatabaseAccessManager.getConnection();
                 PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, isbn);
             try (ResultSet rs = stmt.executeQuery()) {
-                return rs.next(); 
+                return rs.next();
+            }
+        }
+    }
+
+    public boolean isBorrowerBorrowedinRecord(String id) throws SQLException {
+        String query = "SELECT * FROM Borrowing WHERE Borrower_id = ? ";
+        try (Connection connection = DatabaseAccessManager.getConnection();
+                PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
             }
         }
     }

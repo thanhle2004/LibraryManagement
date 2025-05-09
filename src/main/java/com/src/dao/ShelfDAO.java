@@ -191,4 +191,19 @@ public class ShelfDAO extends AbstractGenericDAO<Map<String, Object>, Integer> {
             throw new RuntimeException("Error retrieving shelf with ID " + shelfId + ": " + e.getMessage());
         }
     }
+
+    public boolean isManagerInUse(int managerId) {
+        String sql = "SELECT COUNT(*) FROM shelves WHERE Manager_id = ?";
+        try (Connection conn = DatabaseAccessManager.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, managerId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
