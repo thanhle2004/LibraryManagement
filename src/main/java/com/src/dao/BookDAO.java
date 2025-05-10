@@ -172,6 +172,17 @@ public class BookDAO extends AbstractGenericDAO<Map<String, Object>, String> {
             }
         }
     }
+
+    public boolean isAuthorUsed(String genreId) throws SQLException {
+        String query = "SELECT * FROM book WHERE Author_id = ?";
+        try (Connection conn = DatabaseAccessManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, genreId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next(); 
+            }
+        }
+    }
     
 
 }

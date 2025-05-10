@@ -1456,6 +1456,10 @@ public class ManageBooks extends JFrame {
                     } catch (NumberFormatException ex) {
                         throw new IllegalArgumentException("Author ID must be a valid integer.");
                     }
+                    BookDAO bookDAO = new BookDAO();
+                    if(bookDAO.isAuthorUsed(authorIdStr)) {
+                        throw new IllegalArgumentException("Author with ID " + authorId + " is used.");
+                    }
 
                     AuthorDAO authorDAO = new AuthorDAO();
                     if (authorDAO.getById(authorId) == null) {

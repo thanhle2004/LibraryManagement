@@ -7,14 +7,16 @@
   <version>1.0-SNAPSHOT</version>
   <name>LibraryManSys</name>
   <url>http://maven.apache.org</url>
-    <repositories>
-        <repository>
-            <id>unknown-jars-temp-repo</id>
-            <name>A temporary repository created by NetBeans for libraries and jars it could not identify. Please replace the dependencies in this repository with correct ones and delete this repository.</name>
-            <url>file:${project.basedir}/lib</url>
-        </repository>
-    </repositories>
-    <dependencies>
+  
+  <repositories>
+    <repository>
+      <id>unknown-jars-temp-repo</id>
+      <name>A temporary repository created by NetBeans for libraries and jars it could not identify. Please replace the dependencies in this repository with correct ones and delete this repository.</name>
+      <url>file:${project.basedir}/lib</url>
+    </repository>
+  </repositories>
+
+  <dependencies>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -25,22 +27,62 @@
     <dependency>
       <groupId>com.mysql</groupId>
       <artifactId>mysql-connector-j</artifactId>
-      <version>9.2.0</version> 
+      <version>9.2.0</version>
     </dependency>
-        <dependency>
-            <groupId>unknown.binary</groupId>
-            <artifactId>RSFoto_v1.0</artifactId>
-            <version>SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>unknown.binary</groupId>
-            <artifactId>RSCalendar</artifactId>
-            <version>SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>unknown.binary</groupId>
-            <artifactId>RojeruSan.parte1</artifactId>
-            <version>SNAPSHOT</version>
-        </dependency>
-    </dependencies>
+
+    <dependency>
+      <groupId>unknown.binary</groupId>
+      <artifactId>RSFoto_v1.0</artifactId>
+      <version>SNAPSHOT</version>
+    </dependency>
+
+    <dependency>
+      <groupId>unknown.binary</groupId>
+      <artifactId>RSCalendar</artifactId>
+      <version>SNAPSHOT</version>
+    </dependency>
+
+    <dependency>
+      <groupId>unknown.binary</groupId>
+      <artifactId>RojeruSan.parte1</artifactId>
+      <version>SNAPSHOT</version>
+    </dependency>
+
+    <dependency>
+      <groupId>net.sourceforge.plantuml</groupId>
+      <artifactId>plantuml</artifactId>
+      <version>1.2023.10</version> <!-- You can choose the latest version -->
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <id>generate-uml</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>java</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <mainClass>net.sourceforge.plantuml.Run</mainClass> 
+          <arguments>
+            <!-- Scan the source code directory -->
+            <argument>-dir</argument>
+            <argument>${project.basedir}/src/main/java/com/src/dao</argument>
+            <!-- Output will be saved in the uml-output directory -->
+            <argument>-o</argument>
+            <argument>${project.basedir}/uml-output</argument>
+          </arguments>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
 </project>
